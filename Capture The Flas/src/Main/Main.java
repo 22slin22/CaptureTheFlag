@@ -32,8 +32,17 @@ public class Main implements Runnable{
 		
 		game = new Game(keyManager);
 		
+		
+		try {
+			thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		WIDTH = display.getCanvas().getWidth();
 		HEIGHT = display.getCanvas().getHeight();
+		
+		System.out.println(WIDTH);
+		System.out.println(HEIGHT);
 		
 		start();
 	}

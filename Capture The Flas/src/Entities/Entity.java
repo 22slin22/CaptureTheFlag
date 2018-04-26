@@ -13,7 +13,7 @@ public abstract class Entity {
 	
 	public abstract void tick();
 	
-	public abstract void render(Graphics g);
+	public abstract void render(Graphics g, int xOffset, int yOffset);
 	
 	public void move(float x, float y) {
 		this.x += x;

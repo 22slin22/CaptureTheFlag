@@ -26,6 +26,21 @@ public class Map {
 	public void tick() {
 		xOffset = (int)(-player.getX() - Main.getWidth()/2);
 		yOffset = (int)(-player.getY() - Main.getHeight()/2);
+		
+		//System.out.println(xOffset);
+		
+		if(xOffset > 0 + 30) {
+			xOffset = 0 + 30;
+		}
+		else if(xOffset < -WIDTH + Main.getWidth() - 30) {
+			xOffset = -WIDTH + Main.getWidth() - 30;
+		}
+		if(yOffset > 0 + 30) {
+			yOffset = 0 + 30;
+		}
+		else if(yOffset < -HEIGHT + Main.getHeight() - 30) {
+			yOffset = -HEIGHT + Main.getHeight() - 30;
+		}
 	}
 	
 	public void render(Graphics g) {
@@ -35,6 +50,14 @@ public class Map {
 		for(Obstacle obs : obstacles) {
 			obs.render(g);
 		}
+	}
+	
+	public int getXOffset() {
+		return xOffset;
+	}
+	
+	public int getYOffset() {
+		return yOffset;
 	}
 
 }

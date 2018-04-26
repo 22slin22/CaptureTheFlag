@@ -8,13 +8,15 @@ import Map.Map;
 
 public class Game {
 	
+	private int xOffset, yOffset;
+	
 	private Runner runner;
 	private Map map;
 	
 	private KeyManager keyManager;
 	
 	public Game(KeyManager keyManager) {
-		runner = new Runner(300, 300, keyManager);
+		runner = new Runner(Main.getWidth()/2, Main.getHeight()/2, keyManager);
 		map = new Map(runner);
 		this.keyManager = keyManager;
 	}
@@ -28,8 +30,11 @@ public class Game {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Main.getWidth(), Main.getHeight());
 		
+		xOffset = map.getXOffset();
+		yOffset = map.getYOffset();
+		
 		map.render(g);
-		runner.render(g);
+		runner.render(g, xOffset, yOffset);
 	}
 
 }

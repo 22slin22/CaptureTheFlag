@@ -18,7 +18,10 @@ public class Display {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		canvas = new Canvas();
-		canvas.setSize(width, height);
+		//canvas.setSize(width, height);
+		canvas.setMaximumSize(new Dimension(width, height));
+		canvas.setPreferredSize(new Dimension(width, height));
+		canvas.setMinimumSize(new Dimension(width, height));
 		
 		frame.add(canvas);
 		canvas.requestFocus();
