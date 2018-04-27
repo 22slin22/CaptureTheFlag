@@ -37,11 +37,7 @@ public class Runner extends Player{
 	@Override
 	public void render(Graphics g, int xOffset, int yOffset) {
 		g.setColor(Color.BLACK);
-		System.out.print("X");
-		System.out.println(x);
-		System.out.println(xOffset);
-		System.out.println(x + xOffset - DIAMETER/2);
-		g.fillOval((int)x + xOffset - DIAMETER/2, (int)y + yOffset - DIAMETER/2 + yOffset, DIAMETER, DIAMETER);
+		g.fillOval((int)x - xOffset - DIAMETER/2, (int)y - yOffset - DIAMETER/2, DIAMETER, DIAMETER);
 	}
 
 }
