@@ -7,6 +7,7 @@ import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
+import Map.Map;
 import Map.Obstacle;
 
 public abstract class Player extends Entity{
@@ -24,10 +25,10 @@ public abstract class Player extends Entity{
 	protected EntityManager entityManager;
 
 	
-	public Player(float x, float y, int radius, int max_x, int max_y, float cooldown, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
-		super(x, y);
-		this.max_x = max_x;
-		this.max_y = max_y;
+	public Player(float x, float y, int radius, Map map, float cooldown, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
+		super(x, y, map.getObstacles());
+		this.max_x = map.getWidth();
+		this.max_y = map.getHeight();
 		this.radius = radius;
 		this.cooldown = cooldown;
 		this.keyManager = keyManager;
@@ -64,7 +65,7 @@ public abstract class Player extends Entity{
 		}
 		
 		for(Obstacle obs : obstacles) {
-			if(obs.containes(this)) {
+			if(obs.touches(this)) {
 				this.x -= x;
 				this.y -= y;
 			}

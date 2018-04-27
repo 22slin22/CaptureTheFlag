@@ -9,6 +9,7 @@ import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
+import Map.Obstacle;
 
 public class EntityManager {
 	
@@ -19,7 +20,7 @@ public class EntityManager {
 	
 	
 	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera) {
-		runner = new Runner(1000, 1000, map.getWidth(), map.getHeight(), keyManager, mouseManager, camera, this);
+		runner = new Runner(1000, 1000, map, keyManager, mouseManager, camera, this);
 		projectiles = new ArrayList<>();
 		
 		this.map = map;
@@ -27,9 +28,27 @@ public class EntityManager {
 	
 	
 	public void tick() {
-		runner.tick(map.getObstacles());
-		for(Projectile projectile : projectiles) {
-			projectile.tick();
+		runner.tick();
+		
+		boolean dead;
+		for(int i = projectiles.size()-1; i>=0; i--) {
+			dead = false;
+			if(projectiles.get(i).getX() < projectiles.get(i).getRadius() || projectiles.get(i).getX() > map.getWidth() - projectiles.get(i).getRadius()
+					|| projectiles.get(i).getY() < projectiles.get(i).getRadius() || projectiles.get(i).getY() > map.getHeight() - projectiles.get(i).getRadius()) {
+				dead = true;
+			}
+			for(Obstacle obstacle : map.getObstacles()) {
+				if(obstacle.touches(projectiles.get(i))) {
+					dead = true;
+					break;
+				}
+			}
+			if(dead) {
+				projectiles.remove(i);
+			}
+			else {
+				projectiles.get(i).tick();
+			}
 		}
 	}
 	

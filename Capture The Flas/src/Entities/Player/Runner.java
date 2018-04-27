@@ -3,31 +3,31 @@ package Entities.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 import Entities.EntityManager;
 import Entities.Projectiles.StandardProjectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
-import Map.Obstacle;
+import Map.Map;
 
 public class Runner extends Player{
 	
 	private final static float SPEED = 5;
 	private final static int DIAMETER = 40;
 	
-	private final static float COOLDOWN = 0.01f;
+	private final static float COOLDOWN = 0.1f;
 	private final static float PROJECTILE_SPEED = 15;
 
-	public Runner(float x, float y, int max_x, int max_y, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
-		super(x, y, DIAMETER/2, max_x, max_y, COOLDOWN, keyManager, mouseManager, camera, entityManager);
+	public Runner(float x, float y, Map map, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
+		super(x, y, DIAMETER/2, map, COOLDOWN, keyManager, mouseManager, camera, entityManager);
 		System.out.println(x);
 		System.out.println(y);
 	}
 
 	
-	public void tick(ArrayList<Obstacle> obstacles) {
+	@Override
+	public void tick() {
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
 			move(-SPEED, 0, obstacles);
 		}
@@ -50,13 +50,9 @@ public class Runner extends Player{
 		g.fillOval((int)x - cameraX - DIAMETER/2, (int)y - cameraY - DIAMETER/2, DIAMETER, DIAMETER);
 	}
 
-
-	@Override
-	public void tick() {}
-
 	@Override
 	protected void shoot(double angle) {
-		entityManager.addProjectile(new StandardProjectile(x, y, angle, PROJECTILE_SPEED));
+		entityManager.addProjectile(new StandardProjectile(x, y, angle, PROJECTILE_SPEED, obstacles));
 	}
 
 }

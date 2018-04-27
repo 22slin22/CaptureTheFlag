@@ -1,16 +1,19 @@
 package Entities;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
-import Map.Camera;
+import Map.Obstacle;
 
 public abstract class Entity {
 	
 	protected float x, y;
+	protected ArrayList<Obstacle> obstacles;
 	
-	public Entity(float x, float y) {
+	public Entity(float x, float y, ArrayList<Obstacle> obstacles) {
 		this.x = x;
 		this.y = y;
+		this.obstacles = obstacles;
 	}
 	
 	public abstract void tick();
