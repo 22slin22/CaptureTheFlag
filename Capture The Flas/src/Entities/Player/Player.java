@@ -3,6 +3,7 @@ package Entities.Player;
 import java.util.ArrayList;
 
 import Entities.Entity;
+import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
@@ -13,22 +14,37 @@ public abstract class Player extends Entity{
 	protected int max_x, max_y;
 	protected int radius;
 	
+	protected float cooldown;
+	private double lastShot;
+	
 	protected KeyManager keyManager;
 	protected MouseManager mouseManager;
 	
 	protected Camera camera;
+	protected EntityManager entityManager;
 
 	
-	public Player(float x, float y, int radius, int max_x, int max_y, KeyManager keyManager, MouseManager mouseManager, Camera camera) {
+	public Player(float x, float y, int radius, int max_x, int max_y, float cooldown, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
 		super(x, y);
 		this.max_x = max_x;
 		this.max_y = max_y;
 		this.radius = radius;
+		this.cooldown = cooldown;
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;
+		this.entityManager = entityManager;
 	}
 	
+	
+	public void tick() {
+		if(mouseManager.isLeftButton()) {
+			if(System.currentTimeMillis() - lastShot > cooldown*1000) {
+				shoot(getMouseAngle());
+				lastShot = System.currentTimeMillis();
+			}
+		}
+	}
 	
 	public void move(float x, float y, ArrayList<Obstacle> obstacles) {
 		this.x += x;
@@ -55,6 +71,8 @@ public abstract class Player extends Entity{
 		}
 	}
 	
+	protected abstract void shoot(double angle);
+	
 	
 	public int getRadius() {
 		return radius;
@@ -74,8 +92,6 @@ public abstract class Player extends Entity{
 		double angle = Math.asin((displayY - mouseY) / r);
 		
 		if(mouseX < displayX) {
-			System.out.println("true");
-			
 			if(angle > 0) {
 				angle = Math.PI - angle;
 			}

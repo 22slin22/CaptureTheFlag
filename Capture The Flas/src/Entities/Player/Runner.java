@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import Entities.EntityManager;
+import Entities.Projectiles.StandardProjectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
@@ -14,9 +16,12 @@ public class Runner extends Player{
 	
 	private final static float SPEED = 5;
 	private final static int DIAMETER = 40;
+	
+	private final static float COOLDOWN = 0.01f;
+	private final static float PROJECTILE_SPEED = 15;
 
-	public Runner(float x, float y, int max_x, int max_y, KeyManager keyManager, MouseManager mouseManager, Camera camera) {
-		super(x, y, DIAMETER/2, max_x, max_y, keyManager, mouseManager, camera);
+	public Runner(float x, float y, int max_x, int max_y, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
+		super(x, y, DIAMETER/2, max_x, max_y, COOLDOWN, keyManager, mouseManager, camera, entityManager);
 		System.out.println(x);
 		System.out.println(y);
 	}
@@ -36,11 +41,7 @@ public class Runner extends Player{
 			move(0, SPEED, obstacles);
 		}
 		
-		if(mouseManager.isLeftButton()) {
-			System.out.println("left button");
-		}
-		
-		System.out.println(getMouseAngle());
+		super.tick();
 	}
 
 	@Override
@@ -51,10 +52,11 @@ public class Runner extends Player{
 
 
 	@Override
-	public void tick() {
-		
+	public void tick() {}
+
+	@Override
+	protected void shoot(double angle) {
+		entityManager.addProjectile(new StandardProjectile(x, y, angle, PROJECTILE_SPEED));
 	}
-	
-	
 
 }
