@@ -2,6 +2,8 @@ package Entities;
 
 import java.awt.Graphics;
 
+import Map.Camera;
+
 public abstract class Entity {
 	
 	protected float x, y;
@@ -13,7 +15,7 @@ public abstract class Entity {
 	
 	public abstract void tick();
 	
-	public abstract void render(Graphics g, int xOffset, int yOffset);
+	public abstract void render(Graphics g, int cameraX, int cameraY);
 	
 	public void move(float x, float y) {
 		this.x += x;

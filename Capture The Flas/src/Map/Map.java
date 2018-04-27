@@ -9,26 +9,27 @@ import Main.Main;
 
 public class Map {
 	
-	private final static int WIDTH = 3000;
-	private final static int HEIGHT = 2000;
+	private final static int WIDTH = 2000;
+	private final static int HEIGHT = 1500;
 	
 	private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
 	
 	
 	public Map() {
-		
+		obstacles.add(new Obstacle(300, 100, 200, 100));
+		obstacles.add(new Obstacle(100, 300, 100, 200));
 	}
 	
 	public void tick() {
 		
 	}
 	
-	public void render(Graphics g, int xOffset, int yOffset) {
+	public void render(Graphics g, int cameraX, int cameraY) {
 		g.setColor(Color.WHITE);
-		g.fillRect(-xOffset, -yOffset, WIDTH, HEIGHT);
+		g.fillRect(-cameraX, -cameraY, WIDTH, HEIGHT);
 		
 		for(Obstacle obs : obstacles) {
-			obs.render(g);
+			obs.render(g, cameraX, cameraY);
 		}
 	}
 	
@@ -39,6 +40,10 @@ public class Map {
 	
 	public int getHeight() {
 		return HEIGHT;
+	}
+	
+	public ArrayList<Obstacle> getObstacles(){
+		return obstacles;
 	}
 
 }

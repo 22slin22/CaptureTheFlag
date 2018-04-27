@@ -4,6 +4,7 @@ import java.awt.image.BufferStrategy;
 
 import Display.Display;
 import Input.KeyManager;
+import Input.MouseManager;
 
 public class Main implements Runnable{
 	
@@ -16,6 +17,7 @@ public class Main implements Runnable{
 	private Display display;
 	private Game game;
 	private KeyManager keyManager;
+	private MouseManager mouseManager;
 	
 	private Thread thread;
 	
@@ -29,8 +31,11 @@ public class Main implements Runnable{
 		
 		keyManager = new KeyManager();
 		display.getCanvas().addKeyListener(keyManager);
+		mouseManager = new MouseManager();
+		display.getCanvas().addMouseListener(mouseManager);
+		display.getCanvas().addMouseMotionListener(mouseManager);
 		
-		game = new Game(keyManager);
+		game = new Game(keyManager, mouseManager);
 		
 		
 		try {

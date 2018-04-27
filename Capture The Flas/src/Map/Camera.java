@@ -11,8 +11,7 @@ public class Camera {
 	private int x, y;
 	
 	
-	public Camera(Player player, int max_x, int max_y) {
-		this.player = player;
+	public Camera(int max_x, int max_y) {
 		this.max_x = max_x;
 		this.max_y = max_y;
 	}
@@ -21,10 +20,6 @@ public class Camera {
 	public void tick() {
 		x = (int)(player.getX() - Main.getWidth()/2);
 		y = (int)(player.getY() - Main.getHeight()/2);
-		
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println("");
 		
 		if(x < 0 - 30) {
 			x = 0 - 30;
@@ -46,6 +41,10 @@ public class Camera {
 	
 	public int getY() {
 		return y;
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 }
