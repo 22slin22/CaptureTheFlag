@@ -27,22 +27,29 @@ public class Player {
 	
 	
 	public void tick(float elapsedTime) {
+		hero.setVx(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
 			hero.setVx(-hero.getSpeed());
 		}
+		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
+			hero.setVx(hero.getVx() + hero.getSpeed());
+		}
+		
+		
+		hero.setVy(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_W) || keyManager.isKeyPressed(KeyEvent.VK_UP)) {
 			hero.setVy(-hero.getSpeed());
 		}
-		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
-			hero.setVx(hero.getSpeed());
-		}
 		if(keyManager.isKeyPressed(KeyEvent.VK_S) || keyManager.isKeyPressed(KeyEvent.VK_DOWN)) {
-			hero.setVy(hero.getSpeed());
+			hero.setVy(hero.getVy() + hero.getSpeed());
 		}
+		
+		
+		hero.setGunAngle(getMouseAngle());
 		
 		if(mouseManager.isLeftButton()) {
 			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
-				hero.shoot(getMouseAngle());
+				hero.shoot();
 				hero.setLastShot(System.currentTimeMillis());
 			}
 		}

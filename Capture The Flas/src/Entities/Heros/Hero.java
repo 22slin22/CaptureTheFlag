@@ -18,6 +18,8 @@ public abstract class Hero extends Entity{
 	
 	protected float speed;
 	
+	protected double gunAngle;
+	
 	protected float cooldown;
 	private double lastShot;
 	
@@ -67,7 +69,7 @@ public abstract class Hero extends Entity{
 		}
 	}
 	
-	public abstract void shoot(double angle);
+	public abstract void shoot();
 	
 	
 	public int getRadius() {
@@ -88,6 +90,10 @@ public abstract class Hero extends Entity{
 	
 	public float getCooldown() {
 		return cooldown;
+	}
+	
+	public void setGunAngle(double d) {
+		this.gunAngle = d;
 	}
 
 }

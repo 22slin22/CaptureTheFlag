@@ -8,7 +8,7 @@ import Map.Obstacle;
 
 public class StandardProjectile extends Projectile{
 	
-	private final static int DIAMETER = 10;
+	public final static int DIAMETER = 10;
 
 	
 	public StandardProjectile(float x, float y, float vx, float vy, ArrayList<Obstacle> obstacles) {
