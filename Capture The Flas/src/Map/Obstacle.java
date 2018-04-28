@@ -3,7 +3,7 @@ package Map;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import Entities.Player.Player;
+import Entities.Heros.Hero;
 import Entities.Projectiles.Projectile;
 
 public class Obstacle{
@@ -24,7 +24,7 @@ public class Obstacle{
 		g.fillRect(x - xOffset, y - yOffset, width, height);
 	}
 
-	public boolean touches(Player player) {
+	public boolean touches(Hero player) {
 		int radius = player.getRadius();
 		float plX = player.getX();
 		float plY = player.getY();

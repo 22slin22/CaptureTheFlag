@@ -20,13 +20,13 @@ public class StandardProjectile extends Projectile{
 	}
 	
 	
-	public void tick() {
-		super.tick();
+	public void tick(float elapsedTime) {
+		super.tick(elapsedTime);
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
 		g.setColor(Color.RED);
-		g.drawOval((int)x - cameraX, (int)y - cameraY, DIAMETER, DIAMETER);
+		g.drawOval((int)x - cameraX - radius, (int)y - cameraY - radius, DIAMETER, DIAMETER);
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Entities.Player.Player;
+import Entities.Heros.Hero;
 import Main.Main;
 
 public class Map {

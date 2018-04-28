@@ -1,5 +1,6 @@
-package Entities.Player;
+package Entities.Heros;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Entities.Entity;
@@ -10,44 +11,38 @@ import Map.Camera;
 import Map.Map;
 import Map.Obstacle;
 
-public abstract class Player extends Entity{
+public abstract class Hero extends Entity{
 	
 	protected int max_x, max_y;
 	protected int radius;
 	
+	protected float speed;
+	
 	protected float cooldown;
 	private double lastShot;
 	
-	protected KeyManager keyManager;
-	protected MouseManager mouseManager;
-	
-	protected Camera camera;
 	protected EntityManager entityManager;
 
 	
-	public Player(float x, float y, int radius, Map map, float cooldown, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
+	public Hero(float x, float y, int radius, float speed, Map map, float cooldown, EntityManager entityManager) {
 		super(x, y, map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.radius = radius;
+		this.speed = speed;
 		this.cooldown = cooldown;
-		this.keyManager = keyManager;
-		this.mouseManager = mouseManager;
-		this.camera = camera;
 		this.entityManager = entityManager;
 	}
 	
 	
-	public void tick() {
-		if(mouseManager.isLeftButton()) {
-			if(System.currentTimeMillis() - lastShot > cooldown*1000) {
-				shoot(getMouseAngle());
-				lastShot = System.currentTimeMillis();
-			}
-		}
+	public void tick(float elapsedTime) {
+		super.tick(elapsedTime);
 	}
 	
-	public void move(float x, float y, ArrayList<Obstacle> obstacles) {
+	public abstract void render(Graphics g, int cameraX, int cameraY);
+	
+	@Override
+	public void move(float x, float y) {
 		this.x += x;
 		this.y += y;
 		
@@ -72,36 +67,27 @@ public abstract class Player extends Entity{
 		}
 	}
 	
-	protected abstract void shoot(double angle);
+	public abstract void shoot(double angle);
 	
 	
 	public int getRadius() {
 		return radius;
 	}
 	
-	public double getMouseAngle() {
-		// displayX and displayY    =    Position on the screen
-		
-		int displayX = (int)x - camera.getX();
-		int displayY = (int)y - camera.getY();
-		
-		int mouseX = mouseManager.getX();
-		int mouseY = mouseManager.getY();
-		
-		double r = Math.sqrt(Math.pow(displayY - mouseY, 2) + Math.pow(mouseX - displayX, 2));
-		
-		double angle = Math.asin((displayY - mouseY) / r);
-		
-		if(mouseX < displayX) {
-			if(angle > 0) {
-				angle = Math.PI - angle;
-			}
-			else {
-				angle = -Math.PI - angle;
-			}
-		}
-		
-		return angle;
+	public float getSpeed() {
+		return speed;
+	}
+	
+	public double getLastShot() {
+		return lastShot;
+	}
+	
+	public void setLastShot(double lastShot) {
+		this.lastShot = lastShot;
+	}
+	
+	public float getCooldown() {
+		return cooldown;
 	}
 
 }

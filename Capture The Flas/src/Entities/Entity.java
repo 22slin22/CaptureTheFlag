@@ -8,6 +8,7 @@ import Map.Obstacle;
 public abstract class Entity {
 	
 	protected float x, y;
+	protected float vx, vy;
 	protected ArrayList<Obstacle> obstacles;
 	
 	public Entity(float x, float y, ArrayList<Obstacle> obstacles) {
@@ -16,7 +17,9 @@ public abstract class Entity {
 		this.obstacles = obstacles;
 	}
 	
-	public abstract void tick();
+	public void tick(float elapsedTime) {
+		move(vx * elapsedTime, vy * elapsedTime);
+	}
 	
 	public abstract void render(Graphics g, int cameraX, int cameraY);
 	
@@ -33,12 +36,32 @@ public abstract class Entity {
 		return y;
 	}
 	
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
+	}
+
+	public float getVx() {
+		return vx;
+	}
+
+	public void setVx(float vx) {
+		this.vx = vx;
+	}
+
+	public float getVy() {
+		return vy;
+	}
+
+	public void setVy(float vy) {
+		this.vy = vy;
+	}
+	
+	public ArrayList<Obstacle> getObstacles(){
+		return obstacles;
 	}
 
 }

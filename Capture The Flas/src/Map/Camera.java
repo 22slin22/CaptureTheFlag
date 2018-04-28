@@ -1,11 +1,11 @@
 package Map;
 
-import Entities.Player.Player;
+import Entities.Heros.Hero;
 import Main.Main;
 
 public class Camera {
 	
-	private Player player;
+	private Hero hero;
 	private int max_x, max_y;
 	
 	private int x, y;
@@ -18,8 +18,8 @@ public class Camera {
 	
 	
 	public void tick() {
-		x = (int)(player.getX() - Main.getWidth()/2);
-		y = (int)(player.getY() - Main.getHeight()/2);
+		x = (int)(hero.getX() - Main.getWidth()/2);
+		y = (int)(hero.getY() - Main.getHeight()/2);
 		
 		if(x < 0 - 30) {
 			x = 0 - 30;
@@ -43,8 +43,8 @@ public class Camera {
 		return y;
 	}
 	
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setHero(Hero hero) {
+		this.hero = hero;
 	}
 
 }

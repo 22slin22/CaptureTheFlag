@@ -3,32 +3,38 @@ package Entities;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Entities.Player.Runner;
+import Entities.Heros.Runner;
 import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
 import Map.Obstacle;
+import Player.Player;
 
 public class EntityManager {
 	
-	private Runner runner;
+	private Player player;
 	private Map map;
 	
 	private ArrayList<Projectile> projectiles;
+	//private ArrayList<Character> characters;
 	
 	
 	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera) {
-		runner = new Runner(1000, 1000, map, keyManager, mouseManager, camera, this);
+		player = new Player(keyManager, mouseManager, camera);
+		player.setCharacter(new Runner(1000, 1000, map, this));
+		
 		projectiles = new ArrayList<>();
+		//characters = new ArrayList<>();
+		//addCharacter(runner);
 		
 		this.map = map;
 	}
 	
 	
-	public void tick() {
-		runner.tick();
+	public void tick(float elaspedTime) {
+		player.tick(elaspedTime);
 		
 		boolean dead;
 		for(int i = projectiles.size()-1; i>=0; i--) {
@@ -47,21 +53,21 @@ public class EntityManager {
 				projectiles.remove(i);
 			}
 			else {
-				projectiles.get(i).tick();
+				projectiles.get(i).tick(elaspedTime);
 			}
 		}
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
-		runner.render(g, cameraX, cameraY);
+		player.render(g, cameraX, cameraY);
 		for(Projectile projectile : projectiles) {
 			projectile.render(g, cameraX, cameraY);
 		}
 	}
 	
 	
-	public Runner getRunner() {
-		return runner;
+	public Player getPlayer() {
+		return player;
 	}
 	
 	public void addProjectile(Projectile projectile) {

@@ -7,35 +7,32 @@ import Entities.Entity;
 import Map.Obstacle;
 
 public abstract class Projectile extends Entity{
-	
-	protected float vx, vy;
+
 	protected int radius;
 	
 
 	public Projectile(float x, float y, float vx, float vy, int radius, ArrayList<Obstacle> obstacles) {
 		super(x, y, obstacles);
-		this.vx = vx;
-		this.vy = vy;
+		setVx(vx);
+		setVy(vy);
 		this.radius = radius;
 	}
 	
 	public Projectile(float x, float y, double angle, float speed, int radius, ArrayList<Obstacle> obstacles) {
 		super(x, y, obstacles);
-		this.vx = angleToSpeedX(angle, speed);
-		this.vy = angleToSpeedY(angle, speed);
+		setVx(angleToSpeedX(angle, speed));
+		setVy(angleToSpeedY(angle, speed));
 		this.radius = radius;
 	}
 
 	
 	@Override
-	public void tick() {
-		move(vx, vy);
+	public void tick(float elapsedTime) {
+		super.tick(elapsedTime);
 	}
 
 	@Override
-	public void render(Graphics g, int cameraX, int cameraY) {
-		
-	}
+	public abstract void render(Graphics g, int cameraX, int cameraY);
 	
 	private float angleToSpeedY(double angle, float speed) {
 		return (float) (-Math.sin(angle) * speed);

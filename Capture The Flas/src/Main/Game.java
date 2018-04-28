@@ -19,18 +19,27 @@ public class Game {
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
 	
+	private long lastFrameTime;
+	
+	
 	public Game(KeyManager keyManager, MouseManager mouseManager) {
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
 		entityManager = new EntityManager(keyManager, mouseManager, map, camera);
-		camera.setPlayer(entityManager.getRunner());
+		camera.setHero(entityManager.getPlayer().getHero());
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
+		
+		lastFrameTime = System.currentTimeMillis();
 	}
 	
 	public void tick() {
-		entityManager.tick();
+		long now = System.currentTimeMillis();
+		long elapsedTime = now - lastFrameTime;
+		lastFrameTime = now;
+		
+		entityManager.tick(elapsedTime);
 		camera.tick();
 	}
 	

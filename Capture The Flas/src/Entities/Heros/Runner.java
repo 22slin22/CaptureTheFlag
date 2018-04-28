@@ -1,4 +1,4 @@
-package Entities.Player;
+package Entities.Heros;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,37 +11,24 @@ import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
 
-public class Runner extends Player{
+public class Runner extends Hero{
 	
-	private final static float SPEED = 5;
+	private final static float SPEED = 0.1f;
 	private final static int DIAMETER = 40;
 	
 	private final static float COOLDOWN = 0.1f;
-	private final static float PROJECTILE_SPEED = 15;
+	private final static float PROJECTILE_SPEED = 0.3f;
 
-	public Runner(float x, float y, Map map, KeyManager keyManager, MouseManager mouseManager, Camera camera, EntityManager entityManager) {
-		super(x, y, DIAMETER/2, map, COOLDOWN, keyManager, mouseManager, camera, entityManager);
+	public Runner(float x, float y, Map map, EntityManager entityManager) {
+		super(x, y, DIAMETER/2, SPEED, map, COOLDOWN, entityManager);
 		System.out.println(x);
 		System.out.println(y);
 	}
-
+	
 	
 	@Override
-	public void tick() {
-		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
-			move(-SPEED, 0, obstacles);
-		}
-		if(keyManager.isKeyPressed(KeyEvent.VK_W) || keyManager.isKeyPressed(KeyEvent.VK_UP)) {
-			move(0, -SPEED, obstacles);
-		}
-		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
-			move(SPEED, 0, obstacles);
-		}
-		if(keyManager.isKeyPressed(KeyEvent.VK_S) || keyManager.isKeyPressed(KeyEvent.VK_DOWN)) {
-			move(0, SPEED, obstacles);
-		}
-		
-		super.tick();
+	public void tick(float elapsedTime) {
+		super.tick(elapsedTime);
 	}
 
 	@Override
@@ -51,7 +38,7 @@ public class Runner extends Player{
 	}
 
 	@Override
-	protected void shoot(double angle) {
+	public void shoot(double angle) {
 		entityManager.addProjectile(new StandardProjectile(x, y, angle, PROJECTILE_SPEED, obstacles));
 	}
 
