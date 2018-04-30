@@ -3,6 +3,8 @@ package Entities;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import Entities.Heros.Runner;
 import Entities.Projectiles.Projectile;
 import Input.KeyManager;
@@ -22,7 +24,7 @@ public class EntityManager {
 	
 	
 	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera) {
-		player = new Player(keyManager, mouseManager, camera);
+		player = new Player(keyManager, mouseManager, camera, JOptionPane.showInputDialog("Please enter a username"));
 		player.setCharacter(new Runner(1000, 1000, map, this));
 		
 		projectiles = new ArrayList<>();

@@ -11,6 +11,8 @@ import Map.Camera;
 
 public class Player {
 	
+	private String username;
+	
 	private Hero hero;
 	
 	protected KeyManager keyManager;
@@ -19,10 +21,11 @@ public class Player {
 	protected Camera camera;
 	
 	
-	public Player(KeyManager keyManager, MouseManager mouseManager, Camera camera) {
+	public Player(KeyManager keyManager, MouseManager mouseManager, Camera camera, String username) {
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;
+		this.username = username;
 	}
 	
 	

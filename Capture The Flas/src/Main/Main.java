@@ -35,7 +35,7 @@ public class Main implements Runnable{
 		display.getCanvas().addMouseListener(mouseManager);
 		display.getCanvas().addMouseMotionListener(mouseManager);
 		
-		game = new Game(keyManager, mouseManager);
+		game = new Game(this, keyManager, mouseManager);
 		
 		
 		try {
@@ -127,6 +127,10 @@ public class Main implements Runnable{
 	
 	public static int getHeight() {
 		return HEIGHT;
+	}
+	
+	public Display getDisplay() {
+		return display;
 	}
 
 }

@@ -2,11 +2,16 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.JOptionPane;
+
 import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
+import net.GameClient;
+import net.GameServer;
+import net.Packet;
 
 public class Game {
 	
@@ -19,10 +24,23 @@ public class Game {
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
 	
+	private GameClient client;
+	private GameServer server;
+	
+	private Main main;
+	
 	private long lastFrameTime;
 	
 	
-	public Game(KeyManager keyManager, MouseManager mouseManager) {
+	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
+		this.main = main;
+		client = new GameClient(this, "localhost");
+		client.start();
+		if(JOptionPane.showConfirmDialog(main.getDisplay().getFrame(), "Do you want to host a server?") == 0) {
+			server = new GameServer(this);
+			server.start();
+		}
+		
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
 		entityManager = new EntityManager(keyManager, mouseManager, map, camera);
@@ -30,6 +48,9 @@ public class Game {
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
+		
+		Packet packet = new Packet(Packet.LOGIN, "slin");
+		client.sendData(packet.getMessage());
 		
 		lastFrameTime = System.currentTimeMillis();
 	}
