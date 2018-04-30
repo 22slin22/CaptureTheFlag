@@ -6,16 +6,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
 
 import Main.Game;
-import Player.PlayerMP;
 
 public class GameServer extends Thread{
 	
 	private DatagramSocket socket;
 	private Game game;
-	private List<PlayerMP> connectedPlayers = new ArrayList<PlayerMP>();
+	private ArrayList<MultiPlayer> connectedPlayers = new ArrayList<>();
 	
 	public GameServer(Game game) {
 		this.game = game;
@@ -39,7 +37,8 @@ public class GameServer extends Thread{
 			Packet packet = new Packet(datagramPacket.getData());
 			switch (packet.getId()) {
 			case Packet.LOGIN:
-				System.out.println(datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + " has connected");
+				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "]" + " has connected");
+				handleLogin(datagramPacket, packet.getData());
 				break;
 			}
 			
@@ -55,8 +54,27 @@ public class GameServer extends Thread{
 		}
 	}
 
-	public void sendDataToAllClients(byte[] data) {
+	public void sendDataToAllClients(byte[] message) {
+		for(MultiPlayer player : connectedPlayers) {
+			sendData(message, player.getIpAddress(), player.getPort());
+		}
+	}
+	
+	
+	private void handleLogin(DatagramPacket dataPacket, String[] data) {
+		for(MultiPlayer player : connectedPlayers) {
+			if(dataPacket.getAddress() == player.getIpAddress() && dataPacket.getPort() == player.getPort()) {
+				return;
+			}
+		}
+		connectedPlayers.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0]));
+		Packet packet = new Packet(Packet.LOGIN, new String(data[0]));
+		sendDataToAllClients(packet.getMessage());
 		
+		for(MultiPlayer player : connectedPlayers) {
+			packet = new Packet(Packet.LOGIN, player.getUsername());
+			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+		}
 	}
 
 }

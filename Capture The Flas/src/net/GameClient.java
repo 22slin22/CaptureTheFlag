@@ -30,14 +30,21 @@ public class GameClient extends Thread{
 	public void run() {
 		while (true) {
 			byte[] data = new byte[1024];
-			DatagramPacket packet = new DatagramPacket(data, data.length);
+			DatagramPacket dataPacket = new DatagramPacket(data, data.length);
 			try {
-				socket.receive(packet);
+				socket.receive(dataPacket);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			String message = new String(packet.getData());
-			System.out.println("Server : " + message);
+			
+			Packet packet = new Packet(dataPacket.getData());
+			switch(packet.getId()) {
+			case Packet.LOGIN:
+				handleLogin(packet.getData());
+				break;
+			case Packet.DISCONNECT:
+				break;
+			}
 		}
 	}
 	
@@ -48,6 +55,10 @@ public class GameClient extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void handleLogin(String[] data) {
+		game.getEntityManager().addPlayer(data[0]);
 	}
 
 }

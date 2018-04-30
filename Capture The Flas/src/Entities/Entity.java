@@ -11,13 +11,20 @@ public abstract class Entity {
 	protected float vx, vy;
 	protected ArrayList<Obstacle> obstacles;
 	
+	private long frameTime;
+	
 	public Entity(float x, float y, ArrayList<Obstacle> obstacles) {
 		this.x = x;
 		this.y = y;
 		this.obstacles = obstacles;
+		
+		frameTime = System.currentTimeMillis();
 	}
 	
-	public void tick(float elapsedTime) {
+	public void tick() {
+		long elapsedTime = System.currentTimeMillis() - frameTime;
+		frameTime = System.currentTimeMillis();
+		
 		move(vx * elapsedTime, vy * elapsedTime);
 	}
 	

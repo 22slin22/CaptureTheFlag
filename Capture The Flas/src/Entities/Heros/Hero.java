@@ -37,10 +37,6 @@ public abstract class Hero extends Entity{
 	}
 	
 	
-	public void tick(float elapsedTime) {
-		super.tick(elapsedTime);
-	}
-	
 	public abstract void render(Graphics g, int cameraX, int cameraY);
 	
 	@Override

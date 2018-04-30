@@ -29,8 +29,6 @@ public class Game {
 	
 	private Main main;
 	
-	private long lastFrameTime;
-	
 	
 	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
 		this.main = main;
@@ -44,23 +42,17 @@ public class Game {
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
 		entityManager = new EntityManager(keyManager, mouseManager, map, camera);
-		camera.setHero(entityManager.getPlayer().getHero());
+		camera.setHero(entityManager.getLocalPlayer().getHero());
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		
-		Packet packet = new Packet(Packet.LOGIN, "slin");
+		Packet packet = new Packet(Packet.LOGIN, entityManager.getLocalPlayer().getUsername());
 		client.sendData(packet.getMessage());
-		
-		lastFrameTime = System.currentTimeMillis();
 	}
 	
 	public void tick() {
-		long now = System.currentTimeMillis();
-		long elapsedTime = now - lastFrameTime;
-		lastFrameTime = now;
-		
-		entityManager.tick(elapsedTime);
+		entityManager.tick();
 		camera.tick();
 	}
 	
@@ -73,6 +65,10 @@ public class Game {
 		
 		map.render(g, cameraX, cameraY);
 		entityManager.render(g, cameraX, cameraY);
+	}
+	
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 
 }

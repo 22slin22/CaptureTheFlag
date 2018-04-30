@@ -24,11 +24,6 @@ public class Runner extends Hero{
 		System.out.println(y);
 	}
 	
-	
-	@Override
-	public void tick(float elapsedTime) {
-		super.tick(elapsedTime);
-	}
 
 	@Override
 	public void render(Graphics g, int cameraX, int cameraY) {
@@ -42,7 +37,7 @@ public class Runner extends Hero{
 				(int)y - cameraY - 15, 30, 30);
 		*/
 		
-		Rectangle rect = new Rectangle((int)x - cameraX - 20 + 5,			// -10 to center it and +5 to let it stick out
+		Rectangle rect = new Rectangle((int)x - cameraX - 20 + 5,			// -20 to center it and +5 to let it stick out
 				(int)y - cameraY - 12, 40, 24);
 		
 		g2d.rotate(-gunAngle, x-cameraX, y-cameraY);

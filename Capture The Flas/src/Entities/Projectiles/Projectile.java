@@ -25,11 +25,6 @@ public abstract class Projectile extends Entity{
 		this.radius = radius;
 	}
 
-	
-	@Override
-	public void tick(float elapsedTime) {
-		super.tick(elapsedTime);
-	}
 
 	@Override
 	public abstract void render(Graphics g, int cameraX, int cameraY);

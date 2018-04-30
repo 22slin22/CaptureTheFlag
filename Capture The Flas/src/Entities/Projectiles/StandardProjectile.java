@@ -18,11 +18,7 @@ public class StandardProjectile extends Projectile{
 	public StandardProjectile(float x, float y, double angle, float speed, ArrayList<Obstacle> obstacles) {
 		super(x, y, angle, speed, DIAMETER/2, obstacles);
 	}
-	
-	
-	public void tick(float elapsedTime) {
-		super.tick(elapsedTime);
-	}
+
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
 		g.setColor(Color.RED);
