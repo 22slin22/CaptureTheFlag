@@ -2,6 +2,8 @@ package Player;
 
 import java.awt.event.KeyEvent;
 
+import Entities.EntityManager;
+import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
@@ -14,22 +16,49 @@ public class LocalPlayer extends Player{
 	private MouseManager mouseManager;
 	
 	private Camera camera;
+	private EntityManager entityManager;
 	
 	private GameClient client;
 	
 
-	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, String username) {
+	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, EntityManager entityManager, String username) {
 		super(username);
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;
 		this.client = client;
+		this.entityManager = entityManager;
 	}
 	
 	@Override
 	public void tick() {
-		Packet packet;
+		updateHero();
+		hero.tick();
 		
+		testShoot();
+		synchronized (hero.getProjectiles()) {
+			checkHit();
+		}
+	}
+	
+	private void checkHit() {
+		for(Projectile projectile : hero.getProjectiles()) {
+			synchronized (entityManager.getPlayers()) {
+				for(Player player : entityManager.getPlayers()) {
+					if(Utils.Collisions.PlayerProjectileCollision(player, projectile)) {
+						hit(player);
+					}
+				}
+			}
+		}
+	}
+	
+	private void hit(Player player) {
+		Packet packet = new Packet(Packet.HIT, username + "," + hero.DAMAGE);
+		client.sendData(packet.getMessage());
+	}
+	
+	private void updateHero() {
 		hero.setVx(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
 			hero.setVx(-hero.getSpeed());
@@ -47,20 +76,19 @@ public class LocalPlayer extends Player{
 			hero.setVy(hero.getVy() + hero.getSpeed());
 		}
 		
-		
 		hero.setGunAngle(getMouseAngle());
 		
-		hero.tick();
-		
-		packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
+		Packet packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
 		client.sendData(packet.getMessage());
-		
+	}
+	
+	private void testShoot() {
 		if(mouseManager.isLeftButton()) {
 			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
 				hero.shoot();
 				hero.setLastShot(System.currentTimeMillis());
 				
-				packet = new Packet(Packet.SHOOT, username);
+				Packet packet = new Packet(Packet.SHOOT, username);
 				client.sendData(packet.getMessage());
 			}
 		}

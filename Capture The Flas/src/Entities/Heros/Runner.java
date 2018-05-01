@@ -27,6 +27,8 @@ public class Runner extends Hero{
 
 	@Override
 	public void render(Graphics g, int cameraX, int cameraY) {
+		super.render(g, cameraX, cameraY);
+		
 		g.setColor(Color.BLACK);
 		g.fillOval((int)x - cameraX - DIAMETER/2, (int)y - cameraY - DIAMETER/2, DIAMETER, DIAMETER);
 		
@@ -50,10 +52,14 @@ public class Runner extends Hero{
 
 	@Override
 	public void shoot() {
+		System.out.println("shooting");
+		
 		float spawnX = x + (float)(Math.cos(gunAngle) * 30);
 		float spawnY = y + (float)(-Math.sin(gunAngle) * 30);
 		
-		entityManager.addProjectile(new StandardProjectile(spawnX, spawnY, gunAngle, PROJECTILE_SPEED, obstacles));
+		synchronized (projectiles) {
+			projectiles.add(new StandardProjectile(spawnX, spawnY, gunAngle, PROJECTILE_SPEED, map));
+		}
 	}
 
 }

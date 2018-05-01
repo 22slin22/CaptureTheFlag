@@ -59,6 +59,10 @@ public class GameClient extends Thread{
 			case Packet.SHOOT:
 				game.getEntityManager().playerShoot(data[0]);
 				break;
+				
+			case Packet.HIT:
+				game.getEntityManager().hitPlayer(data[0], Integer.parseInt(data[1]));
+				break;
 			}
 		}
 	}

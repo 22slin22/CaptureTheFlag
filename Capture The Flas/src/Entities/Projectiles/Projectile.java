@@ -4,28 +4,51 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Entities.Entity;
+import Map.Map;
 import Map.Obstacle;
 
 public abstract class Projectile extends Entity{
 
 	protected int radius;
+	protected boolean remove = false;
+	
+	protected Map map;
 	
 
-	public Projectile(float x, float y, float vx, float vy, int radius, ArrayList<Obstacle> obstacles) {
-		super(x, y, obstacles);
+	public Projectile(float x, float y, float vx, float vy, int radius, Map map) {
+		super(x, y, map.getObstacles());
 		setVx(vx);
 		setVy(vy);
 		this.radius = radius;
+		this.map = map;
 	}
 	
-	public Projectile(float x, float y, double angle, float speed, int radius, ArrayList<Obstacle> obstacles) {
-		super(x, y, obstacles);
+	public Projectile(float x, float y, double angle, float speed, int radius, Map map) {
+		super(x, y, map.getObstacles());
 		setVx(angleToSpeedX(angle, speed));
 		setVy(angleToSpeedY(angle, speed));
+		
 		this.radius = radius;
+		this.map = map;
 	}
 
-
+	public void tick() {
+		super.tick();
+		
+		if (x < radius
+				|| x > map.getWidth() - radius
+				|| y < radius
+				|| y > map.getHeight() - radius) {
+			remove = true;
+		}
+		for (Obstacle obstacle : obstacles) {
+			if (obstacle.touches(this)) {
+				remove = true;
+				break;
+			}
+		}
+	}
+	
 	@Override
 	public abstract void render(Graphics g, int cameraX, int cameraY);
 	
@@ -39,6 +62,10 @@ public abstract class Projectile extends Entity{
 	
 	public int getRadius() {
 		return radius;
+	}
+	
+	public boolean isRemove() {
+		return remove;
 	}
 
 }

@@ -5,25 +5,27 @@ import java.util.ArrayList;
 
 import Entities.Entity;
 import Entities.EntityManager;
-import Input.KeyManager;
-import Input.MouseManager;
-import Map.Camera;
+import Entities.Projectiles.Projectile;
 import Map.Map;
 import Map.Obstacle;
+import Player.Player;
+import net.Packet;
 
 public abstract class Hero extends Entity{
 	
 	protected int max_x, max_y;
 	protected int radius;
-	
 	protected float speed;
 	
+	protected ArrayList<Projectile> projectiles = new ArrayList<>();
 	protected double gunAngle;
-	
 	protected float cooldown;
 	private double lastShot;
+	public static final int DAMAGE = 20;
+	private int health = 100;
 	
 	protected EntityManager entityManager;
+	protected Map map;
 
 	
 	public Hero(float x, float y, int radius, float speed, Map map, float cooldown, EntityManager entityManager) {
@@ -32,12 +34,36 @@ public abstract class Hero extends Entity{
 		this.max_y = map.getHeight();
 		this.radius = radius;
 		this.speed = speed;
+		this.map = map;
 		this.cooldown = cooldown;
 		this.entityManager = entityManager;
 	}
 	
 	
-	public abstract void render(Graphics g, int cameraX, int cameraY);
+	@Override
+	public void tick() {
+		super.tick();
+		
+		synchronized (projectiles) {
+			for(Projectile projectile : projectiles) {
+				projectile.tick();
+			}
+			
+			for (int i = projectiles.size() - 1; i >= 0; i--) {
+				if(projectiles.get(i).isRemove()) {
+					projectiles.remove(i);
+				}
+			}
+		}
+	}
+	
+	public void render(Graphics g, int cameraX, int cameraY) {
+		synchronized (projectiles) {
+			for(Projectile projectile : projectiles) {
+				projectile.render(g, cameraX, cameraY);
+			}
+		}
+	}
 	
 	@Override
 	public void move(float x, float y) {
@@ -64,6 +90,12 @@ public abstract class Hero extends Entity{
 			}
 		}
 	}
+	
+	public void gotHit(int damage) {
+		health -= damage;
+		System.out.println(this + ": " + health);
+	}
+	
 	
 	public abstract void shoot();
 	
@@ -94,6 +126,10 @@ public abstract class Hero extends Entity{
 	
 	public double getGunAngle() {
 		return gunAngle;
+	}
+	
+	public ArrayList<Projectile> getProjectiles(){
+		return projectiles;
 	}
 
 }

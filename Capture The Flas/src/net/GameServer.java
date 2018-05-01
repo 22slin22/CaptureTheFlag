@@ -49,7 +49,8 @@ public class GameServer extends Thread{
 				
 			case Packet.UPDATE_PLAYER:
 			case Packet.SHOOT:
-				sendDataToAllClients(packet.getMessage());
+			case Packet.HIT:
+				sendDataToAllClients(datagramPacket, packet.getMessage());
 				break;
 			}
 			
@@ -65,7 +66,7 @@ public class GameServer extends Thread{
 		}
 		connectedPlayers.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0]));
 		Packet packet = new Packet(Packet.LOGIN, new String(data[0]));
-		sendDataToAllClients(packet.getMessage());
+		sendDataToAllClients(dataPacket, packet.getMessage());
 		
 		// Sending all current players to the new one
 		for(MultiPlayer player : connectedPlayers) {
@@ -79,7 +80,7 @@ public class GameServer extends Thread{
 		for(MultiPlayer player : connectedPlayers) {
 			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
 				Packet packet = new Packet(Packet.DISCONNECT, data[0]);
-				sendDataToAllClients(packet.getMessage());
+				sendDataToAllClients(dataPacket, packet.getMessage());
 				connectedPlayers.remove(player);
 				break;
 			}
@@ -96,9 +97,11 @@ public class GameServer extends Thread{
 		}
 	}
 
-	public void sendDataToAllClients(byte[] message) {
+	public void sendDataToAllClients(DatagramPacket dataPacket, byte[] message) {
 		for(MultiPlayer player : connectedPlayers) {
-			sendData(message, player.getIpAddress(), player.getPort());
+			if(!(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort())) {
+				sendData(message, player.getIpAddress(), player.getPort());
+			}
 		}
 	}
 

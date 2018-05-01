@@ -7,6 +7,7 @@ public class Packet {
 	public static final String DISCONNECT = "01";
 	public static final String UPDATE_PLAYER = "02";
 	public static final String SHOOT = "03";
+	public static final String HIT = "04";
 	
 	private String id;
 	private String data;
