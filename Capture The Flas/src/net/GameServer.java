@@ -37,26 +37,15 @@ public class GameServer extends Thread{
 			Packet packet = new Packet(datagramPacket.getData());
 			switch (packet.getId()) {
 			case Packet.LOGIN:
-				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "]" + " has connected");
+				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + packet.getData()[0] + " has connected");
 				handleLogin(datagramPacket, packet.getData());
 				break;
+				
+			case Packet.DISCONNECT:
+				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + packet.getData()[0] + " has disconnected");
+				handleDisconnect(datagramPacket, packet.getData());
 			}
 			
-		}
-	}
-	
-	public void sendData(byte[] data, InetAddress ipAddress, int port) {
-		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void sendDataToAllClients(byte[] message) {
-		for(MultiPlayer player : connectedPlayers) {
-			sendData(message, player.getIpAddress(), player.getPort());
 		}
 	}
 	
@@ -71,9 +60,38 @@ public class GameServer extends Thread{
 		Packet packet = new Packet(Packet.LOGIN, new String(data[0]));
 		sendDataToAllClients(packet.getMessage());
 		
+		// Sending all current players to the new one
 		for(MultiPlayer player : connectedPlayers) {
 			packet = new Packet(Packet.LOGIN, player.getUsername());
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+		}
+		
+	}
+	
+	private void handleDisconnect(DatagramPacket dataPacket, String[] data) {
+		for(MultiPlayer player : connectedPlayers) {
+			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
+				Packet packet = new Packet(Packet.DISCONNECT, data[0]);
+				sendDataToAllClients(packet.getMessage());
+				connectedPlayers.remove(player);
+				break;
+			}
+		}
+	}
+	
+	
+	public void sendData(byte[] data, InetAddress ipAddress, int port) {
+		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void sendDataToAllClients(byte[] message) {
+		for(MultiPlayer player : connectedPlayers) {
+			sendData(message, player.getIpAddress(), player.getPort());
 		}
 	}
 

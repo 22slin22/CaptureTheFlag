@@ -38,7 +38,7 @@ public class EntityManager {
 	}
 
 	public void tick() {
-		for(Player player : players) {
+		for(Player player : getPlayers()) {
 			player.tick();
 		}
 
@@ -66,7 +66,7 @@ public class EntityManager {
 	}
 
 	public void render(Graphics g, int cameraX, int cameraY) {
-		for(Player player : players) {
+		for(Player player : getPlayers()) {
 			player.render(g, cameraX, cameraY);
 		}
 		
@@ -75,7 +75,7 @@ public class EntityManager {
 		}
 	}
 
-	public ArrayList<Player> getPlayers() {
+	public synchronized ArrayList<Player> getPlayers() {
 		return players;
 	}
 
@@ -84,16 +84,26 @@ public class EntityManager {
 	}
 	
 	public void addPlayer(Player player) {
-		players.add(player);
+		getPlayers().add(player);
 	}
 	
 	public void addPlayer(String username) {
 		if(!(localPlayer.getUsername().equals(username))) {
-			System.out.println("Added new player");
+			System.out.println("Adding " + username);
 			Player player = new Player(username);
 			player.setHero(new Runner(1000, 1000, map, this));
-			players.add(player);
+			getPlayers().add(player);
 			
+		}
+	}
+	
+	public void removePlayer(String username) {
+		System.out.println("Deleting " + username);
+		for(Player player : getPlayers()) {
+			if(player.getUsername().equals(username)) {
+				getPlayers().remove(player);
+				break;
+			}
 		}
 	}
 	

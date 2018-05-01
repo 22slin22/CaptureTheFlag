@@ -40,13 +40,16 @@ public class GameClient extends Thread{
 			Packet packet = new Packet(dataPacket.getData());
 			switch(packet.getId()) {
 			case Packet.LOGIN:
-				handleLogin(packet.getData());
+				game.getEntityManager().addPlayer(packet.getData()[0]);
 				break;
+				
 			case Packet.DISCONNECT:
+				game.getEntityManager().removePlayer(packet.getData()[0]);
 				break;
 			}
 		}
 	}
+	
 	
 	public void sendData(byte[] data) {
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 2222);
@@ -55,10 +58,6 @@ public class GameClient extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void handleLogin(String[] data) {
-		game.getEntityManager().addPlayer(data[0]);
 	}
 
 }

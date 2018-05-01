@@ -5,6 +5,7 @@ import java.awt.image.BufferStrategy;
 import Display.Display;
 import Input.KeyManager;
 import Input.MouseManager;
+import Input.WindowManager;
 
 public class Main implements Runnable{
 	
@@ -18,6 +19,7 @@ public class Main implements Runnable{
 	private Game game;
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
+	private WindowManager windowManager;
 	
 	private Thread thread;
 	
@@ -36,6 +38,8 @@ public class Main implements Runnable{
 		display.getCanvas().addMouseMotionListener(mouseManager);
 		
 		game = new Game(this, keyManager, mouseManager);
+		windowManager = new WindowManager(game);
+		display.getFrame().addWindowListener(windowManager);
 		
 		
 		try {

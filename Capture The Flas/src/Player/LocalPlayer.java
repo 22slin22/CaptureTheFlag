@@ -26,7 +26,6 @@ public class LocalPlayer extends Player{
 	public void tick() {
 		hero.setVx(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
-			System.out.println("pressing A");
 			hero.setVx(-hero.getSpeed());
 		}
 		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	

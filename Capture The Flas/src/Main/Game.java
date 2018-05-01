@@ -70,5 +70,9 @@ public class Game {
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
+	
+	public GameClient getClient() {
+		return client;
+	}
 
 }
