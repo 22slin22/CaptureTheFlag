@@ -44,24 +44,27 @@ public class EntityManager {
 		}
 
 		boolean dead;
-		for (int i = projectiles.size() - 1; i >= 0; i--) {
-			dead = false;
-			if (projectiles.get(i).getX() < projectiles.get(i).getRadius()
-					|| projectiles.get(i).getX() > map.getWidth() - projectiles.get(i).getRadius()
-					|| projectiles.get(i).getY() < projectiles.get(i).getRadius()
-					|| projectiles.get(i).getY() > map.getHeight() - projectiles.get(i).getRadius()) {
-				dead = true;
-			}
-			for (Obstacle obstacle : map.getObstacles()) {
-				if (obstacle.touches(projectiles.get(i))) {
+		
+		synchronized (projectiles) {
+			for (int i = projectiles.size() - 1; i >= 0; i--) {
+				dead = false;
+				if (projectiles.get(i).getX() < projectiles.get(i).getRadius()
+						|| projectiles.get(i).getX() > map.getWidth() - projectiles.get(i).getRadius()
+						|| projectiles.get(i).getY() < projectiles.get(i).getRadius()
+						|| projectiles.get(i).getY() > map.getHeight() - projectiles.get(i).getRadius()) {
 					dead = true;
-					break;
 				}
-			}
-			if (dead) {
-				projectiles.remove(i);
-			} else {
-				projectiles.get(i).tick();
+				for (Obstacle obstacle : map.getObstacles()) {
+					if (obstacle.touches(projectiles.get(i))) {
+						dead = true;
+						break;
+					}
+				}
+				if (dead) {
+					projectiles.remove(i);
+				} else {
+					projectiles.get(i).tick();
+				}
 			}
 		}
 	}
@@ -71,17 +74,17 @@ public class EntityManager {
 			player.render(g, cameraX, cameraY);
 		}
 		
-		for (Projectile projectile : projectiles) {
-			projectile.render(g, cameraX, cameraY);
+		synchronized (projectiles) {
+			for (Projectile projectile : projectiles) {
+				projectile.render(g, cameraX, cameraY);
+			}
 		}
 	}
 
-	public synchronized ArrayList<Player> getPlayers() {
-		return players;
-	}
-
 	public void addProjectile(Projectile projectile) {
-		projectiles.add(projectile);
+		synchronized (projectiles) {
+			projectiles.add(projectile);
+		}
 	}
 	
 	public void addPlayer(Player player) {
@@ -118,8 +121,24 @@ public class EntityManager {
 		}
 	}
 	
+	public void playerShoot(String username) {
+		for(Player player : getPlayers()) {
+			if(player.getUsername().equals(username)) {
+				player.getHero().shoot();
+			}
+		}
+	}
+	
 	public LocalPlayer getLocalPlayer() {
 		return localPlayer;
+	}
+	
+	public synchronized ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	public synchronized ArrayList<Projectile> getProjectiles(){
+		return projectiles;
 	}
 
 }

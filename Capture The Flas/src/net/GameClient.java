@@ -54,6 +54,11 @@ public class GameClient extends Thread{
 				float y = Float.parseFloat(data[2]);
 				double gunAngle = Double.parseDouble(data[3]);
 				game.getEntityManager().updatePlayer(data[0], x, y, gunAngle);
+				break;
+				
+			case Packet.SHOOT:
+				game.getEntityManager().playerShoot(data[0]);
+				break;
 			}
 		}
 	}

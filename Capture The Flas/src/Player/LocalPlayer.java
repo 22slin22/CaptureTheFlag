@@ -28,6 +28,8 @@ public class LocalPlayer extends Player{
 	
 	@Override
 	public void tick() {
+		Packet packet;
+		
 		hero.setVx(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
 			hero.setVx(-hero.getSpeed());
@@ -48,17 +50,20 @@ public class LocalPlayer extends Player{
 		
 		hero.setGunAngle(getMouseAngle());
 		
+		hero.tick();
+		
+		packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
+		client.sendData(packet.getMessage());
+		
 		if(mouseManager.isLeftButton()) {
 			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
 				hero.shoot();
 				hero.setLastShot(System.currentTimeMillis());
+				
+				packet = new Packet(Packet.SHOOT, username);
+				client.sendData(packet.getMessage());
 			}
 		}
-		
-		hero.tick();
-		
-		Packet packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
-		client.sendData(packet.getMessage());
 	}
 	
 	public double getMouseAngle() {

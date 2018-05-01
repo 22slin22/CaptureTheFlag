@@ -48,6 +48,7 @@ public class GameServer extends Thread{
 				break;
 				
 			case Packet.UPDATE_PLAYER:
+			case Packet.SHOOT:
 				sendDataToAllClients(packet.getMessage());
 				break;
 			}
