@@ -10,10 +10,11 @@ import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Utils.Fonts;
+import net.Packet;
 
 public class Player {
 	
-	private String username;
+	protected String username;
 	
 	protected Hero hero;
 	

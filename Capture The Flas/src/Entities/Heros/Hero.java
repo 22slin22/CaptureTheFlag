@@ -91,5 +91,9 @@ public abstract class Hero extends Entity{
 	public void setGunAngle(double d) {
 		this.gunAngle = d;
 	}
+	
+	public double getGunAngle() {
+		return gunAngle;
+	}
 
 }

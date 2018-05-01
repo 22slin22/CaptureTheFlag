@@ -14,6 +14,7 @@ import Map.Map;
 import Map.Obstacle;
 import Player.LocalPlayer;
 import Player.Player;
+import net.GameClient;
 
 public class EntityManager {
 
@@ -24,8 +25,8 @@ public class EntityManager {
 	private ArrayList<Projectile> projectiles;
 	// private ArrayList<Character> characters;
 
-	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera) {
-		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, JOptionPane.showInputDialog("Please enter a username"));
+	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client) {
+		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, JOptionPane.showInputDialog("Please enter a username"));
 		player.setHero(new Runner(1000, 1000, map, this));
 		localPlayer = player;
 		players.add(player);
@@ -94,6 +95,16 @@ public class EntityManager {
 			player.setHero(new Runner(1000, 1000, map, this));
 			getPlayers().add(player);
 			
+		}
+	}
+	
+	public void updatePlayer(String username, float x, float y, double gunAngle) {
+		for(Player player : players) {
+			if(player.getUsername().equals(username)) {
+				player.getHero().setX(x);
+				player.getHero().setY(y);
+				player.getHero().setGunAngle(gunAngle);
+			}
 		}
 	}
 	

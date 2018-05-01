@@ -26,8 +26,8 @@ public class GameServer extends Thread{
 	
 	public void run() {
 		while (true) {
-			byte[] data = new byte[1024];
-			DatagramPacket datagramPacket = new DatagramPacket(data, data.length);
+			byte[] message = new byte[1024];
+			DatagramPacket datagramPacket = new DatagramPacket(message, message.length);
 			try {
 				socket.receive(datagramPacket);
 			} catch (IOException e) {
@@ -35,15 +35,21 @@ public class GameServer extends Thread{
 			}
 			
 			Packet packet = new Packet(datagramPacket.getData());
+			String[] data = packet.getData();
 			switch (packet.getId()) {
 			case Packet.LOGIN:
-				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + packet.getData()[0] + " has connected");
+				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + data[0] + " has connected");
 				handleLogin(datagramPacket, packet.getData());
 				break;
 				
 			case Packet.DISCONNECT:
-				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + packet.getData()[0] + " has disconnected");
-				handleDisconnect(datagramPacket, packet.getData());
+				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + data[0] + " has disconnected");
+				handleDisconnect(datagramPacket, data);
+				break;
+				
+			case Packet.UPDATE_PLAYER:
+				sendDataToAllClients(packet.getMessage());
+				break;
 			}
 			
 		}

@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
+import net.GameClient;
+import net.Packet;
 
 public class LocalPlayer extends Player{
 	
@@ -13,13 +15,15 @@ public class LocalPlayer extends Player{
 	
 	private Camera camera;
 	
+	private GameClient client;
+	
 
-	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, String username) {
+	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, String username) {
 		super(username);
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;
-		
+		this.client = client;
 	}
 	
 	@Override
@@ -52,6 +56,9 @@ public class LocalPlayer extends Player{
 		}
 		
 		hero.tick();
+		
+		Packet packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
+		client.sendData(packet.getMessage());
 	}
 	
 	public double getMouseAngle() {

@@ -5,6 +5,7 @@ public class Packet {
 	public static final String INVALID = "-1";
 	public static final String LOGIN = "00";
 	public static final String DISCONNECT = "01";
+	public static final String UPDATE_PLAYER = "02";
 	
 	private String id;
 	private String data;
@@ -13,6 +14,14 @@ public class Packet {
 	public Packet(String id, String data) {
 		this.id = id;
 		this.data = data;
+	}
+	
+	public Packet(String id, String[] data) {
+		this.id = id;
+		this.data = "";
+		for(String d : data) {
+			this.data += d;
+		}
 	}
 	
 	public Packet(byte[] content) {

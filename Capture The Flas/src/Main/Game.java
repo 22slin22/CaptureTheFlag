@@ -41,7 +41,7 @@ public class Game {
 		
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
-		entityManager = new EntityManager(keyManager, mouseManager, map, camera);
+		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client);
 		camera.setHero(entityManager.getLocalPlayer().getHero());
 		
 		this.keyManager = keyManager;
