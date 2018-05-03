@@ -1,5 +1,6 @@
 package Entities.Heros;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -22,7 +23,9 @@ public abstract class Hero extends Entity{
 	protected float cooldown;
 	private double lastShot;
 	public static final int DAMAGE = 20;
-	private int health = 100;
+	
+	protected int defaultHealth = 100;
+	protected int currentHealth;
 	
 	protected EntityManager entityManager;
 	protected Map map;
@@ -37,6 +40,8 @@ public abstract class Hero extends Entity{
 		this.map = map;
 		this.cooldown = cooldown;
 		this.entityManager = entityManager;
+		
+		currentHealth = defaultHealth;
 	}
 	
 	
@@ -63,6 +68,7 @@ public abstract class Hero extends Entity{
 				projectile.render(g, cameraX, cameraY);
 			}
 		}
+		renderHealthBar(g, cameraX, cameraY);
 	}
 	
 	@Override
@@ -92,10 +98,20 @@ public abstract class Hero extends Entity{
 	}
 	
 	public void gotHit(int damage) {
-		health -= damage;
-		System.out.println(this + ": " + health);
+		currentHealth -= damage;
+		System.out.println(this + ": " + currentHealth);
 	}
 	
+	
+	private int healthBarWidth = 100;
+	private int healthBarHeight = 5;
+	private int healthBarYOffset = radius + healthBarHeight + 30;
+	protected void renderHealthBar(Graphics g, int cameraX, int cameraY) {
+		g.setColor(Color.GRAY);
+		g.drawRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth, healthBarHeight);
+		g.setColor(Color.GREEN);
+		g.fillRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth * currentHealth / defaultHealth, healthBarHeight);
+	}
 	
 	public abstract void shoot();
 	

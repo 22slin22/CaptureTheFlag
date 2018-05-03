@@ -26,20 +26,20 @@ public class EntityManager {
 		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, this, JOptionPane.showInputDialog("Please enter a username"));
 		player.setHero(new Runner(1000, 1000, map, this));
 		localPlayer = player;
-		//players.add(player);
+		players.add(player);
 
 		this.map = map;
 	}
 
 	public void tick() {
-		localPlayer.tick();
+		//localPlayer.tick();
 		for(Player player : getPlayers()) {
 			player.tick();
 		}
 	}
 
 	public void render(Graphics g, int cameraX, int cameraY) {
-		localPlayer.render(g, cameraX, cameraY);
+		//localPlayer.render(g, cameraX, cameraY);
 		for(Player player : getPlayers()) {
 			player.render(g, cameraX, cameraY);
 		}
@@ -87,10 +87,16 @@ public class EntityManager {
 		}
 	}
 	
-	public void hitPlayer(String username, int damage) {
+	public void hitPlayer(String usernameAttack, String username, int damage, int projectileId) {
 		for(Player player : getPlayers()) {
 			if(player.getUsername().equals(username)) {
 				player.getHero().gotHit(damage);
+			}
+		}
+		
+		for(Player player : getPlayers()) {
+			if(player.getUsername().equals(usernameAttack)) {
+				player.getHero().getProjectiles().get(projectileId).setRemove(true);
 			}
 		}
 	}

@@ -67,5 +67,9 @@ public abstract class Projectile extends Entity{
 	public boolean isRemove() {
 		return remove;
 	}
+	
+	public void setRemove(boolean remove) {
+		this.remove = remove;
+	}
 
 }

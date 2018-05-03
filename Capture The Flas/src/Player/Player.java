@@ -34,9 +34,8 @@ public class Player {
 	}
 	
 	private void renderNameTag(Graphics g, int cameraX, int cameraY) {
-		
 		g.setColor(Color.GRAY);
-		Fonts.drawCenteredText(g, username, (int)hero.getX() - cameraX, (int)hero.getY() - cameraY - hero.getRadius() - 20, Fonts.playerNameFont);
+		Fonts.drawCenteredText(g, username, (int)hero.getX() - cameraX, (int)hero.getY() - cameraY - hero.getRadius() - 30, Fonts.playerNameFont);
 	}
 
 

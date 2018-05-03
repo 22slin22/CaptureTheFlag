@@ -52,8 +52,6 @@ public class Runner extends Hero{
 
 	@Override
 	public void shoot() {
-		System.out.println("shooting");
-		
 		float spawnX = x + (float)(Math.cos(gunAngle) * 30);
 		float spawnY = y + (float)(-Math.sin(gunAngle) * 30);
 		

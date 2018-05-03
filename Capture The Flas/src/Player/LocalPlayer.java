@@ -46,16 +46,17 @@ public class LocalPlayer extends Player{
 			synchronized (entityManager.getPlayers()) {
 				for(Player player : entityManager.getPlayers()) {
 					if(Utils.Collisions.PlayerProjectileCollision(player, projectile)) {
-						hit(player);
+						hit(player.getUsername(), hero.getProjectiles().indexOf(projectile));
 					}
 				}
 			}
 		}
 	}
 	
-	private void hit(Player player) {
-		Packet packet = new Packet(Packet.HIT, username + "," + hero.DAMAGE);
+	private void hit(String playerUsername, int projectileId) {
+		Packet packet = new Packet(Packet.HIT, username + "," + playerUsername + "," + hero.DAMAGE + "," + projectileId);
 		client.sendData(packet.getMessage());
+		entityManager.hitPlayer(username, playerUsername, hero.DAMAGE, projectileId);
 	}
 	
 	private void updateHero() {

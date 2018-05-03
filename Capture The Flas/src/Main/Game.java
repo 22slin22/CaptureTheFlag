@@ -32,12 +32,22 @@ public class Game {
 	
 	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
 		this.main = main;
-		client = new GameClient(this, "localhost");
-		client.start();
 		if(JOptionPane.showConfirmDialog(main.getDisplay().getFrame(), "Do you want to host a server?") == 0) {
-			server = new GameServer(this);
+			server = new GameServer();
 			server.start();
+			
+			client = new GameClient(this, "localhost");
 		}
+		else {
+			String input = JOptionPane.showInputDialog("IP Addresse: ");
+			if (input.equalsIgnoreCase("till")) {
+				client = new GameClient(this, "192.168.2.126");
+			}
+			else {
+				client = new GameClient(this, input);
+			}
+		}
+		client.start();
 		
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
