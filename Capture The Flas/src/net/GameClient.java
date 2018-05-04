@@ -61,7 +61,6 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.HIT:
-				System.out.println("Got hit Packet");
 				game.getEntityManager().hitPlayer(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
 				break;
 			}

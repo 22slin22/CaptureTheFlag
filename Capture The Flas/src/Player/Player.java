@@ -15,6 +15,7 @@ import net.Packet;
 public class Player {
 	
 	protected String username;
+	protected int team;
 	
 	protected Hero hero;
 	
@@ -35,7 +36,7 @@ public class Player {
 	
 	private void renderNameTag(Graphics g, int cameraX, int cameraY) {
 		g.setColor(Color.GRAY);
-		Fonts.drawCenteredText(g, username, (int)hero.getX() - cameraX, (int)hero.getY() - cameraY - hero.getRadius() - 30, Fonts.playerNameFont);
+		Fonts.drawCenteredText(g, username, (int)hero.getX() - cameraX, (int)hero.getY() - cameraY + hero.getRadius() + 15, Fonts.playerNameFont);
 	}
 
 
@@ -45,10 +46,15 @@ public class Player {
 	
 	public void setHero(Hero hero) {
 		this.hero = hero;
+		hero.setTeam(team);
 	}
 	
 	public String getUsername() {
 		return username;
+	}
+	
+	public void setTeam(int team) {
+		this.team = team;
 	}
 
 }

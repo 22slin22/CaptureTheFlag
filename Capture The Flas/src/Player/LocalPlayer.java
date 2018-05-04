@@ -7,6 +7,8 @@ import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
+import Map.Flag;
+import Map.Map;
 import net.GameClient;
 import net.Packet;
 

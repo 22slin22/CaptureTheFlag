@@ -13,7 +13,9 @@ public class Display {
 	public Display(int width, int height) {
 		frame = new JFrame("Capture The Flag");
 		frame.setSize(width, height);
-		frame.setLocationRelativeTo(null);
+		//frame.setLocationRelativeTo(null);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		//frame.setUndecorated(true);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		

@@ -10,6 +10,7 @@ import Entities.Projectiles.Projectile;
 import Map.Map;
 import Map.Obstacle;
 import Player.Player;
+import Utils.Teams;
 import net.Packet;
 
 public abstract class Hero extends Entity{
@@ -27,12 +28,14 @@ public abstract class Hero extends Entity{
 	protected int defaultHealth = 100;
 	protected int currentHealth;
 	
+	protected int team;
+	
 	protected EntityManager entityManager;
 	protected Map map;
 
 	
-	public Hero(float x, float y, int radius, float speed, Map map, float cooldown, EntityManager entityManager) {
-		super(x, y, map.getObstacles());
+	public Hero(int team, int radius, float speed, Map map, float cooldown, EntityManager entityManager) {
+		super(Teams.getSpawnX(team), Teams.getSpawnY(team), map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.radius = radius;
@@ -48,6 +51,12 @@ public abstract class Hero extends Entity{
 	@Override
 	public void tick() {
 		super.tick();
+		
+		if(currentHealth <= 0) {
+			currentHealth = defaultHealth;
+			x = Teams.getSpawnX(team);
+			y = Teams.getSpawnY(team);
+		}
 		
 		synchronized (projectiles) {
 			for(Projectile projectile : projectiles) {
@@ -99,11 +108,10 @@ public abstract class Hero extends Entity{
 	
 	public void gotHit(int damage) {
 		currentHealth -= damage;
-		System.out.println(this + ": " + currentHealth);
 	}
 	
 	
-	private int healthBarWidth = 100;
+	private int healthBarWidth = 70;
 	private int healthBarHeight = 5;
 	private int healthBarYOffset = radius + healthBarHeight + 30;
 	protected void renderHealthBar(Graphics g, int cameraX, int cameraY) {
@@ -144,8 +152,16 @@ public abstract class Hero extends Entity{
 		return gunAngle;
 	}
 	
+	public void setTeam(int team) {
+		this.team = team;
+	}
+	
 	public ArrayList<Projectile> getProjectiles(){
 		return projectiles;
+	}
+	
+	public Map getMap() {
+		return map;
 	}
 
 }

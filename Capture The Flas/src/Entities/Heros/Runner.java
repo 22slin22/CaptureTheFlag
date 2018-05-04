@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import Entities.EntityManager;
 import Entities.Projectiles.StandardProjectile;
 import Map.Map;
+import Utils.Teams;
 
 public class Runner extends Hero{
 	
@@ -18,8 +19,8 @@ public class Runner extends Hero{
 	private final static float PROJECTILE_SPEED = 1f;
 	
 
-	public Runner(float x, float y, Map map, EntityManager entityManager) {
-		super(x, y, DIAMETER/2, SPEED, map, COOLDOWN, entityManager);
+	public Runner(int team, Map map, EntityManager entityManager) {
+		super(team, DIAMETER/2, SPEED, map, COOLDOWN, entityManager);
 		System.out.println(x);
 		System.out.println(y);
 	}
@@ -29,25 +30,27 @@ public class Runner extends Hero{
 	public void render(Graphics g, int cameraX, int cameraY) {
 		super.render(g, cameraX, cameraY);
 		
-		g.setColor(Color.BLACK);
-		g.fillOval((int)x - cameraX - DIAMETER/2, (int)y - cameraY - DIAMETER/2, DIAMETER, DIAMETER);
-		
+		g.setColor(Teams.getColor(team));
 		Graphics2D g2d = (Graphics2D) g.create();
-		
 		/*	Shotgun
 		Rectangle rect = new Rectangle((int)x - cameraX - 15 + 5,			// -10 to center it and +5 to let it stick out
 				(int)y - cameraY - 15, 30, 30);
 		*/
 		
-		Rectangle rect = new Rectangle((int)x - cameraX - 20 + 5,			// -20 to center it and +5 to let it stick out
-				(int)y - cameraY - 12, 40, 24);
-		
+		Rectangle rect = new Rectangle((int)x - cameraX - 20 + 5, (int)y - cameraY - 12, 40, 24);		// -20 to center it and +5 to let it stick out
 		g2d.rotate(-gunAngle, x-cameraX, y-cameraY);
-		
 		g2d.fill(rect);
+		
+		g2d.setColor(new Color(50, 50, 50));
+		g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
 		
 		g2d.dispose();
 		g2d = (Graphics2D) g.create();
+		
+		g.setColor(Teams.getColor(team));
+		g.fillOval((int)x - cameraX - DIAMETER/2, (int)y - cameraY - DIAMETER/2, DIAMETER, DIAMETER);
+		g.setColor(new Color(50, 50, 50));
+		g.drawOval((int)x - cameraX - DIAMETER/2, (int)y - cameraY - DIAMETER/2, DIAMETER, DIAMETER);
 	}
 
 	@Override
