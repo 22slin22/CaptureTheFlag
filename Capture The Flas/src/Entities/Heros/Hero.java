@@ -27,6 +27,7 @@ public abstract class Hero extends Entity{
 	
 	protected int defaultHealth = 100;
 	protected int currentHealth;
+	protected boolean dead = false;
 	
 	protected int team;
 	
@@ -52,10 +53,14 @@ public abstract class Hero extends Entity{
 	public void tick() {
 		super.tick();
 		
+		if(dead) {
+			dead = false;
+		}
 		if(currentHealth <= 0) {
 			currentHealth = defaultHealth;
 			x = Teams.getSpawnX(team);
 			y = Teams.getSpawnY(team);
+			dead = true;
 		}
 		
 		synchronized (projectiles) {
@@ -83,7 +88,6 @@ public abstract class Hero extends Entity{
 	@Override
 	public void move(float x, float y) {
 		this.x += x;
-		this.y += y;
 		
 		if(this.x < 0 + radius) {
 			this.x = radius;
@@ -91,6 +95,13 @@ public abstract class Hero extends Entity{
 		else if(this.x > max_x - radius) {
 			this.x = max_x - radius;
 		}
+		for(Obstacle obs : obstacles) {
+			if(obs.touches(this)) {
+				this.x -= x;
+			}
+		}
+		
+		this.y += y;
 		if(this.y < 0 + radius) {
 			this.y = radius;
 		}
@@ -100,7 +111,6 @@ public abstract class Hero extends Entity{
 		
 		for(Obstacle obs : obstacles) {
 			if(obs.touches(this)) {
-				this.x -= x;
 				this.y -= y;
 			}
 		}
@@ -154,6 +164,10 @@ public abstract class Hero extends Entity{
 	
 	public void setTeam(int team) {
 		this.team = team;
+	}
+	
+	public boolean isDead() {
+		return dead;
 	}
 	
 	public ArrayList<Projectile> getProjectiles(){

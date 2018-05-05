@@ -23,8 +23,8 @@ public class LocalPlayer extends Player{
 	private GameClient client;
 	
 
-	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, EntityManager entityManager, String username) {
-		super(username);
+	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, EntityManager entityManager, String username, int team) {
+		super(username, team);
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;

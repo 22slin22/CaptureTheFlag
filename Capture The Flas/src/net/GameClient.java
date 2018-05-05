@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
+
 import Main.Game;
 
 public class GameClient extends Thread{
@@ -41,12 +43,19 @@ public class GameClient extends Thread{
 			String[] data = packet.getData();
 			
 			switch(packet.getId()) {
+			case Packet.INVALID:
+				System.out.println(data[0]);
+				JOptionPane.showMessageDialog(game.getMain().getDisplay().getFrame(), data[0]);
+				System.exit(0);
+				break;
+				
 			case Packet.LOGIN:
-				game.getEntityManager().addPlayer(packet.getData()[0]);
+				System.out.println(data.length);
+				game.getEntityManager().addPlayer(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.DISCONNECT:
-				game.getEntityManager().removePlayer(packet.getData()[0]);
+				game.getEntityManager().removePlayer(data[0]);
 				break;
 				
 			case Packet.UPDATE_PLAYER:
@@ -62,6 +71,14 @@ public class GameClient extends Thread{
 				
 			case Packet.HIT:
 				game.getEntityManager().hitPlayer(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
+				break;
+				
+			case Packet.FLAG_PICKUP:
+				game.getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));
+				break;
+				
+			case Packet.FLAG_RETURN:
+				game.getEntityManager().flagReturn(Integer.parseInt(data[0]));
 				break;
 			}
 		}

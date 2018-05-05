@@ -50,6 +50,8 @@ public class GameServer extends Thread{
 			case Packet.UPDATE_PLAYER:
 			case Packet.SHOOT:
 			case Packet.HIT:
+			case Packet.FLAG_PICKUP:
+			case Packet.FLAG_RETURN:
 				sendDataToAllClients(datagramPacket, packet.getMessage());
 				break;
 			}
@@ -61,16 +63,24 @@ public class GameServer extends Thread{
 	private void handleLogin(DatagramPacket dataPacket, String[] data) {
 		for(MultiPlayer player : connections) {
 			if(dataPacket.getAddress() == player.getIpAddress() && dataPacket.getPort() == player.getPort()) {
+				Packet failPacket = new Packet(Packet.INVALID, "You are already connected");
+				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+				return;
+			}
+			if(player.getUsername().equals(data[0])) {
+				System.out.println("Error, same name");
+				Packet failPacket = new Packet(Packet.INVALID, "Name is already taken");
+				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 				return;
 			}
 		}
-		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0]));
-		Packet packet = new Packet(Packet.LOGIN, new String(data[0]));
+		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0], Integer.parseInt(data[1])));
+		Packet packet = new Packet(Packet.LOGIN, data[0] + "," + data[1]);															//username + team
 		sendDataToAllClients(dataPacket, packet.getMessage());
 		
 		// Sending all current players to the new one
 		for(MultiPlayer player : connections) {
-			packet = new Packet(Packet.LOGIN, player.getUsername());
+			packet = new Packet(Packet.LOGIN, player.getUsername() + "," + player.getTeam());
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		}
 		

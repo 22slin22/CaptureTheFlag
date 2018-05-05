@@ -8,6 +8,8 @@ public class Packet {
 	public static final String UPDATE_PLAYER = "02";
 	public static final String SHOOT = "03";
 	public static final String HIT = "04";
+	public static final String FLAG_PICKUP = "05";
+	public static final String FLAG_RETURN = "06";
 	
 	private String id;
 	private String data;

@@ -3,16 +3,15 @@ package Entities;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import Entities.Heros.Runner;
-import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Flag;
 import Map.Map;
-import Map.Obstacle;
 import Player.LocalPlayer;
 import Player.Player;
 import Utils.Teams;
@@ -25,14 +24,16 @@ public class EntityManager {
 	private Map map;
 	private ArrayList<Flag> flags = new ArrayList<>();
 
-	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client) {
-		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, this, JOptionPane.showInputDialog("Please enter a username"));
-		player.setHero(new Runner(Teams.BLUE, map, this));
+	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client, JFrame frame) {
+		Object[] options = {"BLUE", "RED"};
+		int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, this, JOptionPane.showInputDialog("Please enter a username"), team);
+		player.setHero(new Runner(player.getTeam(), map, this));
 		localPlayer = player;
 		players.add(player);
 
-		flags.add(new Flag(this, Teams.BLUE));
-		flags.add(new Flag(this, Teams.RED));
+		flags.add(new Flag(this, Teams.BLUE, client));
+		flags.add(new Flag(this, Teams.RED, client));
 		
 		this.map = map;
 	}
@@ -61,11 +62,10 @@ public class EntityManager {
 		getPlayers().add(player);
 	}
 	
-	public void addPlayer(String username) {
+	public void addPlayer(String username, int team) {
 		if(!(localPlayer.getUsername().equals(username))) {
 			System.out.println("Adding " + username);
-			Player player = new Player(username);
-			player.setTeam(Teams.RED);
+			Player player = new Player(username, team);
 			player.setHero(new Runner(Teams.RED, map, this));
 			getPlayers().add(player);
 			
@@ -112,6 +112,19 @@ public class EntityManager {
 				player.getHero().getProjectiles().get(projectileId).setRemove(true);
 			}
 		}
+	}
+	
+	public void flagPickup(String username, int flagIndex) {
+		for(Player player : getPlayers()) {
+			if(player.getUsername().equals(username)) {
+				System.out.println(username + " has now a flag");
+				flags.get(flagIndex).setCarrier(player);
+			}
+		}
+	}
+	
+	public void flagReturn(int flagIndex) {
+		flags.get(flagIndex).returnFlag();
 	}
 	
 	public LocalPlayer getLocalPlayer() {

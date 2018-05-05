@@ -20,8 +20,9 @@ public class Player {
 	protected Hero hero;
 	
 	
-	public Player(String username) {
+	public Player(String username, int team) {
 		this.username = username;
+		this.team = team;
 	}
 	
 	
@@ -53,8 +54,8 @@ public class Player {
 		return username;
 	}
 	
-	public void setTeam(int team) {
-		this.team = team;
+	public int getTeam() {
+		return team;
 	}
 
 }

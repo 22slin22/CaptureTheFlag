@@ -51,13 +51,13 @@ public class Game {
 		
 		map = new Map();
 		camera = new Camera(map.getWidth(), map.getHeight());
-		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client);
+		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client, main.getDisplay().getFrame());
 		camera.setHero(entityManager.getLocalPlayer().getHero());
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		
-		Packet packet = new Packet(Packet.LOGIN, entityManager.getLocalPlayer().getUsername());
+		Packet packet = new Packet(Packet.LOGIN, entityManager.getLocalPlayer().getUsername() + "," + entityManager.getLocalPlayer().getTeam());
 		client.sendData(packet.getMessage());
 	}
 	
@@ -83,6 +83,10 @@ public class Game {
 	
 	public GameClient getClient() {
 		return client;
+	}
+	
+	public Main getMain() {
+		return main;
 	}
 
 }
