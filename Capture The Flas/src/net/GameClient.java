@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
 import Main.Game;
+import Utils.Teams;
 
 public class GameClient extends Thread{
 	
@@ -79,6 +80,11 @@ public class GameClient extends Thread{
 				
 			case Packet.FLAG_RETURN:
 				game.getEntityManager().flagReturn(Integer.parseInt(data[0]));
+				break;
+				
+			case Packet.SCORED:
+				game.getEntityManager().score(Integer.parseInt(data[0]));		// 0 = flagIndex		1 = team		2 = username
+				System.out.println(data[1] + " has scored");
 				break;
 			}
 		}

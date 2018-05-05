@@ -127,6 +127,10 @@ public class EntityManager {
 		flags.get(flagIndex).returnFlag();
 	}
 	
+	public void score(int flagIndex) {
+		flags.get(flagIndex).score();
+	}
+	
 	public LocalPlayer getLocalPlayer() {
 		return localPlayer;
 	}

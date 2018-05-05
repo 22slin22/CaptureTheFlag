@@ -71,6 +71,12 @@ public class Flag {
 			else {
 				x = (int)carrier.getHero().getX() ;		//- carrier.getHero().getRadius() * 2;
 				y = (int)carrier.getHero().getY() ;		//- 30;
+				
+				if(carrier == entityManager.getLocalPlayer() && checkScored()) {
+					score();
+					Packet packet = new Packet(Packet.SCORED, entityManager.getFlags().indexOf(this) + "," + carrier.getTeam() + "," + carrier.getUsername());
+					client.sendData(packet.getMessage());
+				}
 			}
 		}
 	}
@@ -92,10 +98,20 @@ public class Flag {
 		return Collisions.circleCollision(this.x, this.y, PICKUP_RADIUS, player.getHero().getX(), player.getHero().getY(), player.getHero().getRadius());
 	}
 	
+	public boolean checkScored() {
+		return Collisions.circleCollision(Teams.getFlagSpawnX(carrier.getTeam()), Teams.getFlagSpawnY(carrier.getTeam()), PICKUP_RADIUS, carrier.getHero().getX(), carrier.getHero().getY(), carrier.getHero().getRadius());
+	}
+	
 	public void returnFlag() {
 		isPickedUp = false;
 		x = Teams.getSpawnX(team);
 		y = Teams.getSpawnY(team);
+	}
+	
+	public void score() {
+		Teams.increaseScore(carrier.getTeam());
+		isCarried = false;
+		returnFlag();
 	}
 	
 	
