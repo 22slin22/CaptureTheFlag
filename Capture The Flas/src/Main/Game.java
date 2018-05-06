@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JOptionPane;
 
+import Display.UI.Overlay;
 import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
@@ -21,6 +22,7 @@ public class Game {
 	private EntityManager entityManager;
 	
 	private Camera camera;
+	private Overlay overlay;
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
 	
@@ -53,6 +55,7 @@ public class Game {
 		camera = new Camera(map.getWidth(), map.getHeight());
 		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client, main.getDisplay().getFrame());
 		camera.setHero(entityManager.getLocalPlayer().getHero());
+		overlay = new Overlay(map, entityManager);
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
@@ -75,6 +78,7 @@ public class Game {
 		
 		map.render(g, cameraX, cameraY);
 		entityManager.render(g, cameraX, cameraY);
+		overlay.render(g);
 	}
 	
 	public EntityManager getEntityManager() {

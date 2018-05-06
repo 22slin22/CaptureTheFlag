@@ -21,8 +21,6 @@ public class Runner extends Hero{
 
 	public Runner(int team, Map map, EntityManager entityManager) {
 		super(team, DIAMETER/2, SPEED, map, COOLDOWN, entityManager);
-		System.out.println(x);
-		System.out.println(y);
 	}
 	
 

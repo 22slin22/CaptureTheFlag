@@ -52,15 +52,18 @@ public class EntityManager {
 		for(Flag flag : flags) {
 			flag.render(g, cameraX, cameraY);
 		}
-		
-		for(Player player : getPlayers()) {
-			player.render(g, cameraX, cameraY);
+		synchronized(players) {
+			for(Player player : players) {
+				player.render(g, cameraX, cameraY);
+			}
 		}
 	}
 	
 	public void addPlayer(Player player) {
-		getPlayers().add(player);
-	}
+		synchronized (players) {
+			players.add(player);
+		}
+	}	
 	
 	public void addPlayer(String username, int team) {
 		if(!(localPlayer.getUsername().equals(username))) {
@@ -117,7 +120,6 @@ public class EntityManager {
 	public void flagPickup(String username, int flagIndex) {
 		for(Player player : getPlayers()) {
 			if(player.getUsername().equals(username)) {
-				System.out.println(username + " has now a flag");
 				flags.get(flagIndex).setCarrier(player);
 			}
 		}

@@ -88,9 +88,18 @@ public class Flag {
 			g.setColor(Teams.getColor(team));
 			Polygon flag = new Polygon(new int[] {x-cameraX, x-cameraX, x-cameraX + FLAG_WIDTH}, new int[] {y-cameraY - FLAG_HEIGHT, y-cameraY - FLAG_HEIGHT/2, y-cameraY - FLAG_HEIGHT*3/4}, 3) ;
 			g.fillPolygon(flag);
+			
+			//if stolen draw tanslucid flag;
+			if(isPickedUp) {
+				int flagX = Teams.getFlagSpawnX(team);
+				int flagY = Teams.getFlagSpawnY(team);
+				g.setColor(new Color(0, 0, 0, 64));
+				g.drawLine(flagX - cameraX, flagY - cameraY, flagX - cameraX, flagY - cameraY - FLAG_HEIGHT);
+				g.setColor(new Color((Teams.getColor(team).getRed()), (Teams.getColor(team).getGreen()), (Teams.getColor(team).getBlue()), 64));
+				Polygon stolenFlag = new Polygon(new int[] {flagX-cameraX, flagX-cameraX, flagX-cameraX + FLAG_WIDTH}, new int[] {flagY-cameraY - FLAG_HEIGHT, flagY-cameraY - FLAG_HEIGHT/2, flagY-cameraY - FLAG_HEIGHT*3/4}, 3) ;
+				g.fillPolygon(stolenFlag);
+			}
 		}
-		
-		
 	}
 	
 	
@@ -104,8 +113,8 @@ public class Flag {
 	
 	public void returnFlag() {
 		isPickedUp = false;
-		x = Teams.getSpawnX(team);
-		y = Teams.getSpawnY(team);
+		x = Teams.getFlagSpawnX(team);
+		y = Teams.getFlagSpawnY(team);
 	}
 	
 	public void score() {
@@ -118,6 +127,7 @@ public class Flag {
 	public void setCarrier(Player player) {
 		carrier = player;
 		isCarried = true;
+		isPickedUp = true;
 	}
 	
 	public int getX() {

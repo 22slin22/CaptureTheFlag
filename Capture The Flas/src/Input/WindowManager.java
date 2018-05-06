@@ -27,7 +27,6 @@ public class WindowManager implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		System.out.println("Window closed");
 		Packet packet = new Packet(Packet.DISCONNECT, game.getEntityManager().getLocalPlayer().getUsername());
 		game.getClient().sendData(packet.getMessage());
 	}

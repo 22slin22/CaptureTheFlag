@@ -38,11 +38,6 @@ public class Main implements Runnable{
 		display.getCanvas().addMouseListener(mouseManager);
 		display.getCanvas().addMouseMotionListener(mouseManager);
 		
-		game = new Game(this, keyManager, mouseManager);
-		windowManager = new WindowManager(game);
-		display.getFrame().addWindowListener(windowManager);
-		
-		
 		try {
 			thread.sleep(500);
 		} catch (InterruptedException e) {
@@ -51,8 +46,9 @@ public class Main implements Runnable{
 		WIDTH = display.getCanvas().getWidth();
 		HEIGHT = display.getCanvas().getHeight();
 		
-		System.out.println(WIDTH);
-		System.out.println(HEIGHT);
+		game = new Game(this, keyManager, mouseManager);
+		windowManager = new WindowManager(game);
+		display.getFrame().addWindowListener(windowManager);
 		
 		start();
 	}

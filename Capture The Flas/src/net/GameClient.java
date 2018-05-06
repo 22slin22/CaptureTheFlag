@@ -51,7 +51,6 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.LOGIN:
-				System.out.println(data.length);
 				game.getEntityManager().addPlayer(data[0], Integer.parseInt(data[1]));
 				break;
 				
