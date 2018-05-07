@@ -7,14 +7,14 @@ public class Teams {
 	public static final int BLUE = 0;
 	public static final int RED = 1;
 	
-	public static final int SPAWN_BLUE_X = 1000;
+	public static final int SPAWN_BLUE_X = 300;
 	public static final int SPAWN_BLUE_Y = 1000;
-	public static final int SPAWN_RED_X = 2000;
+	public static final int SPAWN_RED_X = 2700;
 	public static final int SPAWN_RED_Y = 1000;
 	
-	public static final int FLAG_BLUE_X = 1100;
+	public static final int FLAG_BLUE_X = 200;
 	public static final int FLAG_BLUE_Y = 1000;
-	public static final int FLAG_RED_X = 1900;
+	public static final int FLAG_RED_X = 2800;
 	public static final int FLAG_RED_Y = 1000;
 	
 	private static int[] scores = new int[2];
