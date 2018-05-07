@@ -5,9 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import Display.UI.Killfeed;
 import Entities.EntityManager;
 import Entities.Projectiles.StandardProjectile;
 import Map.Map;
+import Player.Player;
 import Utils.Teams;
 
 public class Runner extends Hero{
@@ -19,8 +21,8 @@ public class Runner extends Hero{
 	private final static float PROJECTILE_SPEED = 1f;
 	
 
-	public Runner(int team, Map map, EntityManager entityManager) {
-		super(team, DIAMETER/2, SPEED, map, COOLDOWN, entityManager);
+	public Runner(int team, Map map, EntityManager entityManager, Player player, Killfeed killfeed) {
+		super(team, DIAMETER/2, SPEED, map, COOLDOWN, entityManager, player, killfeed);
 	}
 	
 

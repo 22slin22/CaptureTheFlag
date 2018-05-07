@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import Display.UI.Killfeed;
 import Entities.Entity;
 import Entities.EntityManager;
 import Entities.Projectiles.Projectile;
@@ -33,9 +34,11 @@ public abstract class Hero extends Entity{
 	
 	protected EntityManager entityManager;
 	protected Map map;
+	protected Player player;
+	protected Killfeed killfeed;
 
 	
-	public Hero(int team, int radius, float speed, Map map, float cooldown, EntityManager entityManager) {
+	public Hero(int team, int radius, float speed, Map map, float cooldown, EntityManager entityManager, Player player, Killfeed killfeed) {
 		super(Teams.getSpawnX(team), Teams.getSpawnY(team), map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
@@ -44,6 +47,8 @@ public abstract class Hero extends Entity{
 		this.map = map;
 		this.cooldown = cooldown;
 		this.entityManager = entityManager;
+		this.player = player;
+		this.killfeed = killfeed;
 		
 		currentHealth = defaultHealth;
 	}
@@ -55,12 +60,6 @@ public abstract class Hero extends Entity{
 		
 		if(dead) {
 			dead = false;
-		}
-		if(currentHealth <= 0) {
-			currentHealth = defaultHealth;
-			x = Teams.getSpawnX(team);
-			y = Teams.getSpawnY(team);
-			dead = true;
 		}
 		
 		synchronized (projectiles) {
@@ -116,8 +115,16 @@ public abstract class Hero extends Entity{
 		}
 	}
 	
-	public void gotHit(int damage) {
+	public void gotHit(int damage, Player hitter) {
 		currentHealth -= damage;
+		
+		if(currentHealth <= 0) {
+			currentHealth = defaultHealth;
+			x = Teams.getSpawnX(team);
+			y = Teams.getSpawnY(team);
+			dead = true;
+			killfeed.addKill(hitter, player);
+		}
 	}
 	
 	

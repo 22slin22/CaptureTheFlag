@@ -7,7 +7,8 @@ import java.awt.Graphics;
 public class Fonts {
 	
 	public static Font playerNameFont = new Font("Arial", Font.PLAIN, 25);
-	public static Font scoreFont = new Font("Aruial", Font.PLAIN, 45);
+	public static Font scoreFont = new Font("Arial", Font.BOLD, 45);
+	public static Font killFeedFont = new Font("Arial", Font.PLAIN, 30);
 	
 	public static void drawCenteredText(Graphics g, String text, int x, int y, Font font) {
 		FontMetrics metrics = g.getFontMetrics(font);

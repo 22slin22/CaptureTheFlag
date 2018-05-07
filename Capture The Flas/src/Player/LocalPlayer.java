@@ -47,7 +47,7 @@ public class LocalPlayer extends Player{
 		for(Projectile projectile : hero.getProjectiles()) {
 			synchronized (entityManager.getPlayers()) {
 				for(Player player : entityManager.getPlayers()) {
-					if(Utils.Collisions.PlayerProjectileCollision(player, projectile)) {
+					if(player.getTeam() != team && Utils.Collisions.PlayerProjectileCollision(player, projectile)) {
 						hit(player.getUsername(), hero.getProjectiles().indexOf(projectile));
 					}
 				}

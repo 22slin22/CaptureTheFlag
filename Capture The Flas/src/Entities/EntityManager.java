@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import Display.UI.Killfeed;
 import Entities.Heros.Runner;
 import Input.KeyManager;
 import Input.MouseManager;
@@ -23,12 +24,13 @@ public class EntityManager {
 	private ArrayList<Player> players = new ArrayList<>();
 	private Map map;
 	private ArrayList<Flag> flags = new ArrayList<>();
+	private Killfeed killfeed;
 
-	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client, JFrame frame) {
+	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client, JFrame frame, Killfeed killfeed) {
 		Object[] options = {"BLUE", "RED"};
 		int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, this, JOptionPane.showInputDialog("Please enter a username"), team);
-		player.setHero(new Runner(player.getTeam(), map, this));
+		player.setHero(new Runner(player.getTeam(), map, this, player, killfeed));
 		localPlayer = player;
 		players.add(player);
 
@@ -36,6 +38,7 @@ public class EntityManager {
 		flags.add(new Flag(this, Teams.RED, client));
 		
 		this.map = map;
+		this.killfeed = killfeed;
 	}
 
 	public void tick() {
@@ -69,7 +72,7 @@ public class EntityManager {
 		if(!(localPlayer.getUsername().equals(username))) {
 			System.out.println("Adding " + username);
 			Player player = new Player(username, team);
-			player.setHero(new Runner(Teams.RED, map, this));
+			player.setHero(new Runner(Teams.RED, map, this, player, killfeed));
 			getPlayers().add(player);
 			
 		}
@@ -106,7 +109,11 @@ public class EntityManager {
 	public void hitPlayer(String usernameAttack, String username, int damage, int projectileId) {
 		for(Player player : getPlayers()) {
 			if(player.getUsername().equals(username)) {
-				player.getHero().gotHit(damage);
+				for(Player attacker : getPlayers()) {
+					if(attacker.getUsername().equals(usernameAttack)) {
+							player.getHero().gotHit(damage, attacker);
+					}
+				}
 			}
 		}
 		

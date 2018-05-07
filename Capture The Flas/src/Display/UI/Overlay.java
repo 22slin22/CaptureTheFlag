@@ -13,34 +13,23 @@ import Utils.Teams;
 
 public class Overlay {
 	
-	private Map map;
-	private EntityManager entityManager;
+	private Minimap minimap;
+	private Killfeed killfeed;
 	
-	private int minimapWidth = 300;
-	private int minimapHeight;
-	
-	private int minimapXOffset = 50;
-	private int minimapYOffset = 50;
-	
-	private int minimapXStart;
-	private int minimapYStart;
-	
-	private float minimapScalar;
-	
-	public Overlay(Map map, EntityManager entityManager) {
-		this.map = map;
-		this.entityManager = entityManager;
-		
-		minimapHeight = minimapWidth * map.getHeight() / map.getWidth();
-		minimapXStart = Main.getWidth() - minimapXOffset - minimapWidth;
-		minimapYStart = minimapYOffset;
-		minimapScalar = (float)minimapWidth / (float)map.getWidth();
+	public Overlay() {
+		minimap = new Minimap();
+		killfeed = new Killfeed();
 	}
 	
 	
+	public void tick() {
+		killfeed.tick();
+	}
+	
 	public void render(Graphics g) {
 		drawScoreboard(g);
-		drawMinimap(g);
+		minimap.render(g);
+		killfeed.render(g);
 	}
 	
 	private int scoreboardXOffset = 15;
@@ -56,37 +45,16 @@ public class Overlay {
 		Fonts.drawLeftAllinedText(g, "" + Teams.getScore(Teams.RED), Main.getWidth()/2 + scoreboardXOffset, scoreboardYOffset, Fonts.scoreFont);
 	}
 	
-	private void drawMinimap(Graphics g) {
-		drawMinimapBorder(g, minimapHeight);
-		drawMinimapObstacles(g);
-		drawMinimapPlayers(g);
+	public Killfeed getKillfeed() {
+		return killfeed;
 	}
 	
-	private int borderThickness = 3;
-	private  void drawMinimapBorder(Graphics g, int minimapHeight) {
-		g.setColor(Color.BLACK);
-		g.fillRect(minimapXStart - borderThickness, minimapYStart - borderThickness, minimapWidth + 2*borderThickness, minimapHeight + 2*borderThickness);
-		
-		g.setColor(Color.WHITE);
-		g.fillRect(minimapXStart, minimapYStart, minimapWidth, minimapHeight);
+	public void setMap(Map map) {
+		minimap.setMap(map);
 	}
 	
-	private void drawMinimapObstacles(Graphics g) {
-		g.setColor(Color.BLACK);
-		for(Obstacle obs : map.getObstacles()) {
-			g.fillRect(minimapXStart + (int)(obs.getX()*minimapScalar), minimapYStart + (int)(obs.getY()*minimapScalar), (int)(obs.getWidth()*minimapScalar), (int)(obs.getHeight()*minimapScalar));
-		}
-	}
-	
-	private void drawMinimapPlayers(Graphics g) {
-		synchronized (entityManager.getPlayers()) {
-			for(Player player : entityManager.getPlayers()) {
-				g.setColor(Teams.getColor(player.getTeam()));
-				g.fillOval(minimapXStart + (int)((player.getHero().getX() - (float)player.getHero().getRadius())*minimapScalar), 
-						minimapYStart + (int)((player.getHero().getY() - player.getHero().getRadius())*minimapScalar), 
-						(int)(player.getHero().getRadius()*2*minimapScalar), (int)(player.getHero().getRadius()*2*minimapScalar));
-			}
-		}
+	public void setEntityManager(EntityManager entityManager) {
+		minimap.setEntityManager(entityManager);
 	}
 
 }

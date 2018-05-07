@@ -45,17 +45,22 @@ public class Game {
 			if (input.equalsIgnoreCase("till")) {
 				client = new GameClient(this, "192.168.2.126");
 			}
+			if (input.equalsIgnoreCase("l")) {
+				client = new GameClient(this, "localhost");
+			}
 			else {
 				client = new GameClient(this, input);
 			}
 		}
 		client.start();
 		
+		overlay = new Overlay();
 		map = new Map();
+		overlay.setMap(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
-		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client, main.getDisplay().getFrame());
+		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client, main.getDisplay().getFrame(), overlay.getKillfeed());
+		overlay.setEntityManager(entityManager);
 		camera.setHero(entityManager.getLocalPlayer().getHero());
-		overlay = new Overlay(map, entityManager);
 		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
@@ -67,6 +72,7 @@ public class Game {
 	public void tick() {
 		entityManager.tick();
 		camera.tick();
+		overlay.tick();
 	}
 	
 	public void render(Graphics g) {
