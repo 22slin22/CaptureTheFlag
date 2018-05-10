@@ -42,8 +42,10 @@ public class EntityManager {
 	}
 
 	public void tick() {
-		for(Player player : getPlayers()) {
-			player.tick();
+		synchronized(players) {
+			for(Player player : players) {
+				player.tick();
+			}
 		}
 		
 		for(Flag flag : flags) {
@@ -73,7 +75,9 @@ public class EntityManager {
 			System.out.println("Adding " + username);
 			Player player = new Player(username, team);
 			player.setHero(new Runner(Teams.RED, map, this, player, killfeed));
-			getPlayers().add(player);
+			synchronized (players) {
+				players.add(player);
+			}
 			
 		}
 	}

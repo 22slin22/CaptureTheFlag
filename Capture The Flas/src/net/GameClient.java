@@ -85,6 +85,10 @@ public class GameClient extends Thread{
 				game.getEntityManager().score(Integer.parseInt(data[0]));		// 0 = flagIndex		1 = team		2 = username
 				System.out.println(data[1] + " has scored");
 				break;
+				
+			case Packet.START_GAME:
+				game.startGame();
+				break;
 			}
 		}
 	}

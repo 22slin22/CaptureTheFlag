@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import javax.swing.JOptionPane;
 
 import Display.UI.Overlay;
+import Display.UI.Lobbys.Lobby;
 import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
@@ -16,10 +17,13 @@ import net.Packet;
 
 public class Game {
 	
+	private boolean running = false;
 	private int cameraX, cameraY;
 	
 	private Map map;
 	private EntityManager entityManager;
+	
+	private Lobby lobby;
 	
 	private Camera camera;
 	private Overlay overlay;
@@ -62,6 +66,11 @@ public class Game {
 		overlay.setEntityManager(entityManager);
 		camera.setHero(entityManager.getLocalPlayer().getHero());
 		
+		lobby = new Lobby(entityManager.getPlayers(), this, client);
+		if(server != null) {
+			lobby.setHost(true);
+		}
+		
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		
@@ -70,21 +79,31 @@ public class Game {
 	}
 	
 	public void tick() {
-		entityManager.tick();
-		camera.tick();
-		overlay.tick();
+		if(running) {
+			entityManager.tick();
+			camera.tick();
+			overlay.tick();
+		}
+		else {
+			lobby.tick();
+		}
 	}
 	
 	public void render(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Main.getWidth(), Main.getHeight());
 		
-		cameraX = camera.getX();
-		cameraY = camera.getY();
-		
-		map.render(g, cameraX, cameraY);
-		entityManager.render(g, cameraX, cameraY);
-		overlay.render(g);
+		if(running) {
+			cameraX = camera.getX();
+			cameraY = camera.getY();
+			
+			map.render(g, cameraX, cameraY);
+			entityManager.render(g, cameraX, cameraY);
+			overlay.render(g);
+		}
+		else {
+			lobby.render(g);
+		}
 	}
 	
 	public EntityManager getEntityManager() {
@@ -97,6 +116,10 @@ public class Game {
 	
 	public Main getMain() {
 		return main;
+	}
+	
+	public void startGame() {
+		running = true;
 	}
 
 }

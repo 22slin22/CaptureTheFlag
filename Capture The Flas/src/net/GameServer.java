@@ -53,6 +53,7 @@ public class GameServer extends Thread{
 			case Packet.FLAG_PICKUP:
 			case Packet.FLAG_RETURN:
 			case Packet.SCORED:
+			case Packet.START_GAME:
 				sendDataToAllClients(datagramPacket, packet.getMessage());
 				break;
 			}

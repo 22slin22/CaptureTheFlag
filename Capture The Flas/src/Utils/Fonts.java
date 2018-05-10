@@ -10,6 +10,10 @@ public class Fonts {
 	public static Font scoreFont = new Font("Arial", Font.BOLD, 45);
 	public static Font killFeedFont = new Font("Arial", Font.PLAIN, 30);
 	
+	public static Font lobbyTeamNameFont = new Font("Arial", Font.BOLD, 45);
+	public static Font lobbyNameFont = new Font("Arial", Font.PLAIN, 30);
+	public static Font buttonFont = new Font("Arial", Font.PLAIN, 30);
+	
 	public static void drawCenteredText(Graphics g, String text, int x, int y, Font font) {
 		FontMetrics metrics = g.getFontMetrics(font);
 		

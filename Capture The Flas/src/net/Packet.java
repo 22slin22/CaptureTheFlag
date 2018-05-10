@@ -11,6 +11,7 @@ public class Packet {
 	public static final String FLAG_PICKUP = "05";
 	public static final String FLAG_RETURN = "06";
 	public static final String SCORED = "07";
+	public static final String START_GAME = "08";
 	
 	private String id;
 	private String data;

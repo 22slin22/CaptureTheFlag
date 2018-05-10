@@ -6,9 +6,9 @@ import java.awt.event.MouseMotionListener;
 
 public class MouseManager implements MouseListener, MouseMotionListener{
 	
-	private boolean leftButton;
-	private int x = 0;
-	private int y = 0;
+	private static boolean leftButton;
+	private static int x = 0;
+	private static int y = 0;
 	
 
 	@Override
@@ -38,15 +38,15 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 	}
 	
 	
-	public boolean isLeftButton() {
+	public static boolean isLeftButton() {
 		return leftButton;
 	}
 	
-	public int getX() {
+	public static int getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public static int getY() {
 		return y;
 	}
 	
