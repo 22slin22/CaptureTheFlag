@@ -10,7 +10,8 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
 import Main.Game;
-import Utils.Teams;
+import States.StateManager;
+import States.States;
 
 public class GameClient extends Thread{
 	
@@ -51,43 +52,46 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.LOGIN:
-				game.getEntityManager().addPlayer(data[0], Integer.parseInt(data[1]));
+				StateManager.getGameState().getEntityManager().addPlayer(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.DISCONNECT:
-				game.getEntityManager().removePlayer(data[0]);
+				StateManager.getGameState().getEntityManager().removePlayer(data[0]);
 				break;
 				
 			case Packet.UPDATE_PLAYER:
 				float x = Float.parseFloat(data[1]);
 				float y = Float.parseFloat(data[2]);
 				double gunAngle = Double.parseDouble(data[3]);
-				game.getEntityManager().updatePlayer(data[0], x, y, gunAngle);
+				StateManager.getGameState().getEntityManager().updatePlayer(data[0], x, y, gunAngle);
 				break;
 				
 			case Packet.SHOOT:
-				game.getEntityManager().playerShoot(data[0]);
+				StateManager.getGameState().getEntityManager().playerShoot(data[0]);
 				break;
 				
 			case Packet.HIT:
-				game.getEntityManager().hitPlayer(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
+				StateManager.getGameState().getEntityManager().hitPlayer(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
 				break;
 				
 			case Packet.FLAG_PICKUP:
-				game.getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));
+				StateManager.getGameState().getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.FLAG_RETURN:
-				game.getEntityManager().flagReturn(Integer.parseInt(data[0]));
+				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[0]));
 				break;
 				
 			case Packet.SCORED:
-				game.getEntityManager().score(Integer.parseInt(data[0]));		// 0 = flagIndex		1 = team		2 = username
-				System.out.println(data[1] + " has scored");
+				StateManager.getGameState().getEntityManager().score(Integer.parseInt(data[0]));		// 0 = flagIndex		1 = team		2 = username
 				break;
 				
 			case Packet.START_GAME:
-				game.startGame();
+				StateManager.changeState(States.GAME_STATE);
+				break;
+				
+			case Packet.CHANGE_TEAM:
+				StateManager.getGameState().getEntityManager().changeTeam(data[0], Integer.parseInt(data[1]));
 				break;
 			}
 		}

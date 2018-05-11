@@ -4,6 +4,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import Main.Game;
+import States.StateManager;
 import net.Packet;
 
 public class WindowManager implements WindowListener{
@@ -27,7 +28,7 @@ public class WindowManager implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		Packet packet = new Packet(Packet.DISCONNECT, game.getEntityManager().getLocalPlayer().getUsername());
+		Packet packet = new Packet(Packet.DISCONNECT, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
 		game.getClient().sendData(packet.getMessage());
 	}
 

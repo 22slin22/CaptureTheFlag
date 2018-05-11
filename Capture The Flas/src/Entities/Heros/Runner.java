@@ -61,6 +61,7 @@ public class Runner extends Hero{
 		synchronized (projectiles) {
 			projectiles.add(new StandardProjectile(spawnX, spawnY, gunAngle, PROJECTILE_SPEED, map));
 		}
+		lastShot = System.currentTimeMillis();
 	}
 
 }

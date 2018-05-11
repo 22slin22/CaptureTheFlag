@@ -47,15 +47,18 @@ public class GameServer extends Thread{
 				handleDisconnect(datagramPacket, data);
 				break;
 				
-			case Packet.UPDATE_PLAYER:
 			case Packet.SHOOT:
-			case Packet.HIT:
 			case Packet.FLAG_PICKUP:
 			case Packet.FLAG_RETURN:
 			case Packet.SCORED:
 			case Packet.START_GAME:
+			case Packet.CHANGE_TEAM:
+			case Packet.HIT:
 				sendDataToAllClients(datagramPacket, packet.getMessage());
 				break;
+				
+			case Packet.UPDATE_PLAYER:
+				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
 			}
 			
 		}
@@ -78,7 +81,7 @@ public class GameServer extends Thread{
 		}
 		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0], Integer.parseInt(data[1])));
 		Packet packet = new Packet(Packet.LOGIN, data[0] + "," + data[1]);															//username + team
-		sendDataToAllClients(dataPacket, packet.getMessage());
+		sendDataToAllClientsExceptSender(dataPacket, packet.getMessage());
 		
 		// Sending all current players to the new one
 		for(MultiPlayer player : connections) {
@@ -92,7 +95,7 @@ public class GameServer extends Thread{
 		for(MultiPlayer player : connections) {
 			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
 				Packet packet = new Packet(Packet.DISCONNECT, data[0]);
-				sendDataToAllClients(dataPacket, packet.getMessage());
+				sendDataToAllClientsExceptSender(dataPacket, packet.getMessage());
 				connections.remove(player);
 				break;
 			}
@@ -108,8 +111,14 @@ public class GameServer extends Thread{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void sendDataToAllClients(DatagramPacket dataPacket, byte[] message) {
+		for(MultiPlayer player : connections) {
+			sendData(message, player.getIpAddress(), player.getPort());
+		}
+	}
+
+	public void sendDataToAllClientsExceptSender(DatagramPacket dataPacket, byte[] message) {
 		for(MultiPlayer player : connections) {
 			if(!(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort())) {
 				sendData(message, player.getIpAddress(), player.getPort());

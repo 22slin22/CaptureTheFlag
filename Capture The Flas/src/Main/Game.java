@@ -1,32 +1,19 @@
 package Main;
-import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JOptionPane;
 
-import Display.UI.Overlay;
-import Display.UI.Lobbys.Lobby;
-import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
-import Map.Camera;
-import Map.Map;
+import States.StateManager;
+import States.States;
 import net.GameClient;
 import net.GameServer;
 import net.Packet;
 
 public class Game {
+	private StateManager stateManager;
 	
-	private boolean running = false;
-	private int cameraX, cameraY;
-	
-	private Map map;
-	private EntityManager entityManager;
-	
-	private Lobby lobby;
-	
-	private Camera camera;
-	private Overlay overlay;
 	private KeyManager keyManager;
 	private MouseManager mouseManager;
 	
@@ -38,6 +25,9 @@ public class Game {
 	
 	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
 		this.main = main;
+		this.keyManager = keyManager;
+		this.mouseManager = mouseManager;
+		
 		if(JOptionPane.showConfirmDialog(main.getDisplay().getFrame(), "Do you want to host a server?") == 0) {
 			server = new GameServer();
 			server.start();
@@ -58,56 +48,23 @@ public class Game {
 		}
 		client.start();
 		
-		overlay = new Overlay();
-		map = new Map();
-		overlay.setMap(map);
-		camera = new Camera(map.getWidth(), map.getHeight());
-		entityManager = new EntityManager(keyManager, mouseManager, map, camera, client, main.getDisplay().getFrame(), overlay.getKillfeed());
-		overlay.setEntityManager(entityManager);
-		camera.setHero(entityManager.getLocalPlayer().getHero());
+		stateManager = new StateManager(keyManager, mouseManager, client, main);
+		StateManager.changeState(States.START_MENU);
 		
-		lobby = new Lobby(entityManager.getPlayers(), this, client);
 		if(server != null) {
-			lobby.setHost(true);
+			StateManager.getLobby().setHost(true);
 		}
 		
-		this.keyManager = keyManager;
-		this.mouseManager = mouseManager;
-		
-		Packet packet = new Packet(Packet.LOGIN, entityManager.getLocalPlayer().getUsername() + "," + entityManager.getLocalPlayer().getTeam());
+		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + StateManager.getGameState().getEntityManager().getLocalPlayer().getTeam());
 		client.sendData(packet.getMessage());
 	}
 	
 	public void tick() {
-		if(running) {
-			entityManager.tick();
-			camera.tick();
-			overlay.tick();
-		}
-		else {
-			lobby.tick();
-		}
+		StateManager.getActiveState().tick();
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, Main.getWidth(), Main.getHeight());
-		
-		if(running) {
-			cameraX = camera.getX();
-			cameraY = camera.getY();
-			
-			map.render(g, cameraX, cameraY);
-			entityManager.render(g, cameraX, cameraY);
-			overlay.render(g);
-		}
-		else {
-			lobby.render(g);
-		}
-	}
-	
-	public EntityManager getEntityManager() {
-		return entityManager;
+		StateManager.getActiveState().render(g);
 	}
 	
 	public GameClient getClient() {
@@ -116,10 +73,6 @@ public class Game {
 	
 	public Main getMain() {
 		return main;
-	}
-	
-	public void startGame() {
-		running = true;
 	}
 
 }

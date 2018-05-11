@@ -42,14 +42,14 @@ public class EntityManager {
 	}
 
 	public void tick() {
+		for(Flag flag : flags) {
+			flag.tick();
+		}
+		
 		synchronized(players) {
 			for(Player player : players) {
 				player.tick();
 			}
-		}
-		
-		for(Flag flag : flags) {
-			flag.tick();
 		}
 	}
 
@@ -83,55 +83,76 @@ public class EntityManager {
 	}
 	
 	public void updatePlayer(String username, float x, float y, double gunAngle) {
-		for(Player player : players) {
-			if(player.getUsername().equals(username)) {
-				player.getHero().setX(x);
-				player.getHero().setY(y);
-				player.getHero().setGunAngle(gunAngle);
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					player.getHero().setX(x);
+					player.getHero().setY(y);
+					player.getHero().setGunAngle(gunAngle);
+				}
+			}
+		}
+	}
+	
+	public void changeTeam(String username, int team) {
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					player.setTeam(team);
+				}
 			}
 		}
 	}
 	
 	public void removePlayer(String username) {
 		System.out.println("Deleting " + username);
-		for(Player player : getPlayers()) {
-			if(player.getUsername().equals(username)) {
-				getPlayers().remove(player);
-				break;
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					getPlayers().remove(player);
+					break;
+				}
 			}
 		}
 	}
 	
 	public void playerShoot(String username) {
-		for(Player player : getPlayers()) {
-			if(player.getUsername().equals(username)) {
-				player.getHero().shoot();
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					player.getHero().shoot();
+				}
 			}
 		}
 	}
 	
 	public void hitPlayer(String usernameAttack, String username, int damage, int projectileId) {
-		for(Player player : getPlayers()) {
-			if(player.getUsername().equals(username)) {
-				for(Player attacker : getPlayers()) {
-					if(attacker.getUsername().equals(usernameAttack)) {
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					for(Player attacker : getPlayers()) {
+						if(attacker.getUsername().equals(usernameAttack)) {
 							player.getHero().gotHit(damage, attacker);
+						}
 					}
 				}
 			}
-		}
 		
-		for(Player player : getPlayers()) {
-			if(player.getUsername().equals(usernameAttack)) {
-				player.getHero().getProjectiles().get(projectileId).setRemove(true);
+		
+			for(Player player : players) {
+				if(player.getUsername().equals(usernameAttack)) {
+					player.getHero().getProjectiles().get(projectileId).setRemove(true);
+				}
 			}
 		}
 	}
 	
 	public void flagPickup(String username, int flagIndex) {
-		for(Player player : getPlayers()) {
-			if(player.getUsername().equals(username)) {
-				flags.get(flagIndex).setCarrier(player);
+		synchronized (players) {
+			for(Player player : getPlayers()) {
+				if(player.getUsername().equals(username)) {
+					flags.get(flagIndex).setCarrier(player);
+				}
 			}
 		}
 	}

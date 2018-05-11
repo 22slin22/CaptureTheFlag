@@ -23,7 +23,7 @@ public abstract class Hero extends Entity{
 	protected ArrayList<Projectile> projectiles = new ArrayList<>();
 	protected double gunAngle;
 	protected float cooldown;
-	private double lastShot;
+	protected double lastShot;
 	public static final int DAMAGE = 20;
 	
 	protected int defaultHealth = 100;

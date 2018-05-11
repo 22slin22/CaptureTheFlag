@@ -31,6 +31,8 @@ public class Button {
 	public void tick() {
 		if(clicked)
 			clicked = false;
+		if(pressed)
+			pressed = false;
 		
 		if(MouseManager.isLeftButton() && containsMouse()) {
 			if(!pressed) {

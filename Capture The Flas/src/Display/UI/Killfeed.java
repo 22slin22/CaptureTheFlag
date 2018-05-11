@@ -49,8 +49,6 @@ public class Killfeed {
 		g.drawString(kill.getKillerName() + " -> ", X_OFFSET, y);
 		
 		int x = X_OFFSET + metrics.stringWidth(kill.getKillerName() + " -> ");
-		System.out.println(kill.getKillerName());
-		System.out.println(x);
 		g.setColor(Teams.getColor(kill.getTarget().getTeam()));
 		g.drawString(kill.getTargetName(), x, y);
 	}

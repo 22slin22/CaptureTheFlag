@@ -51,14 +51,10 @@ public class Flag {
 			if(checkPickup(entityManager.getLocalPlayer())) {
 				if(entityManager.getLocalPlayer().getTeam() != team) {
 					//When picked up by the local player
-					carrier = entityManager.getLocalPlayer();
-					isCarried = true;
-					isPickedUp = true;
 					Packet packet = new Packet(Packet.FLAG_PICKUP, entityManager.getLocalPlayer().getUsername() + "," + entityManager.getFlags().indexOf(this));
 					client.sendData(packet.getMessage());
 				}
 				else if(isPickedUp){
-					returnFlag();
 					Packet packet = new Packet(Packet.FLAG_RETURN, "" + entityManager.getFlags().indexOf(this));
 					client.sendData(packet.getMessage());
 				}
@@ -73,7 +69,6 @@ public class Flag {
 				y = (int)carrier.getHero().getY() ;		//- 30;
 				
 				if(carrier == entityManager.getLocalPlayer() && checkScored()) {
-					score();
 					Packet packet = new Packet(Packet.SCORED, entityManager.getFlags().indexOf(this) + "," + carrier.getTeam() + "," + carrier.getUsername());
 					client.sendData(packet.getMessage());
 				}

@@ -58,7 +58,6 @@ public class LocalPlayer extends Player{
 	private void hit(String playerUsername, int projectileId) {
 		Packet packet = new Packet(Packet.HIT, username + "," + playerUsername + "," + hero.DAMAGE + "," + projectileId);
 		client.sendData(packet.getMessage());
-		entityManager.hitPlayer(username, playerUsername, hero.DAMAGE, projectileId);
 	}
 	
 	private void updateHero() {
@@ -86,11 +85,8 @@ public class LocalPlayer extends Player{
 	}
 	
 	private void testShoot() {
-		if(mouseManager.isLeftButton()) {
+		if(MouseManager.isLeftButton()) {
 			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
-				hero.shoot();
-				hero.setLastShot(System.currentTimeMillis());
-				
 				Packet packet = new Packet(Packet.SHOOT, username);
 				client.sendData(packet.getMessage());
 			}

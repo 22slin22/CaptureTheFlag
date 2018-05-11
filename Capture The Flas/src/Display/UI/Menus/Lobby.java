@@ -1,4 +1,4 @@
-package Display.UI.Lobbys;
+package Display.UI.Menus;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -8,15 +8,19 @@ import java.util.ArrayList;
 import Main.Game;
 import Main.Main;
 import Player.Player;
+import States.State;
+import States.States;
+import States.StateManager;
 import Utils.Button;
 import Utils.Fonts;
 import Utils.Teams;
 import net.GameClient;
 import net.Packet;
 
-public class Lobby {
+public class Lobby extends State{
 	
-	public ArrayList<Player> players = new ArrayList<>();
+	private ArrayList<Player> players = new ArrayList<>();
+	private Player localPlayer;
 	
 	private boolean isHost = false;
 	
@@ -25,38 +29,45 @@ public class Lobby {
 	private int HEIGHT = Main.getHeight() - 2 * yOffset;
 	private int x = Main.getWidth() / 4;
 	
-	private Button startButton;
+	private int teamNameSpace = 100;
 	
-	private Game game;
+	private Button startButton;
+	private Button blueTeamButton;
+	private Button redTeamButton;
+	
 	private GameClient client;
 	
-	
-	public Lobby() {
-		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
-		startButton.setColor(Color.YELLOW);
-		startButton.setText("Start");
-		startButton.setTextColor(Color.BLACK);
-		startButton.setFont(Fonts.buttonFont);
-	}
-	public Lobby(ArrayList<Player> players, Game game, GameClient client) {
+	public Lobby(ArrayList<Player> players, GameClient client, Player localPlayer) {
 		this.players = players;
-		this.game = game;
 		this.client = client;
+		this.localPlayer = localPlayer;
 		
 		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
 		startButton.setColor(Color.YELLOW);
 		startButton.setText("Start");
 		startButton.setTextColor(Color.BLACK);
 		startButton.setFont(Fonts.buttonFont);
+		
+		blueTeamButton = new Button(x, yOffset, WIDTH/2, teamNameSpace);
+		redTeamButton = new Button(x + WIDTH/2, yOffset, WIDTH/2, teamNameSpace);
 	}
 	
 	
 	public void tick() {
 		startButton.tick();
-		if(startButton.isClicked() && isHost) {
-			game.startGame();
-			
+		if(startButton.isClicked() && isHost) {			
 			Packet packet = new Packet(Packet.START_GAME, "");
+			client.sendData(packet.getMessage());
+		}
+		
+		blueTeamButton.tick();
+		redTeamButton.tick();
+		if(blueTeamButton.isClicked()) {
+			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.BLUE);
+			client.sendData(packet.getMessage());
+		}
+		if(redTeamButton.isClicked()) {
+			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.RED);
 			client.sendData(packet.getMessage());
 		}
 	}
@@ -71,8 +82,6 @@ public class Lobby {
 		if(isHost)
 			startButton.render(g);
 	}
-	
-	private int teamNameSpace = 100;
 	
 	private void renderLayout(Graphics g) {
 		g.setColor(new Color(235, 235, 235));
