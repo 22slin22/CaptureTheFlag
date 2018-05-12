@@ -28,8 +28,10 @@ public class WindowManager implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		Packet packet = new Packet(Packet.DISCONNECT, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
-		game.getClient().sendData(packet.getMessage());
+		if(game.getClient() != null) {
+			Packet packet = new Packet(Packet.DISCONNECT, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
+			game.getClient().sendData(packet.getMessage());
+		}
 	}
 
 	@Override

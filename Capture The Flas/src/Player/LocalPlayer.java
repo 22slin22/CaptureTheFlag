@@ -6,9 +6,8 @@ import Entities.EntityManager;
 import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
+import Main.Game;
 import Map.Camera;
-import Map.Flag;
-import Map.Map;
 import net.GameClient;
 import net.Packet;
 
@@ -20,15 +19,14 @@ public class LocalPlayer extends Player{
 	private Camera camera;
 	private EntityManager entityManager;
 	
-	private GameClient client;
+	private Game game;
 	
 
-	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, GameClient client, EntityManager entityManager, String username, int team) {
-		super(username, team);
+	public LocalPlayer(KeyManager keyManager, MouseManager mouseManager, Camera camera, Game game, EntityManager entityManager) {
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		this.camera = camera;
-		this.client = client;
+		this.game = game;
 		this.entityManager = entityManager;
 	}
 	
@@ -57,7 +55,7 @@ public class LocalPlayer extends Player{
 	
 	private void hit(String playerUsername, int projectileId) {
 		Packet packet = new Packet(Packet.HIT, username + "," + playerUsername + "," + hero.DAMAGE + "," + projectileId);
-		client.sendData(packet.getMessage());
+		game.getClient().sendData(packet.getMessage());
 	}
 	
 	private void updateHero() {
@@ -81,14 +79,14 @@ public class LocalPlayer extends Player{
 		hero.setGunAngle(getMouseAngle());
 		
 		Packet packet = new Packet(Packet.UPDATE_PLAYER, username + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
-		client.sendData(packet.getMessage());
+		game.getClient().sendData(packet.getMessage());
 	}
 	
 	private void testShoot() {
 		if(MouseManager.isLeftButton()) {
 			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
 				Packet packet = new Packet(Packet.SHOOT, username);
-				client.sendData(packet.getMessage());
+				game.getClient().sendData(packet.getMessage());
 			}
 		}
 	}

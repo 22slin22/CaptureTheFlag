@@ -28,35 +28,9 @@ public class Game {
 		this.keyManager = keyManager;
 		this.mouseManager = mouseManager;
 		
-		if(JOptionPane.showConfirmDialog(main.getDisplay().getFrame(), "Do you want to host a server?") == 0) {
-			server = new GameServer();
-			server.start();
-			
-			client = new GameClient(this, "localhost");
-		}
-		else {
-			String input = JOptionPane.showInputDialog("IP Addresse: ");
-			if (input.equalsIgnoreCase("till")) {
-				client = new GameClient(this, "192.168.2.126");
-			}
-			if (input.equalsIgnoreCase("l")) {
-				client = new GameClient(this, "localhost");
-			}
-			else {
-				client = new GameClient(this, input);
-			}
-		}
-		client.start();
 		
-		stateManager = new StateManager(keyManager, mouseManager, client, main);
+		stateManager = new StateManager(keyManager, mouseManager, main, this);
 		StateManager.changeState(States.START_MENU);
-		
-		if(server != null) {
-			StateManager.getLobby().setHost(true);
-		}
-		
-		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + StateManager.getGameState().getEntityManager().getLocalPlayer().getTeam());
-		client.sendData(packet.getMessage());
 	}
 	
 	public void tick() {
@@ -73,6 +47,33 @@ public class Game {
 	
 	public Main getMain() {
 		return main;
+	}
+	
+	public void joinServer(String ipAddress) {
+		// ip till "192.168.2.126"
+		
+		client = new GameClient(this, ipAddress);
+		client.start();
+		
+		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
+		client.sendData(packet.getMessage());
+		
+		StateManager.changeState(States.LOBBY);
+	}
+	
+	public void createServer() {
+		server = new GameServer();
+		server.start();
+		
+		client = new GameClient(this, "localhost");
+		client.start();
+		
+		StateManager.getLobby().setHost(true);
+		
+		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
+		client.sendData(packet.getMessage());
+		
+		StateManager.changeState(States.LOBBY);
 	}
 
 }

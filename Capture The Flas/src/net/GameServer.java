@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import Entities.EntityManager;
 import Entities.Projectiles.Projectile;
 import Player.Player;
+import Utils.Teams;
 
 public class GameServer extends Thread{
 	
 	private DatagramSocket socket;
 	private ArrayList<MultiPlayer> connections = new ArrayList<>();
+	
+	private boolean started = false;
 	
 	public GameServer() {
 		try {
@@ -47,11 +50,12 @@ public class GameServer extends Thread{
 				handleDisconnect(datagramPacket, data);
 				break;
 				
+			case Packet.START_GAME:
+				started = true;
 			case Packet.SHOOT:
 			case Packet.FLAG_PICKUP:
 			case Packet.FLAG_RETURN:
 			case Packet.SCORED:
-			case Packet.START_GAME:
 			case Packet.CHANGE_TEAM:
 			case Packet.HIT:
 				sendDataToAllClients(datagramPacket, packet.getMessage());
@@ -59,6 +63,7 @@ public class GameServer extends Thread{
 				
 			case Packet.UPDATE_PLAYER:
 				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
+				break;
 			}
 			
 		}
@@ -79,13 +84,35 @@ public class GameServer extends Thread{
 				return;
 			}
 		}
-		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0], Integer.parseInt(data[1])));
-		Packet packet = new Packet(Packet.LOGIN, data[0] + "," + data[1]);															//username + team
+		
+		// setting a team
+		int reds = 0;
+		int blues = 0;
+		int team;
+		for(MultiPlayer player : connections) {
+			if(player.getTeam() == Teams.BLUE)
+				blues++;
+			if(player.getTeam() == Teams.RED)
+				reds++;
+		}
+		if(reds < blues)
+			team = Teams.RED;
+		else
+			team = Teams.BLUE;
+		Packet teamPacket = new Packet(Packet.CHANGE_TEAM, data[0] + "," + team);
+		sendData(teamPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+		
+		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0], team));
+		Packet packet = new Packet(Packet.LOGIN, data[0] + "," + team);															//username + team
 		sendDataToAllClientsExceptSender(dataPacket, packet.getMessage());
 		
 		// Sending all current players to the new one
 		for(MultiPlayer player : connections) {
 			packet = new Packet(Packet.LOGIN, player.getUsername() + "," + player.getTeam());
+			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+		}
+		if(started) {
+			packet = new Packet(Packet.START_GAME, "");
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		}
 		

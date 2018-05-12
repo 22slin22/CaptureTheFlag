@@ -42,6 +42,10 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 		return leftButton;
 	}
 	
+	public static void setLeftButton(boolean isLeftButton) {
+		leftButton = isLeftButton;
+	}
+	
 	public static int getX() {
 		return x;
 	}

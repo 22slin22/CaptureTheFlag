@@ -35,11 +35,11 @@ public class Lobby extends State{
 	private Button blueTeamButton;
 	private Button redTeamButton;
 	
-	private GameClient client;
+	private Game game;
 	
-	public Lobby(ArrayList<Player> players, GameClient client, Player localPlayer) {
+	public Lobby(ArrayList<Player> players, Game game, Player localPlayer) {
 		this.players = players;
-		this.client = client;
+		this.game = game;
 		this.localPlayer = localPlayer;
 		
 		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
@@ -57,18 +57,18 @@ public class Lobby extends State{
 		startButton.tick();
 		if(startButton.isClicked() && isHost) {			
 			Packet packet = new Packet(Packet.START_GAME, "");
-			client.sendData(packet.getMessage());
+			game.getClient().sendData(packet.getMessage());
 		}
 		
 		blueTeamButton.tick();
 		redTeamButton.tick();
 		if(blueTeamButton.isClicked()) {
 			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.BLUE);
-			client.sendData(packet.getMessage());
+			game.getClient().sendData(packet.getMessage());
 		}
 		if(redTeamButton.isClicked()) {
 			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.RED);
-			client.sendData(packet.getMessage());
+			game.getClient().sendData(packet.getMessage());
 		}
 	}
 	

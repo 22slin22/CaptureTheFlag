@@ -10,13 +10,13 @@ import Display.UI.Killfeed;
 import Entities.Heros.Runner;
 import Input.KeyManager;
 import Input.MouseManager;
+import Main.Game;
 import Map.Camera;
 import Map.Flag;
 import Map.Map;
 import Player.LocalPlayer;
 import Player.Player;
 import Utils.Teams;
-import net.GameClient;
 
 public class EntityManager {
 
@@ -26,16 +26,16 @@ public class EntityManager {
 	private ArrayList<Flag> flags = new ArrayList<>();
 	private Killfeed killfeed;
 
-	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, GameClient client, JFrame frame, Killfeed killfeed) {
-		Object[] options = {"BLUE", "RED"};
-		int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, client, this, JOptionPane.showInputDialog("Please enter a username"), team);
+	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, Game game, JFrame frame, Killfeed killfeed) {
+		//Object[] options = {"BLUE", "RED"};
+		//int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, game, this);		 //	JOptionPane.showInputDialog("Please enter a user name")
 		player.setHero(new Runner(player.getTeam(), map, this, player, killfeed));
 		localPlayer = player;
 		players.add(player);
 
-		flags.add(new Flag(this, Teams.BLUE, client));
-		flags.add(new Flag(this, Teams.RED, client));
+		flags.add(new Flag(this, Teams.BLUE, game));
+		flags.add(new Flag(this, Teams.RED, game));
 		
 		this.map = map;
 		this.killfeed = killfeed;

@@ -74,6 +74,10 @@ public class Button {
 		this.text = text;
 	}
 	
+	public String getText() {
+		return text;
+	}
+	
 	public void setFont(Font font) {
 		this.font = font;
 	}

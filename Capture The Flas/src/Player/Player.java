@@ -20,6 +20,10 @@ public class Player {
 	protected Hero hero;
 	
 	
+	public Player() {
+		
+	}
+	
 	public Player(String username, int team) {
 		this.username = username;
 		this.team = team;
@@ -52,6 +56,10 @@ public class Player {
 	
 	public String getUsername() {
 		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	public int getTeam() {

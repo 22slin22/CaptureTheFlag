@@ -6,6 +6,7 @@ import Display.UI.Menus.Lobby;
 import Display.UI.Menus.StartMenu;
 import Input.KeyManager;
 import Input.MouseManager;
+import Main.Game;
 import Main.GameState;
 import Main.Main;
 import net.GameClient;
@@ -16,10 +17,10 @@ public class StateManager {
 	private static ArrayList<State> states = new ArrayList<>();
 	
 	
-	public StateManager(KeyManager keyManager, MouseManager mouseManager, GameClient client, Main main) {
-		states.add(new GameState(keyManager, mouseManager, client, main));
-		states.add(new StartMenu(keyManager));
-		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), client, getGameState().getEntityManager().getLocalPlayer()));
+	public StateManager(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
+		states.add(new GameState(keyManager, mouseManager, game, main));
+		states.add(new StartMenu(keyManager, game, getGameState().getEntityManager()));
+		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer()));
 	}
 	
 	

@@ -5,10 +5,10 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 
 import Entities.EntityManager;
+import Main.Game;
 import Player.Player;
 import Utils.Collisions;
 import Utils.Teams;
-import net.GameClient;
 import net.Packet;
 
 public class Flag {
@@ -27,10 +27,10 @@ public class Flag {
 	private EntityManager entityManager;
 	private Player carrier;
 	
-	private GameClient client;
+	private Game game;
 	
 	
-	public Flag(EntityManager entityManager, int team, GameClient client) {
+	public Flag(EntityManager entityManager, int team, Game game) {
 		this.entityManager = entityManager;
 		
 		if(team == Teams.BLUE) {
@@ -42,7 +42,7 @@ public class Flag {
 			this.y = Teams.FLAG_RED_Y;
 		}
 		this.team = team;
-		this.client = client;
+		this.game = game;
 	}
 	
 	
@@ -52,11 +52,11 @@ public class Flag {
 				if(entityManager.getLocalPlayer().getTeam() != team) {
 					//When picked up by the local player
 					Packet packet = new Packet(Packet.FLAG_PICKUP, entityManager.getLocalPlayer().getUsername() + "," + entityManager.getFlags().indexOf(this));
-					client.sendData(packet.getMessage());
+					game.getClient().sendData(packet.getMessage());
 				}
 				else if(isPickedUp){
 					Packet packet = new Packet(Packet.FLAG_RETURN, "" + entityManager.getFlags().indexOf(this));
-					client.sendData(packet.getMessage());
+					game.getClient().sendData(packet.getMessage());
 				}
 			}
 		}
@@ -70,7 +70,7 @@ public class Flag {
 				
 				if(carrier == entityManager.getLocalPlayer() && checkScored()) {
 					Packet packet = new Packet(Packet.SCORED, entityManager.getFlags().indexOf(this) + "," + carrier.getTeam() + "," + carrier.getUsername());
-					client.sendData(packet.getMessage());
+					game.getClient().sendData(packet.getMessage());
 				}
 			}
 		}
