@@ -1,4 +1,4 @@
-package Display.UI;
+package UI.Overlay;
 
 import Player.Player;
 

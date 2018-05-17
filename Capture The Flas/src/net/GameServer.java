@@ -52,6 +52,14 @@ public class GameServer extends Thread{
 				
 			case Packet.START_GAME:
 				started = true;
+				sendDataToAllClients(datagramPacket, packet.getMessage());
+				break;
+				
+			case Packet.RESTART:
+				started = false;
+				sendDataToAllClients(datagramPacket, packet.getMessage());
+				break;
+				
 			case Packet.SHOOT:
 			case Packet.FLAG_PICKUP:
 			case Packet.FLAG_RETURN:

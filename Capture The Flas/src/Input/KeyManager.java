@@ -9,7 +9,7 @@ public class KeyManager implements KeyListener{
 	
 	
 	public KeyManager() {
-		keys = new boolean[256];
+		keys = new boolean[1024];
 	}
 
 	@Override

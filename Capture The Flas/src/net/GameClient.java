@@ -93,6 +93,10 @@ public class GameClient extends Thread{
 			case Packet.CHANGE_TEAM:
 				StateManager.getGameState().getEntityManager().changeTeam(data[0], Integer.parseInt(data[1]));
 				break;
+				
+			case Packet.RESTART:
+				game.restart();
+				break;
 			}
 		}
 	}

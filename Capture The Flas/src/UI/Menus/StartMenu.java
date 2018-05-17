@@ -1,4 +1,4 @@
-package Display.UI.Menus;
+package UI.Menus;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -44,11 +44,12 @@ public class StartMenu extends State{
 	private int buttonWidth = 60;
 	private int buttonHeight = 50;
 	private int buttonXDistance = 20;
-	private int buttonYDistance = 20;
+	private int buttonYDistance = 15;
 	private int buttonYOffset = Main.getHeight() /3 ;
 	
-	private int nMiddle = 14;
-	private int nSides = 8;
+	private int nMiddle = 12;
+	private int nRightSide = 9;
+	private int nLeftSide = 8;
 	
 	
 	public StartMenu(KeyManager keyManager, Game game, EntityManager entityManager) {
@@ -80,7 +81,7 @@ public class StartMenu extends State{
 			if(currentButton == 0)
 				game.joinServer("localhost");
 			else
-				game.joinServer("10.9.116." + currentButton);
+				game.joinServer("10.9.116." + (currentButton+1));
 		}
 		createServerButton.tick();
 		if(createServerButton.isClicked()) {
@@ -125,11 +126,11 @@ public class StartMenu extends State{
 		int buttonsXStart2 = buttonsXStart + ((nMiddle) * (buttonXDistance+buttonWidth));
 		
 		//	strange for loops to create buttons ordered by number	e.g. Button with "1" is created first;
-		for(int i=nSides-1; i>=0; i--) {
+		for(int i=nRightSide-1; i>=0; i--) {
 			Button buttonRight = new Button(buttonsXStart2, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
 			buttonRight.setColor(Color.GRAY);
 			buttonRight.setFont(Fonts.buttonFont);
-			buttonRight.setText("" + (nSides-i));
+			buttonRight.setText("" + (nRightSide-i));
 			buttonRight.setTextColor(Color.BLACK);
 			buttons.add(buttonRight);
 		}
@@ -138,16 +139,16 @@ public class StartMenu extends State{
 			Button button = new Button(buttonsXStart + i*(buttonWidth + buttonXDistance), buttonYOffset, buttonWidth, buttonHeight);
 			button.setColor(Color.GRAY);
 			button.setFont(Fonts.buttonFont);
-			button.setText("" + (nSides + (nMiddle-i) * 1));
+			button.setText("" + (nRightSide + (nMiddle-i) * 1));
 			button.setTextColor(Color.BLACK);
 			buttons.add(button);
 		}
 		
-		for(int i=0; i<nSides; i++) {
+		for(int i=0; i<nLeftSide; i++) {
 			Button buttonLeft = new Button(buttonsXStart - buttonWidth - buttonXDistance, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
 			buttonLeft.setColor(Color.GRAY);
 			buttonLeft.setFont(Fonts.buttonFont);
-			buttonLeft.setText("" + (nSides + nMiddle + i + 1));
+			buttonLeft.setText("" + (nLeftSide + nMiddle + i + 1));
 			buttonLeft.setTextColor(Color.BLACK);
 			buttons.add(buttonLeft);
 		}

@@ -1,4 +1,4 @@
-package Display.UI.Menus;
+package UI.Menus;
 
 import java.awt.Color;
 import java.awt.FontMetrics;

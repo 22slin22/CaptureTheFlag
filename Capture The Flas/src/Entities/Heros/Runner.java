@@ -5,11 +5,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import Display.UI.Killfeed;
 import Entities.EntityManager;
 import Entities.Projectiles.StandardProjectile;
 import Map.Map;
 import Player.Player;
+import UI.Overlay.Killfeed;
 import Utils.Teams;
 
 public class Runner extends Hero{

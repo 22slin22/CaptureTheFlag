@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import Display.UI.Killfeed;
 import Entities.Heros.Runner;
 import Input.KeyManager;
 import Input.MouseManager;
@@ -16,6 +15,7 @@ import Map.Flag;
 import Map.Map;
 import Player.LocalPlayer;
 import Player.Player;
+import UI.Overlay.Killfeed;
 import Utils.Teams;
 
 public class EntityManager {
@@ -42,14 +42,14 @@ public class EntityManager {
 	}
 
 	public void tick() {
-		for(Flag flag : flags) {
-			flag.tick();
-		}
-		
 		synchronized(players) {
 			for(Player player : players) {
 				player.tick();
 			}
+		}
+		
+		for(Flag flag : flags) {
+			flag.tick();
 		}
 	}
 
@@ -155,6 +155,16 @@ public class EntityManager {
 					flags.get(flagIndex).setCarrier(player);
 				}
 			}
+		}
+	}
+	
+	public void restart() {
+		for(Player player : players) {
+			player.getHero().getProjectiles().clear();
+			player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
+		}
+		for(Flag flag : flags) {
+			flag.returnFlag();
 		}
 	}
 	

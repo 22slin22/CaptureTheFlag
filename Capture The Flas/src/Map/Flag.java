@@ -108,6 +108,7 @@ public class Flag {
 	
 	public void returnFlag() {
 		isPickedUp = false;
+		isCarried = false;
 		x = Teams.getFlagSpawnX(team);
 		y = Teams.getFlagSpawnY(team);
 	}

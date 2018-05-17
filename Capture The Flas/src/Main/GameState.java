@@ -3,19 +3,23 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import Display.UI.Overlay;
 import Entities.EntityManager;
 import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
 import States.State;
+import States.States;
+import States.StateManager;
+import UI.Overlay.Overlay;
+import Utils.Teams;
 import net.GameClient;
 import net.GameServer;
 
 public class GameState extends State{
 	
-private int cameraX, cameraY;
+	private int cameraX, cameraY;
+	private static final int SCORE_TO_WIN = 1;
 	
 	private Map map;
 	private EntityManager entityManager;
@@ -27,7 +31,6 @@ private int cameraX, cameraY;
 	private MouseManager mouseManager;
 	
 	private Game game;
-	
 	private Main main;
 	
 	
@@ -48,6 +51,15 @@ private int cameraX, cameraY;
 		entityManager.tick();
 		camera.tick();
 		overlay.tick();
+		
+		if(Teams.getScore(Teams.BLUE) >= SCORE_TO_WIN) {
+			StateManager.changeState(States.WIN_SCREEN);
+			StateManager.getWinScreen().setWinner(Teams.BLUE);
+		}
+		else if(Teams.getScore(Teams.RED) >= SCORE_TO_WIN) {
+			StateManager.changeState(States.WIN_SCREEN);
+			StateManager.getWinScreen().setWinner(Teams.RED);
+		}
 	}
 
 	@Override
@@ -61,6 +73,12 @@ private int cameraX, cameraY;
 		map.render(g, cameraX, cameraY);
 		entityManager.render(g, cameraX, cameraY);
 		overlay.render(g);
+	}
+	
+	public void restart() {
+		entityManager.restart();
+		Teams.setScore(Teams.BLUE, 0);
+		Teams.setScore(Teams.RED, 0);
 	}
 	
 	

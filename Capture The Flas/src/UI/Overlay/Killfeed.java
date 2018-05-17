@@ -1,4 +1,4 @@
-package Display.UI;
+package UI.Overlay;
 
 import java.awt.Color;
 import java.awt.FontMetrics;

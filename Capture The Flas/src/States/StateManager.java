@@ -2,13 +2,14 @@ package States;
 
 import java.util.ArrayList;
 
-import Display.UI.Menus.Lobby;
-import Display.UI.Menus.StartMenu;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
 import Main.GameState;
 import Main.Main;
+import UI.Menus.Lobby;
+import UI.Menus.StartMenu;
+import UI.Menus.WinScreen;
 import net.GameClient;
 
 public class StateManager {
@@ -21,6 +22,7 @@ public class StateManager {
 		states.add(new GameState(keyManager, mouseManager, game, main));
 		states.add(new StartMenu(keyManager, game, getGameState().getEntityManager()));
 		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer()));
+		states.add(new WinScreen(game));
 	}
 	
 	
@@ -38,6 +40,10 @@ public class StateManager {
 	
 	public static Lobby getLobby(){
 		return (Lobby)states.get(States.LOBBY);
+	}
+	
+	public static WinScreen getWinScreen() {
+		return (WinScreen) states.get(States.WIN_SCREEN);
 	}
 
 }

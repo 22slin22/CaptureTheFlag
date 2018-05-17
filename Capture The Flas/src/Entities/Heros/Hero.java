@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Display.UI.Killfeed;
 import Entities.Entity;
 import Entities.EntityManager;
 import Entities.Projectiles.Projectile;
 import Map.Map;
 import Map.Obstacle;
 import Player.Player;
+import UI.Overlay.Killfeed;
 import Utils.Teams;
 import net.Packet;
 

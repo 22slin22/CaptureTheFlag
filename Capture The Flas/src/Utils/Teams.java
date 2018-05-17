@@ -70,8 +70,22 @@ public class Teams {
 		scores[team] += 1;
 	}
 	
+	public static void setScore(int team, int score) {
+		scores[team] = score;
+	}
+	
 	public static int getScore(int team) {
 		return scores[team];
+	}
+	
+	public static String getTeamName(int team) {
+		if(team == BLUE) {
+			return "BLUE";
+		}
+		if(team == RED) {
+			return "RED";
+		}
+		return "";
 	}
 
 }

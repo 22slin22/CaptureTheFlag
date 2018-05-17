@@ -69,10 +69,16 @@ public class Game {
 		client.start();
 		
 		StateManager.getLobby().setHost(true);
+		StateManager.getWinScreen().setHost(true);
 		
 		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
 		client.sendData(packet.getMessage());
 		
+		StateManager.changeState(States.LOBBY);
+	}
+	
+	public void restart() {
+		StateManager.getGameState().restart();
 		StateManager.changeState(States.LOBBY);
 	}
 
