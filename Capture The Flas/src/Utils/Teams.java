@@ -1,16 +1,21 @@
 package Utils;
 
 import java.awt.Color;
+import java.awt.Point;
 
 public class Teams {
 	
 	public static final int BLUE = 0;
 	public static final int RED = 1;
 	
-	public static final int SPAWN_BLUE_X = 300;
-	public static final int SPAWN_BLUE_Y = 1000;
-	public static final int SPAWN_RED_X = 2700;
-	public static final int SPAWN_RED_Y = 1000;
+	public static Point[] blueSpawnPoints = new Point[] {
+			new Point(300, 300),
+			new Point(300, 1700)
+	};
+	public static Point[] redSpawnPoints = new Point[] {
+			new Point(2700, 300),
+			new Point(2700, 1700)
+	};
 	
 	public static final int FLAG_BLUE_X = 200;
 	public static final int FLAG_BLUE_Y = 1000;
@@ -30,24 +35,15 @@ public class Teams {
 		return Color.BLACK;
 	}
 	
-	public static int getSpawnX(int team) {
+	public static Point getRandomSpawn(int team) {
+		int random = (int)(Math.random() * (float)blueSpawnPoints.length);
 		if(team == BLUE) {
-			return SPAWN_BLUE_X;
+			return blueSpawnPoints[random];
 		}
 		if(team == RED) {
-			return SPAWN_RED_X;
+			return redSpawnPoints[random];
 		}
-		return 0;
-	}
-	
-	public static int getSpawnY(int team) {
-		if(team == BLUE) {
-			return SPAWN_BLUE_Y;
-		}
-		if(team == RED) {
-			return SPAWN_RED_Y;
-		}
-		return 0;
+		return null;
 	}
 	
 	public static int getFlagSpawnX(int team) {

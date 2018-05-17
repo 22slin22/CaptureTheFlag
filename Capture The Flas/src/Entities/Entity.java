@@ -1,6 +1,7 @@
 package Entities;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import Map.Obstacle;
@@ -21,6 +22,15 @@ public abstract class Entity {
 		frameTime = System.currentTimeMillis();
 	}
 	
+	public Entity(Point pos, ArrayList<Obstacle> obstacles) {
+		this.x = pos.x;
+		this.y = pos.y;
+		this.obstacles = obstacles;
+		
+		frameTime = System.currentTimeMillis();
+	}
+	
+	
 	public void tick() {
 		long elapsedTime = System.currentTimeMillis() - frameTime;
 		frameTime = System.currentTimeMillis();
@@ -33,6 +43,11 @@ public abstract class Entity {
 	public void move(float x, float y) {
 		this.x += x;
 		this.y += y;
+	}
+	
+	public void move(Point pos) {
+		x = pos.x;
+		y = pos.y;
 	}
 	
 	public float getX() {

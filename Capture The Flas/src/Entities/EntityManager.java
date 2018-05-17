@@ -99,6 +99,7 @@ public class EntityManager {
 			for(Player player : players) {
 				if(player.getUsername().equals(username)) {
 					player.setTeam(team);
+					player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
 				}
 			}
 		}

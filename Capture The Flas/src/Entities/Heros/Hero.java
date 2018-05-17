@@ -39,7 +39,7 @@ public abstract class Hero extends Entity{
 
 	
 	public Hero(int team, int radius, float speed, Map map, float cooldown, EntityManager entityManager, Player player, Killfeed killfeed) {
-		super(Teams.getSpawnX(team), Teams.getSpawnY(team), map.getObstacles());
+		super(Teams.getRandomSpawn(team), map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.radius = radius;
@@ -120,8 +120,7 @@ public abstract class Hero extends Entity{
 		
 		if(currentHealth <= 0) {
 			currentHealth = defaultHealth;
-			x = Teams.getSpawnX(team);
-			y = Teams.getSpawnY(team);
+			move(Teams.getRandomSpawn(team));
 			dead = true;
 			killfeed.addKill(hitter, player);
 		}
