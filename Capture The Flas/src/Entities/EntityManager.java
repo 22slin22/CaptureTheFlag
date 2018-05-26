@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import Entities.Heros.Runner;
+import Entities.Heros.Light;
+import Entities.Weapons.StandardWeapon;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
@@ -30,7 +31,8 @@ public class EntityManager {
 		//Object[] options = {"BLUE", "RED"};
 		//int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, game, this);		 //	JOptionPane.showInputDialog("Please enter a user name")
-		player.setHero(new Runner(player.getTeam(), map, this, player, killfeed));
+		player.setHero(new Light(player.getTeam(), map, this, player, killfeed));
+		player.getHero().setWeapon(new StandardWeapon(player.getHero()));
 		localPlayer = player;
 		players.add(player);
 
@@ -74,7 +76,7 @@ public class EntityManager {
 		if(!(localPlayer.getUsername().equals(username))) {
 			System.out.println("Adding " + username);
 			Player player = new Player(username, team);
-			player.setHero(new Runner(Teams.RED, map, this, player, killfeed));
+			player.setHero(new Light(Teams.RED, map, this, player, killfeed));
 			synchronized (players) {
 				players.add(player);
 			}

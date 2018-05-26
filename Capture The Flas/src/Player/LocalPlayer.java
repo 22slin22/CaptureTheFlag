@@ -8,7 +8,6 @@ import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
 import Map.Camera;
-import net.GameClient;
 import net.Packet;
 
 public class LocalPlayer extends Player{
@@ -54,7 +53,7 @@ public class LocalPlayer extends Player{
 	}
 	
 	private void hit(String playerUsername, int projectileId) {
-		Packet packet = new Packet(Packet.HIT, username + "," + playerUsername + "," + hero.DAMAGE + "," + projectileId);
+		Packet packet = new Packet(Packet.HIT, username + "," + playerUsername + "," + hero.getWeapon().getDamage() + "," + projectileId);
 		game.getClient().sendData(packet.getMessage());
 	}
 	
@@ -83,8 +82,8 @@ public class LocalPlayer extends Player{
 	}
 	
 	private void testShoot() {
-		if(MouseManager.isLeftButton()) {
-			if(System.currentTimeMillis() - hero.getLastShot() > hero.getCooldown()*1000) {
+		if(mouseManager.isLeftButton()) {
+			if(System.currentTimeMillis() - hero.getWeapon().getLastShot() > hero.getWeapon().getCooldown()*1000) {
 				Packet packet = new Packet(Packet.SHOOT, username);
 				game.getClient().sendData(packet.getMessage());
 			}

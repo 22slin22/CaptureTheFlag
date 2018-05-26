@@ -3,6 +3,7 @@ package UI.Menus;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import Input.MouseManager;
 import Main.Game;
 import Main.Main;
 import States.State;
@@ -26,10 +27,10 @@ public class WinScreen extends State{
 	private Game game;
 	
 	
-	public WinScreen(Game game) {
+	public WinScreen(Game game, MouseManager mouseManager) {
 		this.game = game;
 		
-		playAgain = new Button(Main.getWidth()/2 - playAgainWidth/2, playAgainYOffset - playAgainHeight/2, playAgainWidth, playAgainHeight);
+		playAgain = new Button(mouseManager, Main.getWidth()/2 - playAgainWidth/2, playAgainYOffset - playAgainHeight/2, playAgainWidth, playAgainHeight);
 		playAgain.setColor(Color.GREEN);
 		playAgain.setFont(Fonts.buttonFont);
 		playAgain.setText("Play Again");

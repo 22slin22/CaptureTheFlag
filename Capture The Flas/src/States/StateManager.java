@@ -20,9 +20,9 @@ public class StateManager {
 	
 	public StateManager(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
 		states.add(new GameState(keyManager, mouseManager, game, main));
-		states.add(new StartMenu(keyManager, game, getGameState().getEntityManager()));
-		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer()));
-		states.add(new WinScreen(game));
+		states.add(new StartMenu(keyManager, mouseManager, game, getGameState().getEntityManager()));
+		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer(), mouseManager));
+		states.add(new WinScreen(game, mouseManager));
 	}
 	
 	

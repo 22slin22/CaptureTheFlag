@@ -2,17 +2,19 @@ package Entities.Heros;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import Entities.Entity;
 import Entities.EntityManager;
 import Entities.Projectiles.Projectile;
+import Entities.Weapons.Weapon;
 import Map.Map;
 import Map.Obstacle;
 import Player.Player;
 import UI.Overlay.Killfeed;
 import Utils.Teams;
-import net.Packet;
 
 public abstract class Hero extends Entity{
 	
@@ -22,9 +24,6 @@ public abstract class Hero extends Entity{
 	
 	protected ArrayList<Projectile> projectiles = new ArrayList<>();
 	protected double gunAngle;
-	protected float cooldown;
-	protected double lastShot;
-	public static final int DAMAGE = 20;
 	
 	protected int defaultHealth = 100;
 	protected int currentHealth;
@@ -36,16 +35,17 @@ public abstract class Hero extends Entity{
 	protected Map map;
 	protected Player player;
 	protected Killfeed killfeed;
+	
+	protected Weapon weapon;
 
 	
-	public Hero(int team, int radius, float speed, Map map, float cooldown, EntityManager entityManager, Player player, Killfeed killfeed) {
+	public Hero(int team, int radius, float speed, Map map, EntityManager entityManager, Player player, Killfeed killfeed) {
 		super(Teams.getRandomSpawn(team), map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.radius = radius;
 		this.speed = speed;
 		this.map = map;
-		this.cooldown = cooldown;
 		this.entityManager = entityManager;
 		this.player = player;
 		this.killfeed = killfeed;
@@ -73,16 +73,31 @@ public abstract class Hero extends Entity{
 				}
 			}
 		}
+		
+		if(weapon != null) {
+			weapon.tick();
+		}
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
+		renderProjectiles(g, cameraX, cameraY);
+		renderHealthBar(g, cameraX, cameraY);
+		
+		if(weapon != null) {
+			weapon.render(g, cameraX, cameraY);
+		}
+		renderBody(g, cameraX, cameraY);
+	}
+	
+	protected void renderProjectiles(Graphics g, int cameraX, int cameraY) {
 		synchronized (projectiles) {
 			for(Projectile projectile : projectiles) {
 				projectile.render(g, cameraX, cameraY);
 			}
 		}
-		renderHealthBar(g, cameraX, cameraY);
 	}
+	
+	protected abstract void renderBody(Graphics g, int cameraX, int cameraY);
 	
 	@Override
 	public void move(float x, float y) {
@@ -137,7 +152,11 @@ public abstract class Hero extends Entity{
 		g.fillRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth * currentHealth / defaultHealth, healthBarHeight);
 	}
 	
-	public abstract void shoot();
+	public void shoot() {
+		if(weapon != null) {
+			weapon.shoot();
+		}
+	}
 	
 	
 	public int getRadius() {
@@ -146,18 +165,6 @@ public abstract class Hero extends Entity{
 	
 	public float getSpeed() {
 		return speed;
-	}
-	
-	public double getLastShot() {
-		return lastShot;
-	}
-	
-	public void setLastShot(double lastShot) {
-		this.lastShot = lastShot;
-	}
-	
-	public float getCooldown() {
-		return cooldown;
 	}
 	
 	public void setGunAngle(double d) {
@@ -172,6 +179,10 @@ public abstract class Hero extends Entity{
 		this.team = team;
 	}
 	
+	public int getTeam() {
+		return team;
+	}
+	
 	public boolean isDead() {
 		return dead;
 	}
@@ -182,6 +193,14 @@ public abstract class Hero extends Entity{
 	
 	public Map getMap() {
 		return map;
+	}
+	
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+	}
+	
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 }

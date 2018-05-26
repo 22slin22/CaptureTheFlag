@@ -5,16 +5,14 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import Input.MouseManager;
 import Main.Game;
 import Main.Main;
 import Player.Player;
 import States.State;
-import States.States;
-import States.StateManager;
 import Utils.Button;
 import Utils.Fonts;
 import Utils.Teams;
-import net.GameClient;
 import net.Packet;
 
 public class Lobby extends State{
@@ -37,19 +35,19 @@ public class Lobby extends State{
 	
 	private Game game;
 	
-	public Lobby(ArrayList<Player> players, Game game, Player localPlayer) {
+	public Lobby(ArrayList<Player> players, Game game, Player localPlayer, MouseManager mouseManager) {
 		this.players = players;
 		this.game = game;
 		this.localPlayer = localPlayer;
 		
-		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
+		startButton = new Button(mouseManager, Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
 		startButton.setColor(Color.YELLOW);
 		startButton.setText("Start");
 		startButton.setTextColor(Color.BLACK);
 		startButton.setFont(Fonts.buttonFont);
 		
-		blueTeamButton = new Button(x, yOffset, WIDTH/2, teamNameSpace);
-		redTeamButton = new Button(x + WIDTH/2, yOffset, WIDTH/2, teamNameSpace);
+		blueTeamButton = new Button(mouseManager, x, yOffset, WIDTH/2, teamNameSpace);
+		redTeamButton = new Button(mouseManager, x + WIDTH/2, yOffset, WIDTH/2, teamNameSpace);
 	}
 	
 	

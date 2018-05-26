@@ -19,13 +19,7 @@ public class StartMenu extends State{
 	
 	private Game game;
 	private EntityManager entityManager;
-	
-	/*
-	private static int yOffset = 200;
-	private static int WIDTH = Main.getWidth() / 2;
-	private static int HEIGHT = Main.getHeight() - 2 * yOffset;
-	private static int x = Main.getWidth() / 4;
-	*/
+	private MouseManager mouseManager;
 	
 	private static final int titleYOffset = 150;
 	
@@ -52,17 +46,17 @@ public class StartMenu extends State{
 	private int nLeftSide = 8;
 	
 	
-	public StartMenu(KeyManager keyManager, Game game, EntityManager entityManager) {
+	public StartMenu(KeyManager keyManager, MouseManager mouseManager, Game game, EntityManager entityManager) {
 		this.game = game;
 		this.entityManager = entityManager;
 		
-		joinServerbutton = new Button(Main.getWidth()/2 - joinButtonWidth - joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
+		joinServerbutton = new Button(mouseManager, Main.getWidth()/2 - joinButtonWidth - joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
 		joinServerbutton.setColor(Color.GREEN);
 		joinServerbutton.setFont(Fonts.playButtonFont);
 		joinServerbutton.setText("Join");
 		joinServerbutton.setTextColor(Color.WHITE);
 		
-		createServerButton = new Button(Main.getWidth()/2 + joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
+		createServerButton = new Button(mouseManager, Main.getWidth()/2 + joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
 		createServerButton.setColor(Color.GREEN);
 		createServerButton.setFont(Fonts.playButtonFont);
 		createServerButton.setText("Create");
@@ -75,7 +69,7 @@ public class StartMenu extends State{
 	public void tick() {
 		joinServerbutton.tick();
 		if(joinServerbutton.isClicked()) {
-			MouseManager.setLeftButton(false);
+			mouseManager.setLeftButton(false);
 			entityManager.getLocalPlayer().setUsername(JOptionPane.showInputDialog("Please enter a username"));
 			
 			if(currentButton == 0)
@@ -127,7 +121,7 @@ public class StartMenu extends State{
 		
 		//	strange for loops to create buttons ordered by number	e.g. Button with "1" is created first;
 		for(int i=nRightSide-1; i>=0; i--) {
-			Button buttonRight = new Button(buttonsXStart2, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
+			Button buttonRight = new Button(mouseManager, buttonsXStart2, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
 			buttonRight.setColor(Color.GRAY);
 			buttonRight.setFont(Fonts.buttonFont);
 			buttonRight.setText("" + (nRightSide-i));
@@ -136,7 +130,7 @@ public class StartMenu extends State{
 		}
 		
 		for(int i=nMiddle-1; i>=0; i--) {
-			Button button = new Button(buttonsXStart + i*(buttonWidth + buttonXDistance), buttonYOffset, buttonWidth, buttonHeight);
+			Button button = new Button(mouseManager, buttonsXStart + i*(buttonWidth + buttonXDistance), buttonYOffset, buttonWidth, buttonHeight);
 			button.setColor(Color.GRAY);
 			button.setFont(Fonts.buttonFont);
 			button.setText("" + (nRightSide + (nMiddle-i) * 1));
@@ -145,7 +139,7 @@ public class StartMenu extends State{
 		}
 		
 		for(int i=0; i<nLeftSide; i++) {
-			Button buttonLeft = new Button(buttonsXStart - buttonWidth - buttonXDistance, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
+			Button buttonLeft = new Button(mouseManager, buttonsXStart - buttonWidth - buttonXDistance, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
 			buttonLeft.setColor(Color.GRAY);
 			buttonLeft.setFont(Fonts.buttonFont);
 			buttonLeft.setText("" + (nLeftSide + nMiddle + i + 1));
