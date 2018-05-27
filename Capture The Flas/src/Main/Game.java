@@ -1,8 +1,6 @@
 package Main;
 import java.awt.Graphics;
 
-import javax.swing.JOptionPane;
-
 import Input.KeyManager;
 import Input.MouseManager;
 import States.StateManager;
@@ -12,10 +10,6 @@ import net.GameServer;
 import net.Packet;
 
 public class Game {
-	private StateManager stateManager;
-	
-	private KeyManager keyManager;
-	private MouseManager mouseManager;
 	
 	private GameClient client;
 	private GameServer server;
@@ -25,11 +19,8 @@ public class Game {
 	
 	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
 		this.main = main;
-		this.keyManager = keyManager;
-		this.mouseManager = mouseManager;
 		
-		
-		stateManager = new StateManager(keyManager, mouseManager, main, this);
+		StateManager.init(keyManager, mouseManager, main, this);
 		StateManager.changeState(States.START_MENU);
 	}
 	
@@ -49,19 +40,19 @@ public class Game {
 		return main;
 	}
 	
-	public void joinServer(String ipAddress) {
+	public void joinServer(String ipAddress, String username) {
 		// ip till "192.168.2.126"
 		
 		client = new GameClient(this, ipAddress);
 		client.start();
 		
-		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
+		Packet packet = new Packet(Packet.LOGIN, username);
 		client.sendData(packet.getMessage());
 		
-		Packet changeHero = new Packet(Packet.CHANGE_HERO, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + "1" + "," + "2");
-		client.sendData(changeHero.getMessage());
+		//Packet changeHero = new Packet(Packet.CHANGE_HERO, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + "1" + "," + "2");
+		//client.sendData(changeHero.getMessage());
 		
-		StateManager.changeState(States.LOBBY);
+		//StateManager.changeState(States.LOBBY);
 	}
 	
 	public void createServer() {
@@ -77,12 +68,11 @@ public class Game {
 		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
 		client.sendData(packet.getMessage());
 		
-		StateManager.changeState(States.LOBBY);
+		StateManager.changeState(States.CUSTOMIZE_MENU);
 	}
 	
 	public void restart() {
-		StateManager.getGameState().restart();
-		StateManager.changeState(States.LOBBY);
+		StateManager.changeState(States.CUSTOMIZE_MENU);
 	}
 
 }

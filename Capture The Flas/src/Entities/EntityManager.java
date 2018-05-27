@@ -23,28 +23,29 @@ import Player.LocalPlayer;
 import Player.Player;
 import UI.Overlay.Killfeed;
 import Utils.Teams;
-import net.Packet;
 
 public class EntityManager {
 
 	private LocalPlayer localPlayer;
 	private ArrayList<Player> players = new ArrayList<>();
-	private Map map;
 	private ArrayList<Flag> flags = new ArrayList<>();
+	
+	private Map map;
+	private Camera camera;
 	private Killfeed killfeed;
 
 	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, Game game, JFrame frame, Killfeed killfeed) {
-		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, game, this);		 //	JOptionPane.showInputDialog("Please enter a user name")
-		player.setHero(new Medium(player.getTeam(), map, this, player, killfeed));
-		player.getHero().setWeapon(new Laser(player.getHero()));
-		localPlayer = player;
-		players.add(player);
+		this.camera = camera;
+		this.map = map;
+		this.killfeed = killfeed;
+		
+		localPlayer = new LocalPlayer(keyManager, mouseManager, camera, game, this);
+		//localPlayer.setHero(new Medium(localPlayer.getTeam(), map, this, localPlayer, killfeed));
+		//localPlayer.getHero().setWeapon(new Laser(localPlayer.getHero()));
+		players.add(localPlayer);
 
 		flags.add(new Flag(this, Teams.BLUE, game));
 		flags.add(new Flag(this, Teams.RED, game));
-		
-		this.map = map;
-		this.killfeed = killfeed;
 	}
 
 	public void tick() {
@@ -80,7 +81,6 @@ public class EntityManager {
 		if(!(localPlayer.getUsername().equals(username))) {
 			System.out.println("Adding " + username);
 			Player player = new Player(username, team);
-			//player.setHero(new Light(Teams.RED, map, this, player, killfeed));
 			synchronized (players) {
 				players.add(player);
 			}
@@ -117,7 +117,7 @@ public class EntityManager {
 			for(Player player : players) {
 				if(player.getUsername().equals(username)) {
 					player.setTeam(team);
-					player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
+					//player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
 				}
 			}
 		}
@@ -196,7 +196,7 @@ public class EntityManager {
 		}
 	}
 	
-	public void restart() {
+	public void reset() {
 		for(Player player : players) {
 			player.getHero().getProjectiles().clear();
 			player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
@@ -204,6 +204,7 @@ public class EntityManager {
 		for(Flag flag : flags) {
 			flag.returnFlag();
 		}
+		camera.setHero(localPlayer.getHero());
 	}
 	
 	public void flagReturn(int flagIndex) {

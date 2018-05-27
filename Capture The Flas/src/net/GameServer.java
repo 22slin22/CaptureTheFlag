@@ -79,16 +79,17 @@ public class GameServer extends Thread{
 	private void handleLogin(DatagramPacket dataPacket, String[] data) {
 		for(MultiPlayer player : connections) {
 			if(dataPacket.getAddress() == player.getIpAddress() && dataPacket.getPort() == player.getPort()) {
-				Packet failPacket = new Packet(Packet.INVALID, "You are already connected");
+				Packet failPacket = new Packet(Packet.INVALID_LOGIN, "You are already connected");
 				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 				return;
 			}
 			if(player.getUsername().equals(data[0])) {
-				System.out.println("Error, same name");
-				Packet failPacket = new Packet(Packet.INVALID, "Name is already taken");
+				Packet failPacket = new Packet(Packet.INVALID_LOGIN, "Name is already taken");
 				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 				return;
 			}
+			Packet validLoginPacket = new Packet(Packet.VALID_LOGIN, "");
+			sendData(validLoginPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		}
 		
 		// setting a team

@@ -5,4 +5,5 @@ public class States {
 	public static final int START_MENU = 1;
 	public static final int LOBBY = 2;
 	public static final int WIN_SCREEN = 3;
+	public static final int CUSTOMIZE_MENU = 4;
 }

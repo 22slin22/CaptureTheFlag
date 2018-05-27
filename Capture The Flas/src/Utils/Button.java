@@ -19,11 +19,8 @@ public class Button {
 	private Color color = Color.BLACK;
 	private Color textColor = Color.WHITE;
 	
-	private MouseManager mouseManager;
 	
-	
-	public Button(MouseManager mouseManager, int x, int y, int width, int height) {
-		this.mouseManager = mouseManager;
+	public Button(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;

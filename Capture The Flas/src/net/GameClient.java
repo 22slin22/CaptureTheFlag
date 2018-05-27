@@ -88,6 +88,7 @@ public class GameClient extends Thread{
 				
 			case Packet.START_GAME:
 				StateManager.changeState(States.GAME_STATE);
+				StateManager.getGameState().start();
 				break;
 				
 			case Packet.CHANGE_TEAM:
@@ -100,6 +101,14 @@ public class GameClient extends Thread{
 				
 			case Packet.RESTART:
 				game.restart();
+				break;
+				
+			case Packet.VALID_LOGIN:
+				StateManager.changeState(States.CUSTOMIZE_MENU);
+				break;
+				
+			case Packet.INVALID_LOGIN:
+				StateManager.getStartMenu().showError(data[0]);
 				break;
 			}
 		}

@@ -22,8 +22,8 @@ public abstract class Weapon extends Entity{
 	
 	
 	public static final int GUN = 0;
-	public static final int LASER = 1;
-	public static final int SHOTGUN = 2;
+	public static final int SHOTGUN = 1;
+	public static final int LASER = 2;
 	
 	
 	public Weapon(Hero hero, int weaponWidth, int weaponLength, int damage, float cooldown) {

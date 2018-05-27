@@ -9,12 +9,10 @@ import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
 import States.State;
-import States.States;
 import States.StateManager;
+import States.States;
 import UI.Overlay.Overlay;
 import Utils.Teams;
-import net.GameClient;
-import net.GameServer;
 
 public class GameState extends State{
 	
@@ -27,12 +25,6 @@ public class GameState extends State{
 	private Camera camera;
 	private Overlay overlay;
 	
-	private KeyManager keyManager;
-	private MouseManager mouseManager;
-	
-	private Game game;
-	private Main main;
-	
 	
 	public GameState(KeyManager keyManager, MouseManager mouseManager, Game game, Main main) {
 		overlay = new Overlay();
@@ -42,7 +34,7 @@ public class GameState extends State{
 		
 		entityManager = new EntityManager(keyManager, mouseManager, map, camera, game, main.getDisplay().getFrame(), overlay.getKillfeed());
 		overlay.setEntityManager(entityManager);
-		camera.setHero(entityManager.getLocalPlayer().getHero());
+		//camera.setHero(entityManager.getLocalPlayer().getHero());
 	}
 	
 
@@ -75,8 +67,8 @@ public class GameState extends State{
 		overlay.render(g);
 	}
 	
-	public void restart() {
-		entityManager.restart();
+	public void start() {
+		entityManager.reset();
 		Teams.setScore(Teams.BLUE, 0);
 		Teams.setScore(Teams.RED, 0);
 	}

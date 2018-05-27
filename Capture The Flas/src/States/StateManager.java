@@ -7,10 +7,10 @@ import Input.MouseManager;
 import Main.Game;
 import Main.GameState;
 import Main.Main;
+import UI.Menus.CustomizeMenu;
 import UI.Menus.Lobby;
 import UI.Menus.StartMenu;
 import UI.Menus.WinScreen;
-import net.GameClient;
 
 public class StateManager {
 	
@@ -18,16 +18,17 @@ public class StateManager {
 	private static ArrayList<State> states = new ArrayList<>();
 	
 	
-	public StateManager(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
+	public static void init(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
 		states.add(new GameState(keyManager, mouseManager, game, main));
 		states.add(new StartMenu(keyManager, mouseManager, game, getGameState().getEntityManager()));
 		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer(), mouseManager));
 		states.add(new WinScreen(game, mouseManager));
+		states.add(new CustomizeMenu(game));
 	}
-	
 	
 	public static void changeState(int state) {
 		activeState = states.get(state);
+		MouseManager.setLeftButton(false);
 	}
 	
 	public static State getActiveState() {
@@ -44,6 +45,14 @@ public class StateManager {
 	
 	public static WinScreen getWinScreen() {
 		return (WinScreen) states.get(States.WIN_SCREEN);
+	}
+	
+	public static StartMenu getStartMenu() {
+		return (StartMenu) states.get(States.START_MENU);
+	}
+	
+	public static CustomizeMenu getCustomizeMenu() {
+		return (CustomizeMenu) states.get(States.CUSTOMIZE_MENU);
 	}
 
 }
