@@ -58,6 +58,9 @@ public class Game {
 		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
 		client.sendData(packet.getMessage());
 		
+		Packet changeHero = new Packet(Packet.CHANGE_HERO, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + "1" + "," + "2");
+		client.sendData(changeHero.getMessage());
+		
 		StateManager.changeState(States.LOBBY);
 	}
 	

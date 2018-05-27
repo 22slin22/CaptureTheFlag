@@ -7,9 +7,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import Entities.EntityManager;
-import Entities.Projectiles.Projectile;
-import Player.Player;
 import Utils.Teams;
 
 public class GameServer extends Thread{
@@ -52,12 +49,12 @@ public class GameServer extends Thread{
 				
 			case Packet.START_GAME:
 				started = true;
-				sendDataToAllClients(datagramPacket, packet.getMessage());
+				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.RESTART:
 				started = false;
-				sendDataToAllClients(datagramPacket, packet.getMessage());
+				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.SHOOT:
@@ -66,7 +63,8 @@ public class GameServer extends Thread{
 			case Packet.SCORED:
 			case Packet.CHANGE_TEAM:
 			case Packet.HIT:
-				sendDataToAllClients(datagramPacket, packet.getMessage());
+			case Packet.CHANGE_HERO:
+				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.UPDATE_PLAYER:
@@ -147,7 +145,7 @@ public class GameServer extends Thread{
 		}
 	}
 	
-	public void sendDataToAllClients(DatagramPacket dataPacket, byte[] message) {
+	public void sendDataToAllClients(byte[] message) {
 		for(MultiPlayer player : connections) {
 			sendData(message, player.getIpAddress(), player.getPort());
 		}

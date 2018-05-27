@@ -69,7 +69,7 @@ public class StartMenu extends State{
 	public void tick() {
 		joinServerbutton.tick();
 		if(joinServerbutton.isClicked()) {
-			mouseManager.setLeftButton(false);
+			MouseManager.setLeftButton(false);
 			entityManager.getLocalPlayer().setUsername(JOptionPane.showInputDialog("Please enter a username"));
 			
 			if(currentButton == 0)

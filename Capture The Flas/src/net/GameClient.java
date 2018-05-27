@@ -94,6 +94,10 @@ public class GameClient extends Thread{
 				StateManager.getGameState().getEntityManager().changeTeam(data[0], Integer.parseInt(data[1]));
 				break;
 				
+			case Packet.CHANGE_HERO:
+				StateManager.getGameState().getEntityManager().changeHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username  ,  tank  ,  weapon
+				break;
+				
 			case Packet.RESTART:
 				game.restart();
 				break;

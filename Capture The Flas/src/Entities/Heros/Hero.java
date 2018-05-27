@@ -2,8 +2,6 @@ package Entities.Heros;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import Entities.Entity;
@@ -24,8 +22,8 @@ public abstract class Hero extends Entity{
 	
 	protected ArrayList<Projectile> projectiles = new ArrayList<>();
 	protected double gunAngle;
-	
-	protected int defaultHealth = 100;
+
+	protected int defaultHealth;
 	protected int currentHealth;
 	protected boolean dead = false;
 	
@@ -37,14 +35,20 @@ public abstract class Hero extends Entity{
 	protected Killfeed killfeed;
 	
 	protected Weapon weapon;
+	
+	
+	public static final int LIGHT = 0;
+	public static final int MEDIUM = 1;
+	public static final int HEAVY = 2;
 
 	
-	public Hero(int team, int radius, float speed, Map map, EntityManager entityManager, Player player, Killfeed killfeed) {
+	public Hero(int team, int radius, float speed, int defaultHealth, Map map, EntityManager entityManager, Player player, Killfeed killfeed) {
 		super(Teams.getRandomSpawn(team), map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.radius = radius;
 		this.speed = speed;
+		this.defaultHealth = defaultHealth;
 		this.map = map;
 		this.entityManager = entityManager;
 		this.player = player;

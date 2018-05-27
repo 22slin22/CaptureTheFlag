@@ -14,6 +14,7 @@ public class Packet {
 	public static final String START_GAME = "08";
 	public static final String CHANGE_TEAM = "09";
 	public static final String RESTART = "10";
+	public static final String CHANGE_HERO = "11";
 	
 	private String id;
 	private String data;

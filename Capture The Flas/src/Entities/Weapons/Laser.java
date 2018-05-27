@@ -3,18 +3,18 @@ package Entities.Weapons;
 import Entities.Heros.Hero;
 import Entities.Projectiles.StandardProjectile;
 
-public class Shotgun extends Weapon{
+public class Laser extends Weapon{
 	
 	private static final int WEAPON_WIDTH = 22;
 	private static final int WEAPON_LENGTH = 25;
 	
-	public static final int DAMAGE = 50;
-	private static final float COOLDOWN = 0.5f;
+	public static final int DAMAGE = 5;
+	private static final float COOLDOWN = 0.05f;
 	
 	private static final float PROJECTILE_SPEED = 1f;
 	
 	
-	public Shotgun(Hero hero) {
+	public Laser(Hero hero) {
 		super(hero, WEAPON_WIDTH, WEAPON_LENGTH, DAMAGE, COOLDOWN);
 	}
 	

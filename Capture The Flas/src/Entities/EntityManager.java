@@ -4,10 +4,15 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
+import Entities.Heros.Heavy;
+import Entities.Heros.Hero;
 import Entities.Heros.Light;
-import Entities.Weapons.StandardWeapon;
+import Entities.Heros.Medium;
+import Entities.Weapons.Gun;
+import Entities.Weapons.Laser;
+import Entities.Weapons.Shotgun;
+import Entities.Weapons.Weapon;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
@@ -18,6 +23,7 @@ import Player.LocalPlayer;
 import Player.Player;
 import UI.Overlay.Killfeed;
 import Utils.Teams;
+import net.Packet;
 
 public class EntityManager {
 
@@ -28,11 +34,9 @@ public class EntityManager {
 	private Killfeed killfeed;
 
 	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, Game game, JFrame frame, Killfeed killfeed) {
-		//Object[] options = {"BLUE", "RED"};
-		//int team = JOptionPane.showOptionDialog(frame, "Choose a team!", "Team", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		LocalPlayer player = new LocalPlayer(keyManager, mouseManager, camera, game, this);		 //	JOptionPane.showInputDialog("Please enter a user name")
-		player.setHero(new Light(player.getTeam(), map, this, player, killfeed));
-		player.getHero().setWeapon(new StandardWeapon(player.getHero()));
+		player.setHero(new Medium(player.getTeam(), map, this, player, killfeed));
+		player.getHero().setWeapon(new Laser(player.getHero()));
 		localPlayer = player;
 		players.add(player);
 
@@ -76,11 +80,23 @@ public class EntityManager {
 		if(!(localPlayer.getUsername().equals(username))) {
 			System.out.println("Adding " + username);
 			Player player = new Player(username, team);
-			player.setHero(new Light(Teams.RED, map, this, player, killfeed));
+			//player.setHero(new Light(Teams.RED, map, this, player, killfeed));
 			synchronized (players) {
 				players.add(player);
 			}
 			
+		}
+	}
+	
+	public void removePlayer(String username) {
+		System.out.println("Deleting " + username);
+		synchronized (players) {
+			for(Player player : players) {
+				if(player.getUsername().equals(username)) {
+					getPlayers().remove(player);
+					break;
+				}
+			}
 		}
 	}
 	
@@ -107,13 +123,33 @@ public class EntityManager {
 		}
 	}
 	
-	public void removePlayer(String username) {
-		System.out.println("Deleting " + username);
+	public void changeHero(String username, int tank, int weapon) {
 		synchronized (players) {
 			for(Player player : players) {
 				if(player.getUsername().equals(username)) {
-					getPlayers().remove(player);
-					break;
+					switch (tank) {
+					case Hero.LIGHT:
+						player.setHero(new Light(player.getTeam(), map, this, player, killfeed));
+						break;
+					case Hero.MEDIUM:
+						player.setHero(new Medium(player.getTeam(), map, this, player, killfeed));
+						break;
+					case Hero.HEAVY:
+						player.setHero(new Heavy(player.getTeam(), map, this, player, killfeed));
+						break;
+					}
+					
+					switch (weapon) {
+					case Weapon.GUN:
+						player.getHero().setWeapon(new Gun(player.getHero()));
+						break;
+					case Weapon.SHOTGUN:
+						player.getHero().setWeapon(new Shotgun(player.getHero()));
+						break;
+					case Weapon.LASER:
+						player.getHero().setWeapon(new Laser(player.getHero()));
+						break;
+					}
 				}
 			}
 		}

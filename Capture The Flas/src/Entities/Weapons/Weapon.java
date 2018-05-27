@@ -5,14 +5,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import Entities.Entity;
 import Entities.Heros.Hero;
 import Utils.Teams;
 
-public abstract class Weapon {
+public abstract class Weapon extends Entity{
 	
 	protected Hero hero;
 	
-	protected float x, y;
 	protected int weaponWidth;		// Width of the Barrel
 	protected int weaponLength;		// Determines how much the barrel sticks out
 	protected int damage;
@@ -21,7 +21,13 @@ public abstract class Weapon {
 	protected double lastShot;
 	
 	
+	public static final int GUN = 0;
+	public static final int LASER = 1;
+	public static final int SHOTGUN = 2;
+	
+	
 	public Weapon(Hero hero, int weaponWidth, int weaponLength, int damage, float cooldown) {
+		super(hero.getX(), hero.getY());
 		this.hero = hero;
 		this.weaponWidth = weaponWidth;
 		this.weaponLength = weaponLength;

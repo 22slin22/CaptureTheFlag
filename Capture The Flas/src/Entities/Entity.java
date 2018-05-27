@@ -22,6 +22,13 @@ public abstract class Entity {
 		frameTime = System.currentTimeMillis();
 	}
 	
+	public Entity(float x, float y) {
+		this.x = x;
+		this.y = y;
+		
+		frameTime = System.currentTimeMillis();
+	}
+	
 	public Entity(Point pos, ArrayList<Obstacle> obstacles) {
 		this.x = pos.x;
 		this.y = pos.y;
