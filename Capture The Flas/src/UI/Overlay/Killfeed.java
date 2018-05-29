@@ -1,11 +1,10 @@
 package UI.Overlay;
 
-import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Player.Player;
+import Entities.Hero;
 import Utils.Fonts;
 import Utils.Teams;
 
@@ -35,7 +34,7 @@ public class Killfeed {
 		}
 	}
 	
-	public void addKill(Player killer, Player target) {
+	public void addKill(Hero killer, Hero target) {
 		kills.add(new Kill(killer, target, System.currentTimeMillis()));
 	}
 	

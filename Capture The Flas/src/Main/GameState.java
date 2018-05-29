@@ -8,6 +8,7 @@ import Input.KeyManager;
 import Input.MouseManager;
 import Map.Camera;
 import Map.Map;
+import Player.Player;
 import States.State;
 import States.StateManager;
 import States.States;
@@ -16,14 +17,16 @@ import Utils.Teams;
 
 public class GameState extends State{
 	
-	private int cameraX, cameraY;
-	private static final int SCORE_TO_WIN = 1;
-	
 	private Map map;
-	private EntityManager entityManager;
-	
 	private Camera camera;
 	private Overlay overlay;
+	
+	private EntityManager entityManager;
+	private Player player;
+	
+	private int cameraX, cameraY;
+	
+	private static final int SCORE_TO_WIN = 1;
 	
 	
 	public GameState(KeyManager keyManager, MouseManager mouseManager, Game game, Main main) {
@@ -32,7 +35,9 @@ public class GameState extends State{
 		overlay.setMap(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
 		
-		entityManager = new EntityManager(keyManager, mouseManager, map, camera, game, main.getDisplay().getFrame(), overlay.getKillfeed());
+		entityManager = new EntityManager(keyManager, map, game, main.getDisplay().getFrame(), overlay.getKillfeed());
+		player = new Player(keyManager, camera, game, entityManager, map, overlay.getKillfeed());
+		entityManager.addHero(player.getHero());
 		overlay.setEntityManager(entityManager);
 		//camera.setHero(entityManager.getLocalPlayer().getHero());
 	}
@@ -40,6 +45,7 @@ public class GameState extends State{
 
 	@Override
 	public void tick() {
+		player.tick();
 		entityManager.tick();
 		camera.tick();
 		overlay.tick();
@@ -69,6 +75,7 @@ public class GameState extends State{
 	
 	public void start() {
 		entityManager.reset();
+		camera.setHero(player.getHero());
 		Teams.setScore(Teams.BLUE, 0);
 		Teams.setScore(Teams.RED, 0);
 	}
@@ -76,6 +83,10 @@ public class GameState extends State{
 	
 	public EntityManager getEntityManager() {
 		return entityManager;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 
 }

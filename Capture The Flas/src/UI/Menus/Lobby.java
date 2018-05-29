@@ -5,7 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Input.MouseManager;
+import Entities.Hero;
 import Main.Game;
 import Main.Main;
 import Player.Player;
@@ -17,8 +17,8 @@ import net.Packet;
 
 public class Lobby extends State{
 	
-	private ArrayList<Player> players = new ArrayList<>();
-	private Player localPlayer;
+	private ArrayList<Hero> heros = new ArrayList<>();
+	private Player player;
 	
 	private boolean isHost = false;
 	
@@ -35,10 +35,10 @@ public class Lobby extends State{
 	
 	private Game game;
 	
-	public Lobby(ArrayList<Player> players, Game game, Player localPlayer, MouseManager mouseManager) {
-		this.players = players;
+	public Lobby(ArrayList<Hero> heros, Game game, Player player) {
+		this.heros = heros;
 		this.game = game;
-		this.localPlayer = localPlayer;
+		this.player = player;
 		
 		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
 		startButton.setColor(Color.YELLOW);
@@ -61,11 +61,11 @@ public class Lobby extends State{
 		blueTeamButton.tick();
 		redTeamButton.tick();
 		if(blueTeamButton.isClicked()) {
-			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.BLUE);
+			Packet packet = new Packet(Packet.CHANGE_TEAM, player.getHero().getUsername() + "," + Teams.BLUE);
 			game.getClient().sendData(packet.getMessage());
 		}
 		if(redTeamButton.isClicked()) {
-			Packet packet = new Packet(Packet.CHANGE_TEAM, localPlayer.getUsername() + "," + Teams.RED);
+			Packet packet = new Packet(Packet.CHANGE_TEAM, player.getHero().getUsername() + "," + Teams.RED);
 			game.getClient().sendData(packet.getMessage());
 		}
 	}
@@ -106,18 +106,18 @@ public class Lobby extends State{
 		FontMetrics metrics = g.getFontMetrics();
 		int fontHeight = metrics.getHeight();
 		
-		synchronized (players) {
-			for(Player player : players) {
-				g.setColor(Teams.getColor(player.getTeam()));
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				g.setColor(Teams.getColor(hero.getTeam()));
 				
-				if(player.getTeam() == Teams.BLUE) {
+				if(hero.getTeam() == Teams.BLUE) {
 					int y = yOffset + teamNameSpace + fontHeight + (fontHeight + spaceBetweenNames) * blues;
-					g.drawString(player.getUsername(), x + nameXOffset, y);
+					g.drawString(hero.getUsername(), x + nameXOffset, y);
 					blues += 1;
 				}
-				else if(player.getTeam() == Teams.RED) {
+				else if(hero.getTeam() == Teams.RED) {
 					int y = yOffset + teamNameSpace + fontHeight + (fontHeight + spaceBetweenNames) * reds;
-					g.drawString(player.getUsername(), x + WIDTH/2 + nameXOffset, y);
+					g.drawString(hero.getUsername(), x + WIDTH/2 + nameXOffset, y);
 					reds += 1;
 				}
 			}
@@ -125,8 +125,8 @@ public class Lobby extends State{
 	}
 	
 	
-	public void setPlayers(ArrayList<Player> players) {
-		this.players = players;
+	public void setHeros(ArrayList<Hero> heros) {
+		this.heros = heros;
 	}
 	
 	public void setHost(boolean isHost) {

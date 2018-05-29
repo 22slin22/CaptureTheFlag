@@ -37,6 +37,10 @@ public abstract class Entity {
 		frameTime = System.currentTimeMillis();
 	}
 	
+	public Entity(ArrayList<Obstacle> obstacles) {
+		this.obstacles = obstacles;
+	}
+	
 	
 	public void tick() {
 		long elapsedTime = System.currentTimeMillis() - frameTime;

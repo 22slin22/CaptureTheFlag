@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import Entities.EntityManager;
+import Entities.Hero;
 import Main.Main;
 import Map.Map;
 import Map.Obstacle;
-import Player.Player;
 import Utils.Teams;
 
 public class Minimap {
@@ -57,12 +57,12 @@ public class Minimap {
 	}
 	
 	private void drawPlayers(Graphics g) {
-		synchronized (entityManager.getPlayers()) {
-			for(Player player : entityManager.getPlayers()) {
-				g.setColor(Teams.getColor(player.getTeam()));
-				g.fillOval(xStart + (int)((player.getHero().getX() - (float)player.getHero().getRadius())*minimapScalar), 
-						yStart + (int)((player.getHero().getY() - player.getHero().getRadius())*minimapScalar), 
-						(int)(player.getHero().getRadius()*2*minimapScalar), (int)(player.getHero().getRadius()*2*minimapScalar));
+		synchronized (entityManager.getHeros()) {
+			for(Hero hero : entityManager.getHeros()) {
+				g.setColor(Teams.getColor(hero.getTeam()));
+				g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 
+						yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 
+						(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));
 			}
 		}
 	}

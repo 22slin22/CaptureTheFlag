@@ -3,7 +3,7 @@ package Map;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Entities.Projectiles.Projectile;
 
 public class Obstacle{

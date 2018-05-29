@@ -1,12 +1,12 @@
 package Entities.Weapons;
 
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Entities.Projectiles.StandardProjectile;
 
 public class Shotgun extends Weapon{
 	
-	private static final int WEAPON_WIDTH = 22;
-	private static final int WEAPON_LENGTH = 25;
+	private static final int WEAPON_WIDTH = 28;
+	private static final int WEAPON_LENGTH = 22;
 	
 	public static final int DAMAGE = 50;
 	private static final float COOLDOWN = 0.5f;

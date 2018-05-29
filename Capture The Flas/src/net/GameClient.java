@@ -52,26 +52,27 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.LOGIN:
-				StateManager.getGameState().getEntityManager().addPlayer(data[0], Integer.parseInt(data[1]));
+				System.out.println("Adding a hero");
+				StateManager.getGameState().getEntityManager().addHero(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.DISCONNECT:
-				StateManager.getGameState().getEntityManager().removePlayer(data[0]);
+				StateManager.getGameState().getEntityManager().removeHero(data[0]);
 				break;
 				
 			case Packet.UPDATE_PLAYER:
 				float x = Float.parseFloat(data[1]);
 				float y = Float.parseFloat(data[2]);
 				double gunAngle = Double.parseDouble(data[3]);
-				StateManager.getGameState().getEntityManager().updatePlayer(data[0], x, y, gunAngle);
+				StateManager.getGameState().getEntityManager().updateHero(data[0], x, y, gunAngle);
 				break;
 				
 			case Packet.SHOOT:
-				StateManager.getGameState().getEntityManager().playerShoot(data[0]);
+				StateManager.getGameState().getEntityManager().heroShoot(data[0]);
 				break;
 				
 			case Packet.HIT:
-				StateManager.getGameState().getEntityManager().hitPlayer(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
+				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
 				break;
 				
 			case Packet.FLAG_PICKUP:
@@ -95,7 +96,7 @@ public class GameClient extends Thread{
 				StateManager.getGameState().getEntityManager().changeTeam(data[0], Integer.parseInt(data[1]));
 				break;
 				
-			case Packet.CHANGE_HERO:
+			case Packet.EQUIP_HERO:
 				StateManager.getGameState().getEntityManager().changeHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username  ,  tank  ,  weapon
 				break;
 				
@@ -104,6 +105,7 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.VALID_LOGIN:
+				System.out.println("Valid Login");
 				StateManager.changeState(States.CUSTOMIZE_MENU);
 				break;
 				

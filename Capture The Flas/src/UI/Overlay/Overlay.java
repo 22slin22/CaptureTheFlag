@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import Entities.EntityManager;
 import Main.Main;
 import Map.Map;
-import Map.Obstacle;
-import Player.Player;
 import Utils.Fonts;
 import Utils.Teams;
 

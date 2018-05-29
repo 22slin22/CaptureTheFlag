@@ -1,14 +1,14 @@
 package UI.Overlay;
 
-import Player.Player;
+import Entities.Hero;
 
 public class Kill {
 	
-	private Player killer;
-	private Player target;
+	private Hero killer;
+	private Hero target;
 	private long addTime;
 	
-	public Kill(Player killer, Player target, long addTime) {
+	public Kill(Hero killer, Hero target, long addTime) {
 		this.killer = killer;
 		this.target = target;
 		this.addTime = addTime;
@@ -26,11 +26,11 @@ public class Kill {
 		return addTime;
 	}
 	
-	public Player getKiller() {
+	public Hero getKiller() {
 		return killer;
 	}
 	
-	public Player getTarget() {
+	public Hero getTarget() {
 		return target;
 	}
 

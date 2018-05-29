@@ -12,6 +12,7 @@ import Input.MouseManager;
 import Main.Game;
 import Main.Main;
 import States.State;
+import States.StateManager;
 import Utils.Button;
 import Utils.Fonts;
 
@@ -73,9 +74,8 @@ public class StartMenu extends State{
 	public void tick() {
 		joinServerButton.tick();
 		if(joinServerButton.isClicked()) {
-			MouseManager.setLeftButton(false);
 			String username = (JOptionPane.showInputDialog("Please enter a username"));
-			entityManager.getLocalPlayer().setUsername(username);
+			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
 			if(currentButton == 0)
 				game.joinServer("localhost", username);
@@ -84,9 +84,10 @@ public class StartMenu extends State{
 		}
 		createServerButton.tick();
 		if(createServerButton.isClicked()) {
-			entityManager.getLocalPlayer().setUsername(JOptionPane.showInputDialog("Please enter a username"));
+			String username = (JOptionPane.showInputDialog("Please enter a username"));
+			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
-			game.createServer();
+			game.createServer(username);
 		}
 		
 		for(Button button : buttons) {

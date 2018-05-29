@@ -1,6 +1,6 @@
 package Map;
 
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Main.Main;
 
 public class Camera {

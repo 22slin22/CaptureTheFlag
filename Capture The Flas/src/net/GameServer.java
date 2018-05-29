@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+import Player.MultiPlayer;
 import Utils.Teams;
 
 public class GameServer extends Thread{
@@ -39,7 +40,7 @@ public class GameServer extends Thread{
 			switch (packet.getId()) {
 			case Packet.LOGIN:
 				System.out.println("[" + datagramPacket.getAddress().getHostAddress() + ":" + datagramPacket.getPort() + "] : " + data[0] + " has connected");
-				handleLogin(datagramPacket, data);
+				handleLogin(datagramPacket, data[0]);
 				break;
 				
 			case Packet.DISCONNECT:
@@ -57,13 +58,17 @@ public class GameServer extends Thread{
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
+			case Packet.EQUIP_HERO:
+				handleEquip(datagramPacket, Integer.parseInt(data[1]), Integer.parseInt(data[2]));			// user name + tank + weapon
+				sendDataToAllClients(packet.getMessage());
+				break;
+				
 			case Packet.SHOOT:
 			case Packet.FLAG_PICKUP:
 			case Packet.FLAG_RETURN:
 			case Packet.SCORED:
 			case Packet.CHANGE_TEAM:
 			case Packet.HIT:
-			case Packet.CHANGE_HERO:
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
@@ -76,14 +81,14 @@ public class GameServer extends Thread{
 	}
 	
 	
-	private void handleLogin(DatagramPacket dataPacket, String[] data) {
+	private void handleLogin(DatagramPacket dataPacket, String username) {
 		for(MultiPlayer player : connections) {
 			if(dataPacket.getAddress() == player.getIpAddress() && dataPacket.getPort() == player.getPort()) {
 				Packet failPacket = new Packet(Packet.INVALID_LOGIN, "You are already connected");
 				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 				return;
 			}
-			if(player.getUsername().equals(data[0])) {
+			if(player.getUsername().equals(username)) {
 				Packet failPacket = new Packet(Packet.INVALID_LOGIN, "Name is already taken");
 				sendData(failPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 				return;
@@ -106,16 +111,19 @@ public class GameServer extends Thread{
 			team = Teams.RED;
 		else
 			team = Teams.BLUE;
-		Packet teamPacket = new Packet(Packet.CHANGE_TEAM, data[0] + "," + team);
+		Packet teamPacket = new Packet(Packet.CHANGE_TEAM, username + "," + team);
 		sendData(teamPacket.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		
-		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), data[0], team));
-		Packet packet = new Packet(Packet.LOGIN, data[0] + "," + team);															//username + team
-		sendDataToAllClientsExceptSender(dataPacket, packet.getMessage());
+		// sending all current players the new player
+		Packet packet = new Packet(Packet.LOGIN, username + "," + team);
+		sendDataToAllClients(packet.getMessage());
 		
-		// Sending all current players to the new one
+		// Sending the new player all current players
 		for(MultiPlayer player : connections) {
 			packet = new Packet(Packet.LOGIN, player.getUsername() + "," + player.getTeam());
+			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+			
+			packet = new Packet(Packet.EQUIP_HERO, player.getUsername() + "," + player.getTank() + "," + player.getWeapon());
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		}
 		if(started) {
@@ -123,6 +131,7 @@ public class GameServer extends Thread{
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 		}
 		
+		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), username, team));
 	}
 	
 	private void handleDisconnect(DatagramPacket dataPacket, String[] data) {
@@ -132,6 +141,15 @@ public class GameServer extends Thread{
 				sendDataToAllClientsExceptSender(dataPacket, packet.getMessage());
 				connections.remove(player);
 				break;
+			}
+		}
+	}
+	
+	private void handleEquip(DatagramPacket dataPacket, int tank, int weapon) {
+		for(MultiPlayer player : connections) {
+			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
+				player.setTank(tank);
+				player.setWeapon(weapon);
 			}
 		}
 	}
@@ -152,6 +170,7 @@ public class GameServer extends Thread{
 		}
 	}
 
+
 	public void sendDataToAllClientsExceptSender(DatagramPacket dataPacket, byte[] message) {
 		for(MultiPlayer player : connections) {
 			if(!(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort())) {
@@ -159,5 +178,6 @@ public class GameServer extends Thread{
 			}
 		}
 	}
+	
 
 }

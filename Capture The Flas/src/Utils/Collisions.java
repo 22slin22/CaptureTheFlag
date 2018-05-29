@@ -1,14 +1,14 @@
 package Utils;
 
+import Entities.Hero;
 import Entities.Projectiles.Projectile;
-import Player.Player;
 
 public class Collisions {
 	
-	public static boolean PlayerProjectileCollision(Player player, Projectile projectile) {
-		float x1 = player.getHero().getX();
-		float y1 = player.getHero().getY();
-		int r1 = player.getHero().getRadius();
+	public static boolean HeroProjectileCollision(Hero hero, Projectile projectile) {
+		float x1 = hero.getX();
+		float y1 = hero.getY();
+		int r1 = hero.getRadius();
 		
 		float x2 = projectile.getX();
 		float y2 = projectile.getY();

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Main.Main;
 import Utils.Teams;
 

@@ -5,8 +5,10 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 
 import Entities.EntityManager;
+import Entities.Hero;
 import Main.Game;
 import Player.Player;
+import States.StateManager;
 import Utils.Collisions;
 import Utils.Teams;
 import net.Packet;
@@ -25,7 +27,7 @@ public class Flag {
 	public static final int PICKUP_RADIUS = 20;
 	
 	private EntityManager entityManager;
-	private Player carrier;
+	private Hero carrier;
 	
 	private Game game;
 	
@@ -48,10 +50,10 @@ public class Flag {
 	
 	public void tick() {
 		if(!isCarried) {
-			if(checkPickup(entityManager.getLocalPlayer())) {
-				if(entityManager.getLocalPlayer().getTeam() != team) {
+			if(checkPickup(StateManager.getGameState().getPlayer())) {
+				if(StateManager.getGameState().getPlayer().getHero().getTeam() != team) {
 					//When picked up by the local player
-					Packet packet = new Packet(Packet.FLAG_PICKUP, entityManager.getLocalPlayer().getUsername() + "," + entityManager.getFlags().indexOf(this));
+					Packet packet = new Packet(Packet.FLAG_PICKUP, StateManager.getGameState().getPlayer().getHero().getUsername() + "," + entityManager.getFlags().indexOf(this));
 					game.getClient().sendData(packet.getMessage());
 				}
 				else if(isPickedUp){
@@ -61,14 +63,14 @@ public class Flag {
 			}
 		}
 		else {
-			if(carrier.getHero().isDead()) {
+			if(carrier.isDead()) {
 				isCarried = false;
 			}
 			else {
-				x = (int)carrier.getHero().getX() ;		//- carrier.getHero().getRadius() * 2;
-				y = (int)carrier.getHero().getY() ;		//- 30;
+				x = (int)carrier.getX() ;		//- carrier.getHero().getRadius() * 2;
+				y = (int)carrier.getY() ;		//- 30;
 				
-				if(carrier == entityManager.getLocalPlayer() && checkScored()) {
+				if(carrier == StateManager.getGameState().getPlayer().getHero() && checkScored()) {
 					Packet packet = new Packet(Packet.SCORED, entityManager.getFlags().indexOf(this) + "," + carrier.getTeam() + "," + carrier.getUsername());
 					game.getClient().sendData(packet.getMessage());
 				}
@@ -103,7 +105,7 @@ public class Flag {
 	}
 	
 	public boolean checkScored() {
-		return Collisions.circleCollision(Teams.getFlagSpawnX(carrier.getTeam()), Teams.getFlagSpawnY(carrier.getTeam()), PICKUP_RADIUS, carrier.getHero().getX(), carrier.getHero().getY(), carrier.getHero().getRadius());
+		return Collisions.circleCollision(Teams.getFlagSpawnX(carrier.getTeam()), Teams.getFlagSpawnY(carrier.getTeam()), PICKUP_RADIUS, carrier.getX(), carrier.getY(), carrier.getRadius());
 	}
 	
 	public void returnFlag() {
@@ -120,8 +122,8 @@ public class Flag {
 	}
 	
 	
-	public void setCarrier(Player player) {
-		carrier = player;
+	public void setCarrier(Hero hero) {
+		carrier = hero;
 		isCarried = true;
 		isPickedUp = true;
 	}

@@ -1,6 +1,6 @@
 package Entities.Weapons;
 
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Entities.Projectiles.StandardProjectile;
 
 public class Laser extends Weapon{

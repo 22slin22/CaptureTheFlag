@@ -21,7 +21,7 @@ public class StateManager {
 	public static void init(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
 		states.add(new GameState(keyManager, mouseManager, game, main));
 		states.add(new StartMenu(keyManager, mouseManager, game, getGameState().getEntityManager()));
-		states.add(new Lobby(getGameState().getEntityManager().getPlayers(), game, getGameState().getEntityManager().getLocalPlayer(), mouseManager));
+		states.add(new Lobby(getGameState().getEntityManager().getHeros(), game, getGameState().getPlayer()));
 		states.add(new WinScreen(game, mouseManager));
 		states.add(new CustomizeMenu(game));
 	}

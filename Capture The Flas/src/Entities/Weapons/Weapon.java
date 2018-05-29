@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import Entities.Entity;
-import Entities.Heros.Hero;
+import Entities.Hero;
 import Utils.Teams;
 
 public abstract class Weapon extends Entity{

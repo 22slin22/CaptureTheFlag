@@ -1,4 +1,5 @@
 package Main;
+
 import java.awt.Graphics;
 
 import Input.KeyManager;
@@ -48,14 +49,9 @@ public class Game {
 		
 		Packet packet = new Packet(Packet.LOGIN, username);
 		client.sendData(packet.getMessage());
-		
-		//Packet changeHero = new Packet(Packet.CHANGE_HERO, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + "1" + "," + "2");
-		//client.sendData(changeHero.getMessage());
-		
-		//StateManager.changeState(States.LOBBY);
 	}
 	
-	public void createServer() {
+	public void createServer(String username) {
 		server = new GameServer();
 		server.start();
 		
@@ -65,7 +61,7 @@ public class Game {
 		StateManager.getLobby().setHost(true);
 		StateManager.getWinScreen().setHost(true);
 		
-		Packet packet = new Packet(Packet.LOGIN, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername());
+		Packet packet = new Packet(Packet.LOGIN, username);
 		client.sendData(packet.getMessage());
 		
 		StateManager.changeState(States.CUSTOMIZE_MENU);

@@ -1,4 +1,4 @@
-package net;
+package Player;
 
 import java.net.InetAddress;
 
@@ -7,7 +7,10 @@ public class MultiPlayer {
 	private InetAddress ipAddress;
 	private int port;
 	private String username;
+	
 	private int team;
+	private int tank;
+	private int weapon;
 	
 	
 	public MultiPlayer(InetAddress ipAddress, int port, String username, int team) {
@@ -33,5 +36,20 @@ public class MultiPlayer {
 	public int getTeam() {
 		return team;
 	}
-
+	
+	public int getTank() {
+		return tank;
+	}
+	
+	public void setTank(int tank) {
+		this.tank = tank;
+	}
+	
+	public int getWeapon() {
+		return weapon;
+	}
+	
+	public void setWeapon(int weapon) {
+		this.weapon = weapon;
+	}
 }

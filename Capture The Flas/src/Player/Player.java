@@ -1,76 +1,125 @@
 package Player;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.security.GeneralSecurityException;
 
-import Entities.Heros.Hero;
+import Entities.EntityManager;
+import Entities.Hero;
+import Entities.Projectiles.Projectile;
 import Input.KeyManager;
 import Input.MouseManager;
+import Main.Game;
 import Map.Camera;
-import Utils.Fonts;
+import Map.Map;
+import UI.Overlay.Killfeed;
 import net.Packet;
 
-public class Player {
+public class Player{
 	
-	protected String username;
-	protected int team;
+	private KeyManager keyManager;
 	
-	protected Hero hero;
+	private Camera camera;
+	private EntityManager entityManager;
 	
+	private Game game;
 	
-	public Player() {
+	private Hero hero;
+	
+
+	public Player(KeyManager keyManager, Camera camera, Game game, EntityManager entityManager, Map map, Killfeed killfeed) {
+		this.keyManager = keyManager;
+		this.camera = camera;
+		this.game = game;
+		this.entityManager = entityManager;
 		
+		hero = new Hero(map, killfeed);
 	}
-	
-	public Player(String username, int team) {
-		this.username = username;
-		this.team = team;
-	}
-	
 	
 	public void tick() {
+		updateHero();
 		hero.tick();
+		
+		testShoot();
+		synchronized (hero.getProjectiles()) {
+			checkHit();
+		}
 	}
 	
-	public void render(Graphics g, int cameraX, int cameraY) {
-		hero.render(g, cameraX, cameraY);
-		renderNameTag(g, cameraX, cameraY);
+	private void checkHit() {
+		for(Projectile projectile : hero.getProjectiles()) {
+			synchronized (entityManager.getHeros()) {
+				for(Hero hero : entityManager.getHeros()) {
+					if(hero.getTeam() != this.hero.getTeam() && Utils.Collisions.HeroProjectileCollision(hero, projectile)) {
+						hit(hero.getUsername(), hero.getProjectiles().indexOf(projectile));
+					}
+				}
+			}
+		}
 	}
 	
-	private void renderNameTag(Graphics g, int cameraX, int cameraY) {
-		g.setColor(Color.GRAY);
-		Fonts.drawCenteredText(g, username, (int)hero.getX() - cameraX, (int)hero.getY() - cameraY + hero.getRadius() + 15, Fonts.playerNameFont);
+	private void hit(String playerUsername, int projectileId) {
+		Packet packet = new Packet(Packet.HIT, hero.getUsername() + "," + playerUsername + "," + hero.getWeapon().getDamage() + "," + projectileId);
+		game.getClient().sendData(packet.getMessage());
 	}
-
-
+	
+	private void updateHero() {
+		hero.setVx(0);
+		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
+			hero.setVx(-hero.getTank().getSpeed());
+		}
+		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
+			hero.setVx(hero.getVx() + hero.getTank().getSpeed());
+		}
+		
+		
+		hero.setVy(0);
+		if(keyManager.isKeyPressed(KeyEvent.VK_W) || keyManager.isKeyPressed(KeyEvent.VK_UP)) {
+			hero.setVy(-hero.getTank().getSpeed());
+		}
+		if(keyManager.isKeyPressed(KeyEvent.VK_S) || keyManager.isKeyPressed(KeyEvent.VK_DOWN)) {
+			hero.setVy(hero.getVy() + hero.getTank().getSpeed());
+		}
+		
+		hero.setGunAngle(getMouseAngle());
+		
+		Packet packet = new Packet(Packet.UPDATE_PLAYER, hero.getUsername() + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
+		game.getClient().sendData(packet.getMessage());
+	}
+	
+	private void testShoot() {
+		if(MouseManager.isLeftButton()) {
+			if(System.currentTimeMillis() - hero.getWeapon().getLastShot() > hero.getWeapon().getCooldown()*1000) {
+				Packet packet = new Packet(Packet.SHOOT, hero.getUsername());
+				game.getClient().sendData(packet.getMessage());
+			}
+		}
+	}
+	
+	public double getMouseAngle() {
+		// displayX and displayY    =    Position on the screen
+		
+		int displayX = (int)hero.getX() - camera.getX();
+		int displayY = (int)hero.getY() - camera.getY();
+		
+		int mouseX = MouseManager.getX();
+		int mouseY = MouseManager.getY();
+		
+		double r = Math.sqrt(Math.pow(displayY - mouseY, 2) + Math.pow(mouseX - displayX, 2));
+		
+		double angle = Math.asin((displayY - mouseY) / r);
+		
+		if(mouseX < displayX) {
+			if(angle > 0) {
+				angle = Math.PI - angle;
+			}
+			else {
+				angle = -Math.PI - angle;
+			}
+		}
+		
+		return angle;
+	}
+	
 	public Hero getHero() {
 		return hero;
 	}
-	
-	public void setHero(Hero hero) {
-		this.hero = hero;
-		hero.setTeam(team);
-	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public int getTeam() {
-		return team;
-	}
-	
-	public void setTeam(int team) {
-		this.team = team;
-		if(hero != null) {
-			hero.setTeam(team);
-		}
-	}
-
 }

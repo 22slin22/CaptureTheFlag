@@ -72,7 +72,7 @@ public class CustomizeMenu extends State{
 		
 		playButton.tick();
 		if(playButton.isClicked()) {
-			Packet packet = new Packet(Packet.CHANGE_HERO, StateManager.getGameState().getEntityManager().getLocalPlayer().getUsername() + "," + selectedTank + "," + selectedWeapon);
+			Packet packet = new Packet(Packet.EQUIP_HERO, StateManager.getGameState().getPlayer().getHero().getUsername() + "," + selectedTank + "," + selectedWeapon);
 			game.getClient().sendData(packet.getMessage());
 			StateManager.changeState(States.LOBBY);
 		}

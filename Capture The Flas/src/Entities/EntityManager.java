@@ -5,53 +5,46 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import Entities.Heros.Heavy;
-import Entities.Heros.Hero;
-import Entities.Heros.Light;
-import Entities.Heros.Medium;
+import Entities.Tanks.Heavy;
+import Entities.Tanks.Light;
+import Entities.Tanks.Medium;
 import Entities.Weapons.Gun;
 import Entities.Weapons.Laser;
 import Entities.Weapons.Shotgun;
 import Entities.Weapons.Weapon;
 import Input.KeyManager;
-import Input.MouseManager;
 import Main.Game;
-import Map.Camera;
 import Map.Flag;
 import Map.Map;
-import Player.LocalPlayer;
-import Player.Player;
 import UI.Overlay.Killfeed;
 import Utils.Teams;
 
 public class EntityManager {
 
-	private LocalPlayer localPlayer;
-	private ArrayList<Player> players = new ArrayList<>();
+	//private LocalPlayer localPlayer;
+	private ArrayList<Hero> heros = new ArrayList<>();
 	private ArrayList<Flag> flags = new ArrayList<>();
 	
 	private Map map;
-	private Camera camera;
 	private Killfeed killfeed;
 
-	public EntityManager(KeyManager keyManager, MouseManager mouseManager, Map map, Camera camera, Game game, JFrame frame, Killfeed killfeed) {
-		this.camera = camera;
+	public EntityManager(KeyManager keyManager, Map map, Game game, JFrame frame, Killfeed killfeed) {
 		this.map = map;
 		this.killfeed = killfeed;
 		
-		localPlayer = new LocalPlayer(keyManager, mouseManager, camera, game, this);
+		//localPlayer = new LocalPlayer(keyManager, mouseManager, camera, game, this);
 		//localPlayer.setHero(new Medium(localPlayer.getTeam(), map, this, localPlayer, killfeed));
 		//localPlayer.getHero().setWeapon(new Laser(localPlayer.getHero()));
-		players.add(localPlayer);
+		//players.add(localPlayer);
 
 		flags.add(new Flag(this, Teams.BLUE, game));
 		flags.add(new Flag(this, Teams.RED, game));
 	}
 
 	public void tick() {
-		synchronized(players) {
-			for(Player player : players) {
-				player.tick();
+		synchronized(heros) {
+			for(Hero hero : heros) {
+				hero.tick();
 			}
 		}
 		
@@ -64,59 +57,56 @@ public class EntityManager {
 		for(Flag flag : flags) {
 			flag.render(g, cameraX, cameraY);
 		}
-		synchronized(players) {
-			for(Player player : players) {
-				player.render(g, cameraX, cameraY);
+		synchronized(heros) {
+			for(Hero hero : heros) {
+				hero.render(g, cameraX, cameraY);
 			}
 		}
 	}
 	
-	public void addPlayer(Player player) {
-		synchronized (players) {
-			players.add(player);
+	public void addHero(Hero hero) {
+		synchronized (heros) {
+			heros.add(hero);
 		}
 	}	
 	
-	public void addPlayer(String username, int team) {
-		if(!(localPlayer.getUsername().equals(username))) {
-			System.out.println("Adding " + username);
-			Player player = new Player(username, team);
-			synchronized (players) {
-				players.add(player);
-			}
-			
+	public void addHero(String username, int team) {
+		Hero player = new Hero(team, map, killfeed);
+		player.setUsername(username);
+		synchronized (heros) {
+			heros.add(player);	
 		}
 	}
 	
-	public void removePlayer(String username) {
+	public void removeHero(String username) {
 		System.out.println("Deleting " + username);
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
-					getPlayers().remove(player);
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					heros.remove(hero);
 					break;
 				}
 			}
 		}
 	}
 	
-	public void updatePlayer(String username, float x, float y, double gunAngle) {
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
-					player.getHero().setX(x);
-					player.getHero().setY(y);
-					player.getHero().setGunAngle(gunAngle);
+	public void updateHero(String username, float x, float y, double gunAngle) {
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					hero.setX(x);
+					hero.setY(y);
+					hero.setGunAngle(gunAngle);
 				}
 			}
 		}
 	}
 	
 	public void changeTeam(String username, int team) {
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
-					player.setTeam(team);
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					hero.setTeam(team);
 					//player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
 				}
 			}
@@ -124,30 +114,30 @@ public class EntityManager {
 	}
 	
 	public void changeHero(String username, int tank, int weapon) {
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
 					switch (tank) {
 					case Hero.LIGHT:
-						player.setHero(new Light(player.getTeam(), map, this, player, killfeed));
+						hero.setTank(new Light(hero));
 						break;
 					case Hero.MEDIUM:
-						player.setHero(new Medium(player.getTeam(), map, this, player, killfeed));
+						hero.setTank(new Medium(hero));
 						break;
 					case Hero.HEAVY:
-						player.setHero(new Heavy(player.getTeam(), map, this, player, killfeed));
+						hero.setTank(new Heavy(hero));
 						break;
 					}
 					
 					switch (weapon) {
 					case Weapon.GUN:
-						player.getHero().setWeapon(new Gun(player.getHero()));
+						hero.setWeapon(new Gun(hero));
 						break;
 					case Weapon.SHOTGUN:
-						player.getHero().setWeapon(new Shotgun(player.getHero()));
+						hero.setWeapon(new Shotgun(hero));
 						break;
 					case Weapon.LASER:
-						player.getHero().setWeapon(new Laser(player.getHero()));
+						hero.setWeapon(new Laser(hero));
 						break;
 					}
 				}
@@ -155,56 +145,55 @@ public class EntityManager {
 		}
 	}
 	
-	public void playerShoot(String username) {
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
-					player.getHero().shoot();
+	public void heroShoot(String username) {
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					hero.shoot();
 				}
 			}
 		}
 	}
 	
-	public void hitPlayer(String usernameAttack, String username, int damage, int projectileId) {
-		synchronized (players) {
-			for(Player player : players) {
-				if(player.getUsername().equals(username)) {
-					for(Player attacker : getPlayers()) {
+	public void hitHero(String usernameAttack, String username, int damage, int projectileId) {
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					for(Hero attacker : heros) {
 						if(attacker.getUsername().equals(usernameAttack)) {
-							player.getHero().gotHit(damage, attacker);
+							hero.gotHit(damage, attacker);
 						}
 					}
 				}
 			}
 		
 		
-			for(Player player : players) {
-				if(player.getUsername().equals(usernameAttack)) {
-					player.getHero().getProjectiles().get(projectileId).setRemove(true);
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(usernameAttack)) {
+					hero.getProjectiles().get(projectileId).setRemove(true);
 				}
 			}
 		}
 	}
 	
 	public void flagPickup(String username, int flagIndex) {
-		synchronized (players) {
-			for(Player player : getPlayers()) {
-				if(player.getUsername().equals(username)) {
-					flags.get(flagIndex).setCarrier(player);
+		synchronized (heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					flags.get(flagIndex).setCarrier(hero);
 				}
 			}
 		}
 	}
 	
 	public void reset() {
-		for(Player player : players) {
-			player.getHero().getProjectiles().clear();
-			player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
+		for(Hero hero : heros) {
+			hero.getProjectiles().clear();
+			hero.move(Teams.getRandomSpawn(hero.getTeam()));
 		}
 		for(Flag flag : flags) {
 			flag.returnFlag();
 		}
-		camera.setHero(localPlayer.getHero());
 	}
 	
 	public void flagReturn(int flagIndex) {
@@ -215,12 +204,12 @@ public class EntityManager {
 		flags.get(flagIndex).score();
 	}
 	
-	public LocalPlayer getLocalPlayer() {
-		return localPlayer;
-	}
+	//public LocalPlayer getLocalPlayer() {
+	//	return localPlayer;
+	//}
 	
-	public synchronized ArrayList<Player> getPlayers() {
-		return players;
+	public ArrayList<Hero> getHeros(){
+		return heros;
 	}
 	
 	public ArrayList<Flag> getFlags(){
