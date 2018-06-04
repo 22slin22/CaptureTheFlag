@@ -27,6 +27,8 @@ public class Game {
 	
 	public void tick() {
 		StateManager.getActiveState().tick();
+		
+		MouseManager.tick();
 	}
 	
 	public void render(Graphics g) {

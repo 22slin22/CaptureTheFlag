@@ -1,11 +1,11 @@
 package Utils;
 
 import Entities.Hero;
-import Entities.Projectiles.Projectile;
+import Entities.Projectiles.StandardProjectile;
 
 public class Collisions {
 	
-	public static boolean HeroProjectileCollision(Hero hero, Projectile projectile) {
+	public static boolean HeroProjectileCollision(Hero hero, StandardProjectile projectile) {
 		float x1 = hero.getX();
 		float y1 = hero.getY();
 		int r1 = hero.getRadius();

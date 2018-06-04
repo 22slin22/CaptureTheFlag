@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import Entities.EntityManager;
 import Entities.Hero;
 import Entities.Projectiles.Projectile;
+import Entities.Projectiles.StandardProjectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
@@ -45,7 +46,7 @@ public class Player{
 	}
 	
 	private void checkHit() {
-		for(Projectile projectile : hero.getProjectiles()) {
+		for(StandardProjectile projectile : hero.getProjectiles()) {
 			synchronized (entityManager.getHeros()) {
 				for(Hero hero : entityManager.getHeros()) {
 					if(hero.getTeam() != this.hero.getTeam() && Utils.Collisions.HeroProjectileCollision(hero, projectile)) {

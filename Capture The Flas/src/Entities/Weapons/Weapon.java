@@ -36,7 +36,7 @@ public abstract class Weapon extends Entity{
 	}
 	
 	
-	public void tick() {
+	public void update() {
 		x = hero.getX();
 		y = hero.getY();
 	}

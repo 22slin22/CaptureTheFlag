@@ -8,10 +8,12 @@ public class Shotgun extends Weapon{
 	private static final int WEAPON_WIDTH = 28;
 	private static final int WEAPON_LENGTH = 22;
 	
-	public static final int DAMAGE = 50;
+	public static final int DAMAGE = 35;
 	private static final float COOLDOWN = 0.5f;
 	
 	private static final float PROJECTILE_SPEED = 1f;
+	private static final int LIFE_TIME = 500;		// in milliseconds
+	private static final double DELTA_ANGLE = 0.13;		// = 4 degree
 	
 	
 	public Shotgun(Hero hero) {
@@ -21,11 +23,15 @@ public class Shotgun extends Weapon{
 	
 	@Override
 	public void shoot() {
-		float spawnX = x + (float)(Math.cos(hero.getGunAngle()) * hero.getRadius());
-		float spawnY = y + (float)(-Math.sin(hero.getGunAngle()) * hero.getRadius());
-		
-		synchronized (hero.getProjectiles()) {
-			hero.getProjectiles().add(new StandardProjectile(spawnX, spawnY, hero.getGunAngle(), PROJECTILE_SPEED, hero.getMap()));
+		double angle = hero.getGunAngle() - DELTA_ANGLE;
+		for(double i = 0; i < 3; i++) {
+			float spawnX = x + (float)(Math.cos(angle) * hero.getRadius());
+			float spawnY = y + (float)(-Math.sin(angle) * hero.getRadius());
+			
+			synchronized (hero.getProjectiles()) {
+				hero.getProjectiles().add(new StandardProjectile(spawnX, spawnY, angle, PROJECTILE_SPEED, hero.getMap(), LIFE_TIME));
+			}
+			angle += DELTA_ANGLE;
 		}
 		lastShot = System.currentTimeMillis();
 	}

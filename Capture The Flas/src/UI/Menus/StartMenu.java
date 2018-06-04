@@ -15,43 +15,49 @@ import States.State;
 import States.StateManager;
 import Utils.Button;
 import Utils.Fonts;
+import Utils.InputField;
 
 public class StartMenu extends State{
 	
 	private Game game;
 	private EntityManager entityManager;
-	private MouseManager mouseManager;
-	
-	private static final int titleYOffset = 150;
-	
-	private Button joinServerButton;
-	private Button createServerButton;
-	
-	private int joinButtonYOffset = Main.getHeight() * 3/4;
-	private int joinButtonXDistance = 100;
-	private int joinButtonWidth = 200;
-	private int joinButtonHeight = 120;
 	
 	
-	private ArrayList<Button> buttons = new ArrayList<>();
-	
-	private int currentButton;
-	private int buttonWidth = 60;
-	private int buttonHeight = 50;
-	private int buttonXDistance = 20;
-	private int buttonYDistance = 15;
-	private int buttonYOffset = Main.getHeight() /3 ;
-	
-	private int nMiddle = 12;
-	private int nRightSide = 9;
-	private int nLeftSide = 8;
-	
+	private int currentButton = -1;
 	
 	private String error;
 	private boolean showError = false;
 	
 	
-	public StartMenu(KeyManager keyManager, MouseManager mouseManager, Game game, EntityManager entityManager) {
+	private static final int titleYOffset = 150;
+	
+	private static final int joinButtonYOffset = Main.getHeight() * 3/4;
+	private static final int joinButtonXDistance = 100;
+	private static final int joinButtonWidth = 200;
+	private static final int joinButtonHeight = 120;
+	
+	private static final int buttonWidth = 60;
+	private static final int buttonHeight = 50;
+	private static final int buttonXDistance = 20;
+	private static final int buttonYDistance = 15;
+	private static final int buttonYOffset = Main.getHeight() /3 ;
+	
+	private static final int nMiddle = 12;
+	private static final int nRightSide = 9;
+	private static final int nLeftSide = 8;
+	
+	private static final int inputFieldYOffset = Main.getHeight() * 3/5;
+	private static final int inputFieldWidth = 400;
+	private static final int inputFieldHeight = 50;
+	
+	
+	private ArrayList<Button> buttons = new ArrayList<>();
+	private Button joinServerButton;
+	private Button createServerButton;
+	private InputField inputField;
+	
+	
+	public StartMenu(KeyManager keyManager, Game game, EntityManager entityManager) {
 		this.game = game;
 		this.entityManager = entityManager;
 		
@@ -68,30 +74,37 @@ public class StartMenu extends State{
 		createServerButton.setTextColor(Color.WHITE);
 		
 		createButtons();
+		
+		inputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, inputFieldYOffset, inputFieldWidth, inputFieldHeight, "username");
 	}
 	
 	
 	public void tick() {
 		joinServerButton.tick();
+		createServerButton.tick();
+		for(Button button : buttons) {
+			button.tick();
+		}
+		inputField.tick();
+		
 		if(joinServerButton.isClicked()) {
-			String username = (JOptionPane.showInputDialog("Please enter a username"));
+			String username = inputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
 			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
-			if(currentButton == 0)
+			if(currentButton == -1)
 				game.joinServer("localhost", username);
 			else
 				game.joinServer("10.9.116." + (currentButton+1), username);
 		}
-		createServerButton.tick();
+
 		if(createServerButton.isClicked()) {
-			String username = (JOptionPane.showInputDialog("Please enter a username"));
+			String username = inputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
 			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
 			game.createServer(username);
 		}
 		
 		for(Button button : buttons) {
-			button.tick();
 			if(button.isClicked()) {
 				buttons.get(currentButton).setColor(Color.GRAY);
 				buttons.get(currentButton).setTextColor(Color.BLACK);
@@ -111,6 +124,7 @@ public class StartMenu extends State{
 		for(Button button : buttons) {
 			button.render(g);
 		}
+		inputField.render(g);
 	}
 	
 	public void showError(String error) {

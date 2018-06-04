@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import Entities.Hero;
-import Entities.Projectiles.Projectile;
+import Entities.Projectiles.StandardProjectile;
 
 public class Obstacle{
 
@@ -56,7 +56,7 @@ public class Obstacle{
 		return false;
 	}
 	
-	public boolean touches(Projectile projectile) {
+	public boolean touches(StandardProjectile projectile) {
 		int radius = projectile.getRadius();
 		float plX = projectile.getX();
 		float plY = projectile.getY();

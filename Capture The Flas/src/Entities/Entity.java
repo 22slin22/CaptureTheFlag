@@ -47,6 +47,11 @@ public abstract class Entity {
 		frameTime = System.currentTimeMillis();
 		
 		move(vx * elapsedTime, vy * elapsedTime);
+		update();
+	}
+	
+	protected void update() {
+		
 	}
 	
 	public abstract void render(Graphics g, int cameraX, int cameraY);

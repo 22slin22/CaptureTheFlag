@@ -5,7 +5,7 @@ import Entities.Projectiles.StandardProjectile;
 
 public class Gun extends Weapon{
 	
-	private static final int WEAPON_WIDTH = 22;
+	private static final int WEAPON_WIDTH = 20;
 	private static final int WEAPON_LENGTH = 25;
 	
 	public static final int DAMAGE = 20;

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import Entities.Projectiles.Projectile;
+import Entities.Projectiles.StandardProjectile;
 import Entities.Tanks.Tank;
 import Entities.Weapons.Weapon;
 import Map.Map;
@@ -20,7 +21,7 @@ public class Hero extends Entity{
 	
 	private int max_x, max_y;
 	
-	private ArrayList<Projectile> projectiles = new ArrayList<>();
+	private ArrayList<StandardProjectile> projectiles = new ArrayList<>();
 	private double gunAngle;
 
 	private int currentHealth;
@@ -61,9 +62,7 @@ public class Hero extends Entity{
 	
 	
 	@Override
-	public void tick() {
-		super.tick();
-		
+	public void update() {
 		if(dead) {
 			dead = false;
 		}
@@ -188,7 +187,7 @@ public class Hero extends Entity{
 		return dead;
 	}
 	
-	public ArrayList<Projectile> getProjectiles(){
+	public ArrayList<StandardProjectile> getProjectiles(){
 		return projectiles;
 	}
 	

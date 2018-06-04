@@ -17,6 +17,7 @@ public class Fonts {
 	public static Font lobbyNameFont = new Font("Arial", Font.PLAIN, 30);
 	public static Font buttonFont = new Font("Arial", Font.PLAIN, 30);
 	public static Font playButtonFont = new Font("Arial", Font.BOLD, 50);
+	public static Font inputFieldFont = new Font("", Font.ITALIC, 40);
 	public static Font titleFont = new Font("", Font.BOLD, 75);
 	public static Font winScreenWinner = new Font("", Font.BOLD, 60);
 	

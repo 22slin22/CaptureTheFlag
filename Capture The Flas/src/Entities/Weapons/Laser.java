@@ -5,8 +5,8 @@ import Entities.Projectiles.StandardProjectile;
 
 public class Laser extends Weapon{
 	
-	private static final int WEAPON_WIDTH = 22;
-	private static final int WEAPON_LENGTH = 25;
+	private static final int WEAPON_WIDTH = 14;
+	private static final int WEAPON_LENGTH = 32;
 	
 	public static final int DAMAGE = 5;
 	private static final float COOLDOWN = 0.05f;
@@ -18,7 +18,6 @@ public class Laser extends Weapon{
 		super(hero, WEAPON_WIDTH, WEAPON_LENGTH, DAMAGE, COOLDOWN);
 	}
 	
-	
 	@Override
 	public void shoot() {
 		float spawnX = x + (float)(Math.cos(hero.getGunAngle()) * hero.getRadius());
@@ -29,4 +28,5 @@ public class Laser extends Weapon{
 		}
 		lastShot = System.currentTimeMillis();
 	}
+	
 }

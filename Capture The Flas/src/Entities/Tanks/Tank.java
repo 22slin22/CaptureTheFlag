@@ -21,7 +21,7 @@ public abstract class Tank extends Entity{
 		this.defaultHealth = defaultHealth;
 	}
 	
-	public void tick() {
+	public void update() {
 		x = hero.getX();
 		y = hero.getY();
 	}
