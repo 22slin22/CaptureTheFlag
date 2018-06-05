@@ -17,30 +17,37 @@ import net.Packet;
 
 public class Lobby extends State{
 	
-	private ArrayList<Hero> heros = new ArrayList<>();
-	private Player player;
+	private Game game;
+	
 	
 	private boolean isHost = false;
 	
-	private int yOffset = 200;
+	private static final int yOffset = 200;
 	private int WIDTH = Main.getWidth() / 2;
 	private int HEIGHT = Main.getHeight() - 2 * yOffset;
 	private int x = Main.getWidth() / 4;
 	
-	private int teamNameSpace = 100;
+	private static final int startButtonWidth = 140;
+	private static final int startButtonHeight = 80;
+	private static final int startButtonArcWidth = 10;
+	private static final int startButtonArcHeight = 10;
+	
+	private static final int teamNameSpace = 100;
+	
 	
 	private Button startButton;
 	private Button blueTeamButton;
 	private Button redTeamButton;
 	
-	private Game game;
+	private ArrayList<Hero> heros = new ArrayList<>();
+	private Player player;
 	
 	public Lobby(ArrayList<Hero> heros, Game game, Player player) {
 		this.heros = heros;
 		this.game = game;
 		this.player = player;
 		
-		startButton = new Button(Main.getWidth()/2 - 70, yOffset + HEIGHT + yOffset/2 - 30, 140, 60);
+		startButton = new Button(Main.getWidth()/2 - startButtonWidth/2, yOffset + HEIGHT + yOffset/2 - startButtonHeight/2, startButtonWidth, startButtonHeight, startButtonArcWidth, startButtonArcHeight);
 		startButton.setColor(Color.YELLOW);
 		startButton.setText("Start");
 		startButton.setTextColor(Color.BLACK);

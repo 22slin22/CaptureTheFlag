@@ -61,13 +61,13 @@ public class StartMenu extends State{
 		this.game = game;
 		this.entityManager = entityManager;
 		
-		joinServerButton = new Button(Main.getWidth()/2 - joinButtonWidth - joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
+		joinServerButton = new Button(Main.getWidth()/2 - joinButtonWidth - joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight, 15, 15);
 		joinServerButton.setColor(Color.GREEN);
 		joinServerButton.setFont(Fonts.playButtonFont);
 		joinServerButton.setText("Join");
 		joinServerButton.setTextColor(Color.WHITE);
 		
-		createServerButton = new Button(Main.getWidth()/2 + joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight);
+		createServerButton = new Button(Main.getWidth()/2 + joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight, 15, 15);
 		createServerButton.setColor(Color.GREEN);
 		createServerButton.setFont(Fonts.playButtonFont);
 		createServerButton.setText("Create");
@@ -75,7 +75,7 @@ public class StartMenu extends State{
 		
 		createButtons();
 		
-		inputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, inputFieldYOffset, inputFieldWidth, inputFieldHeight, "username");
+		inputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, inputFieldYOffset, inputFieldWidth, inputFieldHeight, "username", 10, 10);
 	}
 	
 	
@@ -106,8 +106,10 @@ public class StartMenu extends State{
 		
 		for(Button button : buttons) {
 			if(button.isClicked()) {
-				buttons.get(currentButton).setColor(Color.GRAY);
-				buttons.get(currentButton).setTextColor(Color.BLACK);
+				if(currentButton != -1) {
+					buttons.get(currentButton).setColor(Color.GRAY);
+					buttons.get(currentButton).setTextColor(Color.BLACK);
+				}
 				
 				currentButton = Integer.parseInt(button.getText()) - 1;
 				button.setColor(new Color(12, 77, 4));

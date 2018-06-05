@@ -15,6 +15,7 @@ public class InputField {
 	
 	private int x, y;
 	private int width, height;
+	private boolean rounded = false;
 	
 	private String text = "";
 	private boolean active = false;
@@ -23,8 +24,8 @@ public class InputField {
 	
 	private static final int USERNAME_MAX_LENGHT = 15;
 	
-	private static final int arcWidth = 10;
-	private static final int arcHeight = 10;
+	private int arcWidth;
+	private int arcHeight;
 	
 	private static final int TEXT_X_OFFSET = 10;
 	private static final int TEXT_Y_OFFSET = 11;
@@ -59,6 +60,38 @@ public class InputField {
 		keyManager.addActiveInputField(this);
 	}
 	
+	public InputField(KeyManager keyManager, int x, int y, int width, int height, int arcWidth, int arcHeight) {
+		this.keyManager = keyManager;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.arcWidth = arcWidth;
+		this.arcHeight = arcHeight;
+		
+		rounded = true;
+		clickBox = new Rectangle(x, y, width, height);
+		
+		keyManager.addActiveInputField(this);
+	}
+	
+	public InputField(KeyManager keyManager, int x, int y, int width, int height, String hint, int arcWidth, int arcHeight) {
+		this.keyManager = keyManager;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.text = hint;
+		this.arcWidth = arcWidth;
+		this.arcHeight = arcHeight;
+		
+		clickBox = new Rectangle(x, y, width, height);
+		showHint = true;
+		rounded = true;
+		
+		keyManager.addActiveInputField(this);
+	}
+	
 	
 	public void tick() {
 		if(MouseManager.hasClicked()) {
@@ -81,8 +114,14 @@ public class InputField {
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(Color.DARK_GRAY);
-		g.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+		if(rounded) {
+			g.setColor(Color.DARK_GRAY);
+			g.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+		}
+		else {
+			g.setColor(Color.DARK_GRAY);
+			g.drawRect(x, y, width, height);
+		}
 		
 		g.setFont(Fonts.inputFieldFont);
 		g.drawString(text, x + TEXT_X_OFFSET, y + height - TEXT_Y_OFFSET);

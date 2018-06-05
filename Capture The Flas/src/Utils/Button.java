@@ -10,6 +10,8 @@ public class Button {
 	
 	private int x, y;
 	private int width, height;
+	private int arcWidth, arcHeight;
+	private boolean rounded = false;
 	
 	private boolean clicked;
 	private boolean pressed;
@@ -25,6 +27,17 @@ public class Button {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public Button(int x, int y, int width, int height, int arcWidth, int arcHeight) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.arcWidth = arcWidth;
+		this.arcHeight = arcHeight;
+		
+		rounded = true;
 	}
 	
 	
@@ -45,7 +58,12 @@ public class Button {
 	public void render(Graphics g) {
 		g.setColor(color);
 		
-		g.fillRect(x, y, width, height);
+		if(rounded) {
+			g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+		}
+		else {
+			g.fillRect(x, y, width, height);
+		}
 		
 		if(text != null) {
 			g.setColor(textColor);

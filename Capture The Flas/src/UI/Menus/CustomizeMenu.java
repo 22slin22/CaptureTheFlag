@@ -40,6 +40,8 @@ public class CustomizeMenu extends State{
 	private static final int playButtonYOffset = Main.getHeight() * 3/4;
 	private static final int playButtonWidth = 230;
 	private static final int playButtonHeight = 120;
+	private static final int playButtonArcWidth = 15;
+	private static final int playButtonArcHeight = 15;
 	
 	
 	public CustomizeMenu(Game game) {
@@ -93,18 +95,18 @@ public class CustomizeMenu extends State{
 	
 	
 	private void createButtons() {
-		tankButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2 - distanceBetweenButtonsX - buttonWidth, buttonsYOffset, buttonWidth, buttonHeight));
+		tankButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2 - distanceBetweenButtonsX - buttonWidth, buttonsYOffset, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		tankButtons.get(0).setText("LIGHT");
-		tankButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2, buttonsYOffset, buttonWidth, buttonHeight));
+		tankButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2, buttonsYOffset, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		tankButtons.get(1).setText("MEDIUM");
-		tankButtons.add(new Button(Main.getWidth()/2 + buttonWidth/2 + distanceBetweenButtonsX, buttonsYOffset, buttonWidth, buttonHeight));
+		tankButtons.add(new Button(Main.getWidth()/2 + buttonWidth/2 + distanceBetweenButtonsX, buttonsYOffset, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		tankButtons.get(2).setText("HEAVY");
 		
-		weaponButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2 - distanceBetweenButtonsX - buttonWidth, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight));
+		weaponButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2 - distanceBetweenButtonsX - buttonWidth, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		weaponButtons.get(0).setText("GUN");
-		weaponButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight));
+		weaponButtons.add(new Button(Main.getWidth()/2 - buttonWidth/2, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		weaponButtons.get(1).setText("SHOTGUN");
-		weaponButtons.add(new Button(Main.getWidth()/2 + buttonWidth/2 + distanceBetweenButtonsX, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight));
+		weaponButtons.add(new Button(Main.getWidth()/2 + buttonWidth/2 + distanceBetweenButtonsX, buttonsYOffset + distanceBetweenButtonsY + buttonHeight, buttonWidth, buttonHeight, playButtonArcWidth, playButtonArcHeight));
 		weaponButtons.get(2).setText("LASER");
 		
 		for(Button button : tankButtons) {
@@ -119,7 +121,7 @@ public class CustomizeMenu extends State{
 		}
 		
 		
-		playButton = new Button(Main.getWidth()/2 - playButtonWidth/2, playButtonYOffset, playButtonWidth, playButtonHeight);
+		playButton = new Button(Main.getWidth()/2 - playButtonWidth/2, playButtonYOffset, playButtonWidth, playButtonHeight, playButtonArcWidth, playButtonArcHeight);
 		playButton.setColor(Color.GREEN);
 		playButton.setFont(Fonts.playButtonFont);
 		playButton.setText("PLAY");
