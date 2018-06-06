@@ -4,12 +4,12 @@ import java.awt.event.KeyEvent;
 
 import Entities.EntityManager;
 import Entities.Hero;
-import Entities.Projectiles.Projectile;
 import Entities.Projectiles.StandardProjectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
 import Map.Camera;
+import Map.Flag;
 import Map.Map;
 import UI.Overlay.Killfeed;
 import net.Packet;
@@ -24,6 +24,7 @@ public class Player{
 	private Game game;
 	
 	private Hero hero;
+	private Flag flag;
 	
 
 	public Player(KeyManager keyManager, Camera camera, Game game, EntityManager entityManager, Map map, Killfeed killfeed) {
@@ -50,7 +51,7 @@ public class Player{
 			synchronized (entityManager.getHeros()) {
 				for(Hero hero : entityManager.getHeros()) {
 					if(hero.getTeam() != this.hero.getTeam() && Utils.Collisions.HeroProjectileCollision(hero, projectile)) {
-						hit(hero.getUsername(), hero.getProjectiles().indexOf(projectile));
+						hit(hero.getUsername(), this.hero.getProjectiles().indexOf(projectile));
 					}
 				}
 			}
@@ -122,5 +123,9 @@ public class Player{
 	
 	public Hero getHero() {
 		return hero;
+	}
+	
+	public void setFlag(Flag flag) {
+		this.flag = flag;
 	}
 }

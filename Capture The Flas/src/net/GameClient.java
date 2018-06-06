@@ -9,7 +9,9 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+import Entities.EntityManager;
 import Main.Game;
+import Main.GameState;
 import States.StateManager;
 import States.States;
 
@@ -72,7 +74,7 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.HIT:
-				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, amount, projectile id
+				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, damage, projectile id
 				break;
 				
 			case Packet.FLAG_PICKUP:

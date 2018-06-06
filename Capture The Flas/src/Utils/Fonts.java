@@ -20,6 +20,7 @@ public class Fonts {
 	public static Font inputFieldFont = new Font("", Font.ITALIC, 40);
 	public static Font titleFont = new Font("", Font.BOLD, 75);
 	public static Font winScreenWinner = new Font("", Font.BOLD, 60);
+	public static Font errorFont = new Font("Arial", Font.ITALIC, 20);
 	
 	public static void drawCenteredText(Graphics g, String text, int x, int y, Font font) {
 		FontMetrics metrics = g.getFontMetrics(font);

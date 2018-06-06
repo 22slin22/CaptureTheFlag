@@ -50,6 +50,8 @@ public class StartMenu extends State{
 	private static final int inputFieldWidth = 400;
 	private static final int inputFieldHeight = 50;
 	
+	private static final int errorYOffset = inputFieldYOffset - 30;
+	
 	
 	private ArrayList<Button> buttons = new ArrayList<>();
 	private Button joinServerButton;
@@ -127,6 +129,15 @@ public class StartMenu extends State{
 			button.render(g);
 		}
 		inputField.render(g);
+		
+		if(showError) {
+			renderError(g);
+		}
+	}
+	
+	public void renderError(Graphics g) {
+		g.setColor(Color.RED);
+		Fonts.drawCenteredText(g, error, Main.getWidth()/2, errorYOffset, Fonts.errorFont);
 	}
 	
 	public void showError(String error) {

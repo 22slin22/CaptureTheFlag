@@ -63,10 +63,7 @@ public class Flag {
 			}
 		}
 		else {
-			if(carrier.isDead()) {
-				isCarried = false;
-			}
-			else {
+			if(!carrier.isDead()) {
 				x = (int)carrier.getX() ;		//- carrier.getHero().getRadius() * 2;
 				y = (int)carrier.getY() ;		//- 30;
 				
@@ -86,7 +83,7 @@ public class Flag {
 			Polygon flag = new Polygon(new int[] {x-cameraX, x-cameraX, x-cameraX + FLAG_WIDTH}, new int[] {y-cameraY - FLAG_HEIGHT, y-cameraY - FLAG_HEIGHT/2, y-cameraY - FLAG_HEIGHT*3/4}, 3) ;
 			g.fillPolygon(flag);
 			
-			//if stolen draw tanslucid flag;
+			//if stolen draw tanslucend flag;
 			if(isPickedUp) {
 				int flagX = Teams.getFlagSpawnX(team);
 				int flagY = Teams.getFlagSpawnY(team);
