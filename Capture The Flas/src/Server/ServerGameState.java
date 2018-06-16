@@ -66,7 +66,7 @@ public class ServerGameState{
 				}
 			}
 			if(flag.checkScored()) {
-				entityManager.score(entityManager.getFlags().indexOf(flag));
+				entityManager.flagReturn(entityManager.getFlags().indexOf(flag));
 				Packet packet = new Packet(Packet.SCORED, "" + entityManager.getFlags().indexOf(flag));
 				server.sendDataToAllClients(packet.getMessage());
 			}
