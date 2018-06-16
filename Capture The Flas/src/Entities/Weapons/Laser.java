@@ -1,5 +1,6 @@
 package Entities.Weapons;
 
+import Entities.EntityManager;
 import Entities.Hero;
 import Entities.Projectiles.StandardProjectile;
 
@@ -14,8 +15,8 @@ public class Laser extends Weapon{
 	private static final float PROJECTILE_SPEED = 1f;
 	
 	
-	public Laser(Hero hero) {
-		super(hero, WEAPON_WIDTH, WEAPON_LENGTH, DAMAGE, COOLDOWN);
+	public Laser(Hero hero, EntityManager entityManager) {
+		super(hero, entityManager, WEAPON_WIDTH, WEAPON_LENGTH, DAMAGE, COOLDOWN);
 	}
 	
 	@Override
@@ -23,8 +24,8 @@ public class Laser extends Weapon{
 		float spawnX = x + (float)(Math.cos(hero.getGunAngle()) * hero.getRadius());
 		float spawnY = y + (float)(-Math.sin(hero.getGunAngle()) * hero.getRadius());
 		
-		synchronized (hero.getProjectiles()) {
-			hero.getProjectiles().add(new StandardProjectile(spawnX, spawnY, hero.getGunAngle(), PROJECTILE_SPEED, hero.getMap()));
+		synchronized (entityManager.getProjectiles()) {
+			entityManager.getProjectiles().add(new StandardProjectile(spawnX, spawnY, hero.getGunAngle(), PROJECTILE_SPEED, hero.getMap(), hero));
 		}
 		lastShot = System.currentTimeMillis();
 	}

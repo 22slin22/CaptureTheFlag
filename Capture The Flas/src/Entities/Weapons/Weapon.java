@@ -6,12 +6,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import Entities.Entity;
+import Entities.EntityManager;
 import Entities.Hero;
 import Utils.Teams;
 
 public abstract class Weapon extends Entity{
 	
 	protected Hero hero;
+	protected EntityManager entityManager;
 	
 	protected int weaponWidth;		// Width of the Barrel
 	protected int weaponLength;		// Determines how much the barrel sticks out
@@ -26,9 +28,10 @@ public abstract class Weapon extends Entity{
 	public static final int LASER = 2;
 	
 	
-	public Weapon(Hero hero, int weaponWidth, int weaponLength, int damage, float cooldown) {
+	public Weapon(Hero hero, EntityManager entityManager, int weaponWidth, int weaponLength, int damage, float cooldown) {
 		super(hero.getX(), hero.getY());
 		this.hero = hero;
+		this.entityManager = entityManager;
 		this.weaponWidth = weaponWidth;
 		this.weaponLength = weaponLength;
 		this.damage = damage;

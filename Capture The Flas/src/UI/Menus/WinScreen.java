@@ -27,7 +27,7 @@ public class WinScreen extends State{
 	private Game game;
 	
 	
-	public WinScreen(Game game, MouseManager mouseManager) {
+	public WinScreen(Game game) {
 		this.game = game;
 		
 		playAgain = new Button(Main.getWidth()/2 - playAgainWidth/2, playAgainYOffset - playAgainHeight/2, playAgainWidth, playAgainHeight);

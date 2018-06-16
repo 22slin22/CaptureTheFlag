@@ -16,15 +16,13 @@ import Utils.Teams;
 
 public class Hero extends Entity{
 	private Map map;
-	private Killfeed killfeed;
 	
 	
 	private int max_x, max_y;
 	
-	private ArrayList<StandardProjectile> projectiles = new ArrayList<>();
 	private double gunAngle;
 
-	private int currentHealth;
+	private int health;
 	private boolean dead = false;
 	
 	private String username;
@@ -43,21 +41,19 @@ public class Hero extends Entity{
 	private int healthBarYOffset;
 
 	
-	public Hero(Map map, Killfeed killfeed) {
+	public Hero(Map map) {
 		super(map.getObstacles());
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.map = map;
-		this.killfeed = killfeed;
 	}
 	
-	public Hero(int team, Map map, Killfeed killfeed) {
+	public Hero(int team, Map map) {
 		super(map.getObstacles());
 		this.team = team;
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
 		this.map = map;
-		this.killfeed = killfeed;
 	}
 	
 	
@@ -67,25 +63,11 @@ public class Hero extends Entity{
 			dead = false;
 		}
 		
-		synchronized (projectiles) {
-			for(Projectile projectile : projectiles) {
-				projectile.tick();
-			}
-			
-			for (int i = projectiles.size() - 1; i >= 0; i--) {
-				if(projectiles.get(i).isRemove()) {
-					projectiles.remove(i);
-				}
-			}
-		}
-		
-		
 		weapon.tick();
 		tank.tick();
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
-		renderProjectiles(g, cameraX, cameraY);
 		renderHealthBar(g, cameraX, cameraY);
 		renderNameTag(g, cameraX, cameraY);
 		
@@ -93,20 +75,12 @@ public class Hero extends Entity{
 		tank.render(g, cameraX, cameraY);
 		
 	}
-	
-	protected void renderProjectiles(Graphics g, int cameraX, int cameraY) {
-		synchronized (projectiles) {
-			for(Projectile projectile : projectiles) {
-				projectile.render(g, cameraX, cameraY);
-			}
-		}
-	}
 
 	private void renderHealthBar(Graphics g, int cameraX, int cameraY) {
 		g.setColor(Color.GRAY);
 		g.drawRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth, healthBarHeight);
 		g.setColor(Color.GREEN);
-		g.fillRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth * currentHealth / tank.getDefaultHealth(), healthBarHeight);
+		g.fillRect((int)x - cameraX - healthBarWidth/2, (int)y - cameraY - healthBarYOffset, healthBarWidth * health / tank.getDefaultHealth(), healthBarHeight);
 	}
 	
 	private void renderNameTag(Graphics g, int cameraX, int cameraY) {
@@ -146,14 +120,18 @@ public class Hero extends Entity{
 	}
 	
 	public void gotHit(int damage, Hero hitter) {
-		currentHealth -= damage;
+		if(!dead)
+			health -= damage;
 		
-		if(currentHealth <= 0) {
-			currentHealth = tank.getDefaultHealth();
-			move(Teams.getRandomSpawn(team));
-			dead = true;
-			killfeed.addKill(hitter, this);
+		if(health <= 0) {
+			kill();
 		}
+	}
+	
+	public void kill() {
+		health = tank.getDefaultHealth();
+		move(Teams.getRandomSpawn(team));
+		dead = true;
 	}
 	
 	public void shoot() {
@@ -183,12 +161,12 @@ public class Hero extends Entity{
 		return team;
 	}
 	
-	public boolean isDead() {
-		return dead;
+	public void removeHealth(int damage) {
+		health -= damage;
 	}
 	
-	public ArrayList<StandardProjectile> getProjectiles(){
-		return projectiles;
+	public boolean isDead() {
+		return dead;
 	}
 	
 	public Map getMap() {
@@ -214,7 +192,7 @@ public class Hero extends Entity{
 	public void setTank(Tank tank) {
 		this.tank = tank;
 		healthBarYOffset = tank.getRadius() + healthBarHeight + 30;
-		currentHealth = tank.getDefaultHealth();
+		health = tank.getDefaultHealth();
 	}
 	
 	public Tank getTank() {

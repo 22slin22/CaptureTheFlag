@@ -1,4 +1,4 @@
-package net;
+package Server;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -7,22 +7,32 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+import Entities.EntityManager;
 import Player.MultiPlayer;
 import Utils.Teams;
+import net.Packet;
 
-public class GameServer extends Thread{
+public class Server extends Thread{
 	
 	private DatagramSocket socket;
 	private ArrayList<MultiPlayer> connections = new ArrayList<>();
 	
 	private boolean started = false;
 	
-	public GameServer() {
+	
+	private ServerMain serverMain;
+	private EntityManager entityManager;
+	
+	public Server() {
 		try {
 			this.socket = new DatagramSocket(2222);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		serverMain = new ServerMain(this);
+		serverMain.start();
+		
+		entityManager = serverMain.getServerGameState().getEntityManager();
 	}
 	
 	public void run() {
@@ -50,29 +60,33 @@ public class GameServer extends Thread{
 				
 			case Packet.START_GAME:
 				started = true;
+				serverMain.setPlaying(true);
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.RESTART:
 				started = false;
+				serverMain.setPlaying(false);
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.EQUIP_HERO:
-				handleEquip(datagramPacket, Integer.parseInt(data[1]), Integer.parseInt(data[2]));			// user name + tank + weapon
+				handleEquip(datagramPacket, data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));			// user name + tank + weapon
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.SHOOT:
-			case Packet.FLAG_PICKUP:
-			case Packet.FLAG_RETURN:
-			case Packet.SCORED:
+				entityManager.heroShoot(data[0]);
+				sendDataToAllClients(packet.getMessage());
+				break;
+				
 			case Packet.CHANGE_TEAM:
-			case Packet.HIT:
+				handleChangeTeam(datagramPacket, data[0], Integer.parseInt(data[1]));
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.UPDATE_PLAYER:
+				entityManager.updateHero(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]), Double.parseDouble(data[3]));
 				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
 				break;
 			}
@@ -132,6 +146,7 @@ public class GameServer extends Thread{
 		}
 		
 		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), username, team));
+		entityManager.addHero(username, team);
 	}
 	
 	private void handleDisconnect(DatagramPacket dataPacket, String[] data) {
@@ -143,15 +158,26 @@ public class GameServer extends Thread{
 				break;
 			}
 		}
+		entityManager.removeHero(data[0]);
 	}
 	
-	private void handleEquip(DatagramPacket dataPacket, int tank, int weapon) {
+	private void handleEquip(DatagramPacket dataPacket, String username, int tank, int weapon) {
 		for(MultiPlayer player : connections) {
 			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
 				player.setTank(tank);
 				player.setWeapon(weapon);
 			}
 		}
+		entityManager.changeHero(username, tank, weapon);
+	}
+	
+	private void handleChangeTeam(DatagramPacket dataPacket, String username, int team) {
+		for(MultiPlayer player : connections) {
+			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
+				player.setTeam(team);
+			}
+		}
+		entityManager.changeTeam(username, team);
 	}
 	
 	

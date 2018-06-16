@@ -4,16 +4,16 @@ import java.awt.Graphics;
 
 import Input.KeyManager;
 import Input.MouseManager;
+import Server.Server;
 import States.StateManager;
 import States.States;
 import net.GameClient;
-import net.GameServer;
 import net.Packet;
 
 public class Game {
 	
 	private GameClient client;
-	private GameServer server;
+	private Server server;
 	
 	private Main main;
 	
@@ -21,7 +21,7 @@ public class Game {
 	public Game(Main main, KeyManager keyManager, MouseManager mouseManager) {
 		this.main = main;
 		
-		StateManager.init(keyManager, mouseManager, main, this);
+		StateManager.init(keyManager, main, this);
 		StateManager.changeState(States.START_MENU);
 	}
 	
@@ -54,7 +54,7 @@ public class Game {
 	}
 	
 	public void createServer(String username) {
-		server = new GameServer();
+		server = new Server();
 		server.start();
 		
 		client = new GameClient(this, "localhost");

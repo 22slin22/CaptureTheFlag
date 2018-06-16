@@ -1,17 +1,16 @@
-package Main;
+package States;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import Entities.EntityManager;
 import Input.KeyManager;
-import Input.MouseManager;
+import Main.Game;
+import Main.Main;
 import Map.Camera;
 import Map.Map;
 import Player.Player;
-import States.State;
-import States.StateManager;
-import States.States;
+import Server.ServerGameState;
 import UI.Overlay.Overlay;
 import Utils.Teams;
 
@@ -26,17 +25,16 @@ public class GameState extends State{
 	
 	private int cameraX, cameraY;
 	
-	private static final int SCORE_TO_WIN = 1;
 	
-	
-	public GameState(KeyManager keyManager, MouseManager mouseManager, Game game, Main main) {
+	public GameState(KeyManager keyManager, Game game) {
 		overlay = new Overlay();
 		map = new Map();
 		overlay.setMap(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
 		
-		entityManager = new EntityManager(keyManager, map, game, main.getDisplay().getFrame(), overlay.getKillfeed());
-		player = new Player(keyManager, camera, game, entityManager, map, overlay.getKillfeed());
+		entityManager = new EntityManager(map);
+		entityManager.setKillfeed(overlay.getKillfeed());
+		player = new Player(keyManager, camera, game, map);
 		entityManager.addHero(player.getHero());
 		overlay.setEntityManager(entityManager);
 		//camera.setHero(entityManager.getLocalPlayer().getHero());
@@ -49,15 +47,6 @@ public class GameState extends State{
 		entityManager.tick();
 		camera.tick();
 		overlay.tick();
-		
-		if(Teams.getScore(Teams.BLUE) >= SCORE_TO_WIN) {
-			StateManager.changeState(States.WIN_SCREEN);
-			StateManager.getWinScreen().setWinner(Teams.BLUE);
-		}
-		else if(Teams.getScore(Teams.RED) >= SCORE_TO_WIN) {
-			StateManager.changeState(States.WIN_SCREEN);
-			StateManager.getWinScreen().setWinner(Teams.RED);
-		}
 	}
 
 	@Override

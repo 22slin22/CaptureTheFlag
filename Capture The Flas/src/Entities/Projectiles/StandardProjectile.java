@@ -3,6 +3,7 @@ package Entities.Projectiles;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import Entities.Hero;
 import Map.Map;
 import Map.Obstacle;
 
@@ -23,8 +24,9 @@ public class StandardProjectile extends Projectile{
 		spawnTime = System.currentTimeMillis();
 	}
 
-	public StandardProjectile(float x, float y, double angle, float speed, Map map) {
+	public StandardProjectile(float x, float y, double angle, float speed, Map map, Hero owner) {
 		super(x, y, map);
+		this.owner = owner;
 		
 		setVx(angleToSpeedX(angle, speed));
 		setVy(angleToSpeedY(angle, speed));
@@ -32,9 +34,10 @@ public class StandardProjectile extends Projectile{
 		spawnTime = System.currentTimeMillis();
 	}
 	
-	public StandardProjectile(float x, float y, double angle, float speed, Map map, int lifeTime) {
+	public StandardProjectile(float x, float y, double angle, float speed, Map map, int lifeTime, Hero owner) {
 		super(x, y, map);
 		this.lifeTime = lifeTime;
+		this.owner = owner;
 		
 		setVx(angleToSpeedX(angle, speed));
 		setVy(angleToSpeedY(angle, speed));
@@ -42,25 +45,25 @@ public class StandardProjectile extends Projectile{
 		spawnTime = System.currentTimeMillis();
 	}
 
-	public void update() {
+	public boolean checkRemove() {
 		if (x < RADIUS
 				|| x > map.getWidth() - RADIUS
 				|| y < RADIUS
 				|| y > map.getHeight() - RADIUS) {
-			remove = true;
+			return true;
 		}
 		for (Obstacle obstacle : obstacles) {
 			if (obstacle.touches(this)) {
-				remove = true;
-				break;
+				return true;
 			}
 		}
 		
 		if(lifeTime != -1) {
 			if(System.currentTimeMillis() - spawnTime >= lifeTime) {
-				remove = true;
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {

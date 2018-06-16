@@ -37,6 +37,10 @@ public class MultiPlayer {
 		return team;
 	}
 	
+	public void setTeam(int team) {
+		this.team = team;
+	}
+	
 	public int getTank() {
 		return tank;
 	}

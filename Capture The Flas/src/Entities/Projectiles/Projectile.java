@@ -1,17 +1,17 @@
 package Entities.Projectiles;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import Entities.Entity;
+import Entities.Hero;
 import Map.Map;
-import Map.Obstacle;
 
 public abstract class Projectile extends Entity{
 	
 	protected boolean remove = false;
 	
 	protected Map map;
+	protected Hero owner;
 	
 	public Projectile(Map map) {
 		super(map.getObstacles());
@@ -37,5 +37,12 @@ public abstract class Projectile extends Entity{
 	public void setRemove(boolean remove) {
 		this.remove = remove;
 	}
-
+	
+	public void setOwner(Hero hero) {
+		owner = hero;
+	}
+	
+	public Hero getOwner() {
+		return owner;
+	}
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
-import Main.GameState;
 import Main.Main;
 import UI.Menus.CustomizeMenu;
 import UI.Menus.Lobby;
@@ -18,11 +17,11 @@ public class StateManager {
 	private static ArrayList<State> states = new ArrayList<>();
 	
 	
-	public static void init(KeyManager keyManager, MouseManager mouseManager, Main main, Game game) {
-		states.add(new GameState(keyManager, mouseManager, game, main));
+	public static void init(KeyManager keyManager, Main main, Game game) {
+		states.add(new GameState(keyManager, game));
 		states.add(new StartMenu(keyManager, game, getGameState().getEntityManager()));
 		states.add(new Lobby(getGameState().getEntityManager().getHeros(), game, getGameState().getPlayer()));
-		states.add(new WinScreen(game, mouseManager));
+		states.add(new WinScreen(game));
 		states.add(new CustomizeMenu(game));
 	}
 	

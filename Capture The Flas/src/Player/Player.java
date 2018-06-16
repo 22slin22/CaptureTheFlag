@@ -19,7 +19,6 @@ public class Player{
 	private KeyManager keyManager;
 	
 	private Camera camera;
-	private EntityManager entityManager;
 	
 	private Game game;
 	
@@ -27,13 +26,12 @@ public class Player{
 	private Flag flag;
 	
 
-	public Player(KeyManager keyManager, Camera camera, Game game, EntityManager entityManager, Map map, Killfeed killfeed) {
+	public Player(KeyManager keyManager, Camera camera, Game game, Map map) {
 		this.keyManager = keyManager;
 		this.camera = camera;
 		this.game = game;
-		this.entityManager = entityManager;
 		
-		hero = new Hero(map, killfeed);
+		hero = new Hero(map);
 	}
 	
 	public void tick() {
@@ -41,27 +39,8 @@ public class Player{
 		hero.tick();
 		
 		testShoot();
-		synchronized (hero.getProjectiles()) {
-			checkHit();
-		}
 	}
-	
-	private void checkHit() {
-		for(StandardProjectile projectile : hero.getProjectiles()) {
-			synchronized (entityManager.getHeros()) {
-				for(Hero hero : entityManager.getHeros()) {
-					if(hero.getTeam() != this.hero.getTeam() && Utils.Collisions.HeroProjectileCollision(hero, projectile)) {
-						hit(hero.getUsername(), this.hero.getProjectiles().indexOf(projectile));
-					}
-				}
-			}
-		}
-	}
-	
-	private void hit(String playerUsername, int projectileId) {
-		Packet packet = new Packet(Packet.HIT, hero.getUsername() + "," + playerUsername + "," + hero.getWeapon().getDamage() + "," + projectileId);
-		game.getClient().sendData(packet.getMessage());
-	}
+
 	
 	private void updateHero() {
 		hero.setVx(0);
@@ -71,7 +50,6 @@ public class Player{
 		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
 			hero.setVx(hero.getVx() + hero.getTank().getSpeed());
 		}
-		
 		
 		hero.setVy(0);
 		if(keyManager.isKeyPressed(KeyEvent.VK_W) || keyManager.isKeyPressed(KeyEvent.VK_UP)) {

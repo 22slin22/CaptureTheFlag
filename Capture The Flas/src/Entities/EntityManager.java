@@ -3,8 +3,8 @@ package Entities;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
+import Entities.Projectiles.Projectile;
+import Entities.Projectiles.StandardProjectile;
 import Entities.Tanks.Heavy;
 import Entities.Tanks.Light;
 import Entities.Tanks.Medium;
@@ -12,8 +12,6 @@ import Entities.Weapons.Gun;
 import Entities.Weapons.Laser;
 import Entities.Weapons.Shotgun;
 import Entities.Weapons.Weapon;
-import Input.KeyManager;
-import Main.Game;
 import Map.Flag;
 import Map.Map;
 import UI.Overlay.Killfeed;
@@ -21,30 +19,30 @@ import Utils.Teams;
 
 public class EntityManager {
 
-	//private LocalPlayer localPlayer;
 	private ArrayList<Hero> heros = new ArrayList<>();
 	private ArrayList<Flag> flags = new ArrayList<>();
+	private ArrayList<StandardProjectile> projectiles = new ArrayList<>();
 	
 	private Map map;
-	private Killfeed killfeed;
+	Killfeed killfeed;
 
-	public EntityManager(KeyManager keyManager, Map map, Game game, JFrame frame, Killfeed killfeed) {
+	public EntityManager(Map map) {
 		this.map = map;
-		this.killfeed = killfeed;
 		
-		//localPlayer = new LocalPlayer(keyManager, mouseManager, camera, game, this);
-		//localPlayer.setHero(new Medium(localPlayer.getTeam(), map, this, localPlayer, killfeed));
-		//localPlayer.getHero().setWeapon(new Laser(localPlayer.getHero()));
-		//players.add(localPlayer);
-
-		flags.add(new Flag(this, Teams.BLUE, game));
-		flags.add(new Flag(this, Teams.RED, game));
+		flags.add(new Flag(this, Teams.BLUE));
+		flags.add(new Flag(this, Teams.RED));
 	}
 
 	public void tick() {
 		synchronized(heros) {
 			for(Hero hero : heros) {
 				hero.tick();
+			}
+		}
+		
+		synchronized (projectiles) {
+			for(Projectile projectile : projectiles) {
+				projectile.tick();
 			}
 		}
 		
@@ -57,6 +55,13 @@ public class EntityManager {
 		for(Flag flag : flags) {
 			flag.render(g, cameraX, cameraY);
 		}
+		
+		synchronized (projectiles) {
+			for(Projectile projectile : projectiles) {
+				projectile.render(g, cameraX, cameraY);
+			}
+		}
+		
 		synchronized(heros) {
 			for(Hero hero : heros) {
 				hero.render(g, cameraX, cameraY);
@@ -71,7 +76,7 @@ public class EntityManager {
 	}	
 	
 	public void addHero(String username, int team) {
-		Hero player = new Hero(team, map, killfeed);
+		Hero player = new Hero(team, map);
 		player.setUsername(username);
 		synchronized (heros) {
 			heros.add(player);	
@@ -131,13 +136,13 @@ public class EntityManager {
 					
 					switch (weapon) {
 					case Weapon.GUN:
-						hero.setWeapon(new Gun(hero));
+						hero.setWeapon(new Gun(hero, this));
 						break;
 					case Weapon.SHOTGUN:
-						hero.setWeapon(new Shotgun(hero));
+						hero.setWeapon(new Shotgun(hero, this));
 						break;
 					case Weapon.LASER:
-						hero.setWeapon(new Laser(hero));
+						hero.setWeapon(new Laser(hero, this));
 						break;
 					}
 				}
@@ -155,6 +160,12 @@ public class EntityManager {
 		}
 	}
 	
+	public void removeProjectile(int projectileId) {
+		synchronized(projectiles) {
+			projectiles.remove(projectileId);
+		}
+	}
+	
 	public void hitHero(String usernameAttack, String username, int damage, int projectileId) {
 		synchronized (heros) {
 			for(Hero hero : heros) {
@@ -166,11 +177,20 @@ public class EntityManager {
 					}
 				}
 			}
-		
-		
+		}
+		removeProjectile(projectileId);
+	}
+	
+	public void killHero(String username, String usernameKiller) {
+		synchronized(heros) {
 			for(Hero hero : heros) {
-				if(hero.getUsername().equals(usernameAttack)) {
-					hero.getProjectiles().get(projectileId).setRemove(true);
+				if(hero.getUsername().equals(username)) {
+					for(Hero killer : heros) {
+						if(killer.getUsername().equals(usernameKiller)) {
+							hero.kill();
+							killfeed.addKill(killer, hero);
+						}
+					}
 				}
 			}
 		}
@@ -188,7 +208,7 @@ public class EntityManager {
 	
 	public void reset() {
 		for(Hero hero : heros) {
-			hero.getProjectiles().clear();
+			projectiles.clear();
 			hero.move(Teams.getRandomSpawn(hero.getTeam()));
 		}
 		for(Flag flag : flags) {
@@ -200,20 +220,20 @@ public class EntityManager {
 		flags.get(flagIndex).returnFlag();
 	}
 	
-	public void score(int flagIndex) {
-		flags.get(flagIndex).score();
-	}
-	
-	//public LocalPlayer getLocalPlayer() {
-	//	return localPlayer;
-	//}
-	
 	public ArrayList<Hero> getHeros(){
 		return heros;
 	}
 	
 	public ArrayList<Flag> getFlags(){
 		return flags;
+	}
+	
+	public ArrayList<StandardProjectile> getProjectiles(){
+		return projectiles;
+	}
+	
+	public void setKillfeed(Killfeed killfeed) {
+		this.killfeed = killfeed;
 	}
 
 }

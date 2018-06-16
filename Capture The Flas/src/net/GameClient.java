@@ -11,9 +11,10 @@ import javax.swing.JOptionPane;
 
 import Entities.EntityManager;
 import Main.Game;
-import Main.GameState;
+import States.GameState;
 import States.StateManager;
 import States.States;
+import Utils.Teams;
 
 public class GameClient extends Thread{
 	
@@ -78,7 +79,7 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.FLAG_PICKUP:
-				StateManager.getGameState().getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));
+				StateManager.getGameState().getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));		// username  ,  flag index
 				break;
 				
 			case Packet.FLAG_RETURN:
@@ -86,7 +87,8 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.SCORED:
-				StateManager.getGameState().getEntityManager().score(Integer.parseInt(data[0]));		// 0 = flagIndex		1 = team		2 = username
+				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[0]));		// 0 = flagIndex
+				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[0])).getTeam());
 				break;
 				
 			case Packet.START_GAME:
@@ -114,6 +116,9 @@ public class GameClient extends Thread{
 			case Packet.INVALID_LOGIN:
 				StateManager.getStartMenu().showError(data[0]);
 				break;
+				
+			case Packet.REMOVE_PROJECTILE:
+				StateManager.getGameState().getEntityManager().removeProjectile(Integer.parseInt(data[0]));
 			}
 		}
 	}
