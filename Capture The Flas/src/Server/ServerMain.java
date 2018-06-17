@@ -1,7 +1,5 @@
 package Server;
 
-import States.GameState;
-
 public class ServerMain implements Runnable{
 	
 	private boolean running;
@@ -24,9 +22,11 @@ public class ServerMain implements Runnable{
 		running = true;
 		thread = new Thread(this);
 		thread.start();
+		
+		serverGameState.reset();
 	}
 	
-	private synchronized void stop() {
+	public synchronized void stop() {
 		if(!running)
 			return;
 		
@@ -46,9 +46,6 @@ public class ServerMain implements Runnable{
 		long timeNow;
 		double deltaTime = 0;
 		
-		long timeTicks = System.currentTimeMillis();
-		int ticks = 0;
-		
 		running = true;
 		while(running) {
 			timeNow = System.nanoTime();
@@ -60,13 +57,6 @@ public class ServerMain implements Runnable{
 					serverGameState.tick();
 				
 				deltaTime--;
-				ticks++;
-			}
-			
-			if(System.currentTimeMillis() - timeTicks >= 1000) {
-				//System.out.println("FPS: " + ticks);
-				ticks = 0;
-				timeTicks = System.currentTimeMillis();
 			}
 		}
 	}

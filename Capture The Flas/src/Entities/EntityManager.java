@@ -201,6 +201,7 @@ public class EntityManager {
 			for(Hero hero : heros) {
 				if(hero.getUsername().equals(username)) {
 					flags.get(flagIndex).setCarrier(hero);
+					hero.setFlag(flags.get(flagIndex));
 				}
 			}
 		}

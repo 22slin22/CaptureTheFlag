@@ -2,15 +2,12 @@ package Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
-import Entities.Projectiles.Projectile;
-import Entities.Projectiles.StandardProjectile;
 import Entities.Tanks.Tank;
 import Entities.Weapons.Weapon;
+import Map.Flag;
 import Map.Map;
 import Map.Obstacle;
-import UI.Overlay.Killfeed;
 import Utils.Fonts;
 import Utils.Teams;
 
@@ -30,6 +27,8 @@ public class Hero extends Entity{
 	
 	private Tank tank;
 	private Weapon weapon;
+	
+	private Flag flag;
 	
 	
 	public static final int LIGHT = 0;
@@ -132,6 +131,10 @@ public class Hero extends Entity{
 		health = tank.getDefaultHealth();
 		move(Teams.getRandomSpawn(team));
 		dead = true;
+		if(flag != null) {
+			flag.drop();
+			flag = null;
+		}
 	}
 	
 	public void shoot() {
@@ -165,10 +168,6 @@ public class Hero extends Entity{
 		health -= damage;
 	}
 	
-	public boolean isDead() {
-		return dead;
-	}
-	
 	public Map getMap() {
 		return map;
 	}
@@ -197,6 +196,10 @@ public class Hero extends Entity{
 	
 	public Tank getTank() {
 		return tank;
+	}
+	
+	public void setFlag(Flag flag) {
+		this.flag = flag;
 	}
 
 }

@@ -206,4 +206,7 @@ public class Server extends Thread{
 	}
 	
 
+	public ServerMain getServerMain() {
+		return serverMain;
+	}
 }

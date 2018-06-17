@@ -2,11 +2,8 @@ package Server;
 
 import Entities.EntityManager;
 import Entities.Hero;
-import Entities.Projectiles.StandardProjectile;
 import Map.Flag;
 import Map.Map;
-import States.StateManager;
-import States.States;
 import Utils.Teams;
 import net.Packet;
 
@@ -41,13 +38,15 @@ public class ServerGameState{
 		hitDetection();
 		
 		// test only if sb scored
-		if(Teams.getScore(Teams.BLUE) >= SCORE_TO_WIN) {
-			StateManager.changeState(States.WIN_SCREEN);
-			StateManager.getWinScreen().setWinner(Teams.BLUE);
+		if(scoreBlue >= SCORE_TO_WIN) {
+			Packet packet = new Packet(Packet.WIN, "" + Teams.BLUE);
+			server.sendDataToAllClients(packet.getMessage());
+			server.getServerMain().setPlaying(false);
 		}
-		else if(Teams.getScore(Teams.RED) >= SCORE_TO_WIN) {
-			StateManager.changeState(States.WIN_SCREEN);
-			StateManager.getWinScreen().setWinner(Teams.RED);
+		else if(scoreRed >= SCORE_TO_WIN) {
+			Packet packet = new Packet(Packet.WIN, "" + Teams.RED);
+			server.sendDataToAllClients(packet.getMessage());
+			server.getServerMain().setPlaying(false);
 		}
 	}
 	
@@ -66,6 +65,11 @@ public class ServerGameState{
 				}
 			}
 			if(flag.checkScored()) {
+				if(flag.getCarrier().getTeam() == Teams.BLUE)
+					scoreBlue += 1;
+				else if(flag.getCarrier().getTeam() == Teams.RED)
+					scoreRed += 1;
+				
 				entityManager.flagReturn(entityManager.getFlags().indexOf(flag));
 				Packet packet = new Packet(Packet.SCORED, "" + entityManager.getFlags().indexOf(flag));
 				server.sendDataToAllClients(packet.getMessage());
@@ -107,7 +111,7 @@ public class ServerGameState{
 	}
 	
 	
-	public void start() {
+	public void reset() {
 		entityManager.reset();
 		scoreBlue = 0;
 		scoreRed = 0;

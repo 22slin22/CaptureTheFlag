@@ -9,6 +9,7 @@ public class Packet {
 	public static final String DISCONNECT = "03";				// username
 	public static final String START_GAME = "04";				// -
 	public static final String RESTART = "05";					// -
+	public static final String WIN = "06";						// team
 	
 	public static final String CHANGE_TEAM = "10";				// username, team
 	public static final String EQUIP_HERO = "11";				// username, tank, weapon

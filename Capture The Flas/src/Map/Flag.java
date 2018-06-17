@@ -18,7 +18,9 @@ public class Flag {
 	protected int x, y;
 	protected int team;
 	
+	// true if the flag is not on the flag point
 	protected boolean isPickedUp = false;
+	// true if a playing is carrying the flag
 	protected boolean isCarried = false;
 	
 	protected static final int FLAG_HEIGHT = 80;

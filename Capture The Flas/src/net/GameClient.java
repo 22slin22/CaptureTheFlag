@@ -119,6 +119,12 @@ public class GameClient extends Thread{
 				
 			case Packet.REMOVE_PROJECTILE:
 				StateManager.getGameState().getEntityManager().removeProjectile(Integer.parseInt(data[0]));
+				break;
+				
+			case Packet.WIN:
+				StateManager.changeState(States.WIN_SCREEN);
+				StateManager.getWinScreen().setWinner(Integer.parseInt(data[0]));
+				break;
 			}
 		}
 	}
