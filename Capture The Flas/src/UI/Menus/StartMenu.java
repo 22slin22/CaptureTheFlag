@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import Entities.EntityManager;
 import Input.KeyManager;
-import Input.MouseManager;
 import Main.Game;
 import Main.Main;
 import States.State;

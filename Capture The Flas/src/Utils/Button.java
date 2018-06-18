@@ -44,14 +44,15 @@ public class Button {
 	public void tick() {
 		if(clicked)
 			clicked = false;
-		if(pressed)
-			pressed = false;
 		
-		if(MouseManager.isLeftButton() && containsMouse()) {
-			if(!pressed) {
+		if(MouseManager.hasClicked() && containsMouse()) {
+			pressed = true;
+		}
+		if(!MouseManager.isLeftButton()) {
+			if(pressed && containsMouse()) {		// if the mouse button was released on the button and started on the button
 				clicked = true;
 			}
-			pressed = true;
+			pressed = false;
 		}
 	}
 	
