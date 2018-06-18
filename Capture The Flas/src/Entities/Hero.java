@@ -119,11 +119,11 @@ public class Hero extends Entity{
 	}
 	
 	public void gotHit(int damage, Hero hitter) {
-		if(!dead)
+		if(!dead) {
 			health -= damage;
-		
-		if(health <= 0) {
-			kill();
+			if(health <= 0) {
+				kill();
+			}
 		}
 	}
 	
@@ -132,6 +132,7 @@ public class Hero extends Entity{
 		move(Teams.getRandomSpawn(team));
 		dead = true;
 		if(flag != null) {
+			System.out.println("Droping flag");
 			flag.drop();
 			flag = null;
 		}
