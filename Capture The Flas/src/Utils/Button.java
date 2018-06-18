@@ -72,6 +72,7 @@ public class Button {
 		}
 	}
 	
+	
 	private boolean containsMouse() {
 		if(MouseManager.getX() >= x && MouseManager.getX() <= x + width
 				&& MouseManager.getY() >= y && MouseManager.getY() <= y + height) {
