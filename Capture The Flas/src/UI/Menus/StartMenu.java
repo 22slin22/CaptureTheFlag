@@ -96,6 +96,8 @@ public class StartMenu extends State{
 				game.joinServer("192.168.2.128", username);		// ip nils
 			else if(currentButton == 1)
 				game.joinServer("192.168.2.116", username);		// ip till
+			else if(currentButton == 2)
+				game.joinServer("87.147.204.208", username);
 			else if(currentButton == 3)
 				game.joinServer("10.9.0.103", username);
 			else
