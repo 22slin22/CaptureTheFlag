@@ -9,8 +9,8 @@ public class MultiPlayer {
 	private String username;
 	
 	private int team;
-	private int tank;
-	private int weapon;
+	private int tank = -1;
+	private int weapon = -1;
 	
 	
 	public MultiPlayer(InetAddress ipAddress, int port, String username, int team) {

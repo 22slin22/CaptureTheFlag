@@ -132,7 +132,6 @@ public class Hero extends Entity{
 		move(Teams.getRandomSpawn(team));
 		dead = true;
 		if(flag != null) {
-			System.out.println("Droping flag");
 			flag.drop();
 			flag = null;
 		}

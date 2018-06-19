@@ -137,8 +137,10 @@ public class Server extends Thread{
 			packet = new Packet(Packet.LOGIN, player.getUsername() + "," + player.getTeam());
 			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 			
-			packet = new Packet(Packet.EQUIP_HERO, player.getUsername() + "," + player.getTank() + "," + player.getWeapon());
-			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+			if(player.getTank() != -1 && player.getWeapon() != -1) {
+				packet = new Packet(Packet.EQUIP_HERO, player.getUsername() + "," + player.getTank() + "," + player.getWeapon());
+				sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+			}
 		}
 		if(started) {
 			packet = new Packet(Packet.START_GAME, "");
