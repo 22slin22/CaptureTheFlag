@@ -36,7 +36,9 @@ public class EntityManager {
 	public void tick() {
 		synchronized(heros) {
 			for(Hero hero : heros) {
-				hero.tick();
+				if(hero.isPlaying()) {
+					hero.tick();
+				}
 			}
 		}
 		
@@ -64,7 +66,9 @@ public class EntityManager {
 		
 		synchronized(heros) {
 			for(Hero hero : heros) {
-				hero.render(g, cameraX, cameraY);
+				if(hero.isPlaying()) {
+					hero.render(g, cameraX, cameraY);
+				}
 			}
 		}
 	}
@@ -84,7 +88,6 @@ public class EntityManager {
 	}
 	
 	public void removeHero(String username) {
-		System.out.println("Deleting " + username);
 		synchronized (heros) {
 			for(Hero hero : heros) {
 				if(hero.getUsername().equals(username)) {
@@ -223,6 +226,15 @@ public class EntityManager {
 	
 	public ArrayList<Hero> getHeros(){
 		return heros;
+	}
+	
+	public Hero getHero(String username) {
+		for(Hero hero : heros) {
+			if(hero.getUsername().equals(username)) {
+				return hero;
+			}
+		}
+		return null;
 	}
 	
 	public ArrayList<Flag> getFlags(){

@@ -12,6 +12,8 @@ public class MultiPlayer {
 	private int tank = -1;
 	private int weapon = -1;
 	
+	private boolean ready = false;		// if the player has already chosen a tank and a weapon
+	
 	
 	public MultiPlayer(InetAddress ipAddress, int port, String username, int team) {
 		this.ipAddress = ipAddress;
@@ -55,5 +57,13 @@ public class MultiPlayer {
 	
 	public void setWeapon(int weapon) {
 		this.weapon = weapon;
+	}
+	
+	public boolean isReady() {
+		return ready;
+	}
+	
+	public void setReady(boolean ready) {
+		this.ready = ready;
 	}
 }

@@ -16,6 +16,7 @@ public class Hero extends Entity{
 	
 	
 	private int max_x, max_y;
+	private boolean playing;
 	
 	private double gunAngle;
 
@@ -61,9 +62,10 @@ public class Hero extends Entity{
 		if(dead) {
 			dead = false;
 		}
-		
-		weapon.tick();
-		tank.tick();
+		if(weapon != null)
+			weapon.tick();
+		if(tank != null)
+			tank.tick();
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
@@ -145,7 +147,9 @@ public class Hero extends Entity{
 	
 	
 	public int getRadius() {
-		return tank.getRadius();
+		if(tank != null)
+			return tank.getRadius();
+		return 0;
 	}
 	
 	public void setGunAngle(double d) {
@@ -200,6 +204,14 @@ public class Hero extends Entity{
 	
 	public void setFlag(Flag flag) {
 		this.flag = flag;
+	}
+	
+	public void setPlaying(boolean playing) {
+		this.playing = playing;
+	}
+	
+	public boolean isPlaying() {
+		return playing;
 	}
 
 }

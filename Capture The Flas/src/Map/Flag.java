@@ -76,7 +76,9 @@ public class Flag {
 	
 	
 	public boolean checkCollision(Hero hero) {
-		return Collisions.circleCollision(this.x, this.y, PICKUP_RADIUS, hero.getX(), hero.getY(), hero.getRadius());
+		if(hero.isPlaying())
+			return Collisions.circleCollision(this.x, this.y, PICKUP_RADIUS, hero.getX(), hero.getY(), hero.getRadius());
+		return false;
 	}
 	
 	public boolean checkPickup(Hero hero) {

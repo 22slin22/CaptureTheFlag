@@ -10,7 +10,6 @@ import Main.Main;
 import Map.Camera;
 import Map.Map;
 import Player.Player;
-import Server.ServerGameState;
 import UI.Overlay.Overlay;
 import Utils.Teams;
 

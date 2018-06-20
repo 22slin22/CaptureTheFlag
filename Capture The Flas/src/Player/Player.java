@@ -2,16 +2,12 @@ package Player;
 
 import java.awt.event.KeyEvent;
 
-import Entities.EntityManager;
 import Entities.Hero;
-import Entities.Projectiles.StandardProjectile;
 import Input.KeyManager;
 import Input.MouseManager;
 import Main.Game;
 import Map.Camera;
-import Map.Flag;
 import Map.Map;
-import UI.Overlay.Killfeed;
 import net.Packet;
 
 public class Player{
@@ -23,7 +19,6 @@ public class Player{
 	private Game game;
 	
 	private Hero hero;
-	private Flag flag;
 	
 
 	public Player(KeyManager keyManager, Camera camera, Game game, Map map) {
@@ -36,8 +31,6 @@ public class Player{
 	
 	public void tick() {
 		updateHero();
-		hero.tick();
-		
 		testShoot();
 	}
 
@@ -101,9 +94,5 @@ public class Player{
 	
 	public Hero getHero() {
 		return hero;
-	}
-	
-	public void setFlag(Flag flag) {
-		this.flag = flag;
 	}
 }

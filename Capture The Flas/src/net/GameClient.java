@@ -9,9 +9,8 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
-import Entities.EntityManager;
+import Entities.Hero;
 import Main.Game;
-import States.GameState;
 import States.StateManager;
 import States.States;
 import Utils.Teams;
@@ -55,7 +54,6 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.LOGIN:
-				System.out.println("Adding a hero");
 				StateManager.getGameState().getEntityManager().addHero(data[0], Integer.parseInt(data[1]));
 				break;
 				
@@ -102,10 +100,14 @@ public class GameClient extends Thread{
 				
 			case Packet.EQUIP_HERO:
 				StateManager.getGameState().getEntityManager().changeHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username  ,  tank  ,  weapon
+				StateManager.getGameState().getEntityManager().getHero(data[0]).setPlaying(true);
 				break;
 				
 			case Packet.RESTART:
 				game.restart();
+				for(Hero hero : StateManager.getGameState().getEntityManager().getHeros()) {
+					hero.setPlaying(false);
+				}
 				break;
 				
 			case Packet.VALID_LOGIN:

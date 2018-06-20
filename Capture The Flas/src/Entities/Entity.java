@@ -46,7 +46,9 @@ public abstract class Entity {
 		long elapsedTime = System.currentTimeMillis() - frameTime;
 		frameTime = System.currentTimeMillis();
 		
-		move(vx * elapsedTime, vy * elapsedTime);
+		if(vx != 0 || vy != 0) {
+			move(vx * elapsedTime, vy * elapsedTime);
+		}
 		update();
 	}
 	

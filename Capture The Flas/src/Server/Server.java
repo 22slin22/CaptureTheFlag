@@ -8,7 +8,9 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import Entities.EntityManager;
+import Entities.Hero;
 import Player.MultiPlayer;
+import Player.Player;
 import Utils.Teams;
 import net.Packet;
 
@@ -61,12 +63,22 @@ public class Server extends Thread{
 			case Packet.START_GAME:
 				started = true;
 				serverMain.setPlaying(true);
-				sendDataToAllClients(packet.getMessage());
+				for(MultiPlayer player : connections) {
+					if(player.isReady()) {
+						entityManager.getHero(player.getUsername()).setPlaying(true);
+					}
+				}
+				
+				sendDataToAllClientsIfReady(packet.getMessage());
 				break;
 				
 			case Packet.RESTART:
 				started = false;
 				serverMain.setPlaying(false);
+				for(Hero hero : entityManager.getHeros()) {
+					hero.setPlaying(false);
+				}
+				
 				sendDataToAllClients(packet.getMessage());
 				break;
 				
@@ -142,10 +154,10 @@ public class Server extends Thread{
 				sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
 			}
 		}
-		if(started) {
-			packet = new Packet(Packet.START_GAME, "");
-			sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
-		}
+		//if(started) {
+		//	packet = new Packet(Packet.START_GAME, "");
+		//	sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+		//}
 		
 		connections.add(new MultiPlayer(dataPacket.getAddress(), dataPacket.getPort(), username, team));
 		entityManager.addHero(username, team);
@@ -168,6 +180,16 @@ public class Server extends Thread{
 			if(dataPacket.getAddress().equals(player.getIpAddress()) && dataPacket.getPort() == player.getPort()) {
 				player.setTank(tank);
 				player.setWeapon(weapon);
+				
+				if(!player.isReady()) {
+					player.setReady(true);
+					if(started) {
+						// if the game has already started and the player now is ready, start the game for him
+						Packet packet = new Packet(Packet.START_GAME, "");
+						sendData(packet.getMessage(), dataPacket.getAddress(), dataPacket.getPort());
+						entityManager.getHero(username).setPlaying(true);
+					}
+				}
 			}
 		}
 		entityManager.changeHero(username, tank, weapon);
@@ -195,6 +217,14 @@ public class Server extends Thread{
 	public void sendDataToAllClients(byte[] message) {
 		for(MultiPlayer player : connections) {
 			sendData(message, player.getIpAddress(), player.getPort());
+		}
+	}
+	
+	public void sendDataToAllClientsIfReady(byte[] message) {
+		for(MultiPlayer player : connections) {
+			if(player.isReady()) {
+				sendData(message, player.getIpAddress(), player.getPort());
+			}
 		}
 	}
 
