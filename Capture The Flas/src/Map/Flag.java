@@ -6,34 +6,28 @@ import java.awt.Polygon;
 
 import Entities.EntityManager;
 import Entities.Hero;
-import Main.Game;
-import Player.Player;
-import States.StateManager;
 import Utils.Collisions;
 import Utils.Teams;
-import net.Packet;
 
 public class Flag {
 	
-	protected int x, y;
-	protected int team;
+	private int x, y;
+	private int team;
 	
 	// true if the flag is not on the flag point
-	protected boolean isPickedUp = false;
+	private boolean isPickedUp = false;
 	// true if a playing is carrying the flag
-	protected boolean isCarried = false;
+	private boolean isCarried = false;
 	
-	protected static final int FLAG_HEIGHT = 80;
-	protected static final int FLAG_WIDTH = 40;
+	public static final int FLAG_HEIGHT = 80;
+	public static final int FLAG_WIDTH = 40;
 	
-	protected static final int PICKUP_RADIUS = 20;
+	private static final int PICKUP_RADIUS = 20;
 	
-	protected EntityManager entityManager;
-	protected Hero carrier;
+	private Hero carrier;
 	
 	
-	public Flag(EntityManager entityManager, int team) {
-		this.entityManager = entityManager;
+	public Flag(int team) {
 		
 		if(team == Teams.BLUE) {
 			this.x = Teams.FLAG_BLUE_X;

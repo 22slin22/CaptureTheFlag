@@ -29,8 +29,8 @@ public class EntityManager {
 	public EntityManager(Map map) {
 		this.map = map;
 		
-		flags.add(new Flag(this, Teams.BLUE));
-		flags.add(new Flag(this, Teams.RED));
+		flags.add(new Flag(Teams.BLUE));
+		flags.add(new Flag(Teams.RED));
 	}
 
 	public void tick() {

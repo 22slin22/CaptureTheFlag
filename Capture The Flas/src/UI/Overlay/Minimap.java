@@ -2,10 +2,12 @@ package UI.Overlay;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 
 import Entities.EntityManager;
 import Entities.Hero;
 import Main.Main;
+import Map.Flag;
 import Map.Map;
 import Map.Obstacle;
 import Utils.Teams;
@@ -36,36 +38,63 @@ public class Minimap {
 	
 	
 	public void render(Graphics g) {
-		drawBorder(g, height);
+		drawBorder(g);
 		drawObstacles(g);
 		drawPlayers(g);
+		drawFlags(g);
 	}
 	
-	private  void drawBorder(Graphics g, int minimapHeight) {
-		g.setColor(Color.BLACK);
-		g.fillRect(xStart - borderThickness, yStart - borderThickness, width + 2*borderThickness, minimapHeight + 2*borderThickness);
+	private  void drawBorder(Graphics g) {
+		g.setColor(new Color(0, 0, 0, 200));
+		g.drawRect(xStart - borderThickness, yStart - borderThickness, width + 2*borderThickness, height + 2*borderThickness);
 		
-		g.setColor(Color.WHITE);
-		g.fillRect(xStart, yStart, width, minimapHeight);
+		g.setColor(new Color(255, 255, 255, 200));
+		g.fillRect(xStart, yStart, width, height);
 	}
 	
 	private void drawObstacles(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor(new Color(0, 0, 0, 200));
 		for(Obstacle obs : map.getObstacles()) {
-			g.fillRect(xStart + (int)(obs.getX()*minimapScalar), yStart + (int)(obs.getY()*minimapScalar), (int)(obs.getWidth()*minimapScalar), (int)(obs.getHeight()*minimapScalar));
+			g.fillRect(getMinimapX(obs.getX()), getMinimapY(obs.getY()), (int)(obs.getWidth()*minimapScalar), (int)(obs.getHeight()*minimapScalar));
 		}
 	}
 	
 	private void drawPlayers(Graphics g) {
 		synchronized (entityManager.getHeros()) {
 			for(Hero hero : entityManager.getHeros()) {
-				g.setColor(Teams.getColor(hero.getTeam()));
-				g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 
-						yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 
-						(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));
+				g.setColor(new Color(Teams.getColor(hero.getTeam()).getRed(), Teams.getColor(hero.getTeam()).getGreen(), Teams.getColor(hero.getTeam()).getBlue(), 200)); 		// transparent team colors
+				//g.setColor(Teams.getColor(hero.getTeam()));
+				g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
+						yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 					// y position	= 	y - radius*minimapScalar
+						(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));	// width and height
 			}
 		}
 	}
+	
+	private void drawFlags(Graphics g) {
+		for(Flag flag : entityManager.getFlags()) {
+			g.setColor(new Color(Teams.getColor(flag.getTeam()).getRed(), Teams.getColor(flag.getTeam()).getGreen(), Teams.getColor(flag.getTeam()).getBlue(), 200));
+			System.out.println(getMinimapX(flag.getX()));
+			drawFlag(g, getMinimapX(flag.getX()), getMinimapY(flag.getY()));
+		}
+	}
+	
+	private void drawFlag(Graphics g, int x, int y) {
+		Polygon polygon = new Polygon(new int[] {x, x, x + (int) (Flag.FLAG_WIDTH*minimapScalar)}, new int[] {y - (int)(Flag.FLAG_HEIGHT*minimapScalar), y - (int)(Flag.FLAG_HEIGHT/2 * minimapScalar), y - (int)(Flag.FLAG_HEIGHT*3/4 * minimapScalar)}, 3) ;
+		g.drawPolygon(polygon);
+	}
+	
+	
+	// returns the x position where an object has to be drawn on the minimap
+	private int getMinimapX(int x) {
+		return (xStart + (int)((x * minimapScalar)));
+	}
+	
+	// returns the y position where an object has to be drawn on the minimap
+	private int getMinimapY(int y) {
+		return (yStart + (int)((y * minimapScalar)));
+	}
+	
 	
 	public void setMap(Map map) {
 		this.map = map;
