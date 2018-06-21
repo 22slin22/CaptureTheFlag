@@ -22,6 +22,7 @@ public class Hero extends Entity{
 
 	private int health;
 	private boolean dead = false;
+	private long deathTime;
 	
 	private String username;
 	private int team;
@@ -31,6 +32,8 @@ public class Hero extends Entity{
 	
 	private Flag flag;
 	
+	
+	private static final int RESPAWN_TIME = 3000;		// in milliseconds
 	
 	public static final int LIGHT = 0;
 	public static final int MEDIUM = 1;
@@ -59,21 +62,26 @@ public class Hero extends Entity{
 	
 	@Override
 	public void update() {
-		if(dead) {
-			dead = false;
+		if(dead && System.currentTimeMillis() - deathTime > RESPAWN_TIME) {
+			respawn();
 		}
-		if(weapon != null)
-			weapon.tick();
-		if(tank != null)
-			tank.tick();
+		
+		if(!dead) {
+			if(weapon != null)
+				weapon.tick();
+			if(tank != null)
+				tank.tick();
+		}
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
-		renderHealthBar(g, cameraX, cameraY);
-		renderNameTag(g, cameraX, cameraY);
-		
-		weapon.render(g, cameraX, cameraY);
-		tank.render(g, cameraX, cameraY);
+		if(!dead) {
+			renderHealthBar(g, cameraX, cameraY);
+			renderNameTag(g, cameraX, cameraY);
+			
+			weapon.render(g, cameraX, cameraY);
+			tank.render(g, cameraX, cameraY);
+		}
 		
 	}
 
@@ -130,13 +138,18 @@ public class Hero extends Entity{
 	}
 	
 	public void kill() {
-		health = tank.getDefaultHealth();
-		move(Teams.getRandomSpawn(team));
 		dead = true;
+		deathTime = System.currentTimeMillis();
 		if(flag != null) {
 			flag.drop();
 			flag = null;
 		}
+	}
+	
+	private void respawn() {
+		dead = false;
+		health = tank.getDefaultHealth();
+		move(Teams.getRandomSpawn(team));
 	}
 	
 	public void shoot() {
@@ -196,6 +209,10 @@ public class Hero extends Entity{
 		this.tank = tank;
 		healthBarYOffset = tank.getRadius() + healthBarHeight + 30;
 		health = tank.getDefaultHealth();
+		
+		if(weapon != null) {
+			weapon.setScalar(tank.getRadius());
+		}
 	}
 	
 	public Tank getTank() {
@@ -212,6 +229,10 @@ public class Hero extends Entity{
 	
 	public boolean isPlaying() {
 		return playing;
+	}
+	
+	public boolean isDead() {
+		return dead;
 	}
 
 }

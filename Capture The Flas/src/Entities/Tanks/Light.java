@@ -8,8 +8,8 @@ import Utils.Teams;
 
 public class Light extends Tank{
 	
-	private static final float SPEED = 0.25f;
-	private static final int RADIUS = 20;
+	private static final float SPEED = 0.3f;
+	private static final int RADIUS = 19;
 	private static final int DEFAULT_HEALTH = 100;
 
 	

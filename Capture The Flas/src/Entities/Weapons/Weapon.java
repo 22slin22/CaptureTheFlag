@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import Entities.Entity;
 import Entities.EntityManager;
 import Entities.Hero;
+import Entities.Tanks.Medium;
 import Utils.Teams;
 
 public abstract class Weapon extends Entity{
@@ -17,6 +18,7 @@ public abstract class Weapon extends Entity{
 	
 	protected int weaponWidth;		// Width of the Barrel
 	protected int weaponLength;		// Determines how much the barrel sticks out
+	protected float scalar;			// weaponWidth and weaponHeight are for medium tank
 	protected int damage;
 	
 	protected float cooldown;
@@ -36,6 +38,8 @@ public abstract class Weapon extends Entity{
 		this.weaponLength = weaponLength;
 		this.damage = damage;
 		this.cooldown = cooldown;
+		
+		setScalar(hero.getRadius());
 	}
 	
 	
@@ -49,7 +53,7 @@ public abstract class Weapon extends Entity{
 		g.setColor(Teams.getColor(hero.getTeam()));
 		Graphics2D g2d = (Graphics2D) g.create();
 		
-		Rectangle rect = new Rectangle((int)x - cameraX, (int)y - cameraY - weaponWidth/2, weaponLength, weaponWidth);		// Weapon sticking out to the right at the start
+		Rectangle rect = new Rectangle((int)x - cameraX, (int)(y - cameraY - (weaponWidth*scalar)/2), (int)(weaponLength*scalar), (int)(weaponWidth*scalar));		// Weapon sticking out to the right at the start
 		g2d.rotate(-hero.getGunAngle(), x-cameraX, y-cameraY);																// then rotation it
 		g2d.fill(rect);
 		
@@ -79,5 +83,10 @@ public abstract class Weapon extends Entity{
 	
 	public int getDamage() {
 		return damage;
+	}
+	
+	public void setScalar(int radius) {
+		scalar = (float)radius / (float)Medium.RADIUS;
+		System.out.println(scalar);
 	}
 }

@@ -9,7 +9,7 @@ import Utils.Teams;
 public class Medium extends Tank{
 	
 	private static final float SPEED = 0.25f;
-	private static final int RADIUS = 20;
+	public static final int RADIUS = 21;
 	private static final int DEFAULT_HEALTH = 150;
 	
 

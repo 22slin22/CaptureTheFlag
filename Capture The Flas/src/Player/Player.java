@@ -30,8 +30,10 @@ public class Player{
 	}
 	
 	public void tick() {
-		updateHero();
-		testShoot();
+		if(!hero.isDead()) {
+			updateHero();
+			testShoot();
+		}
 	}
 
 	

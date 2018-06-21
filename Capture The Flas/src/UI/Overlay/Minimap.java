@@ -74,7 +74,6 @@ public class Minimap {
 	private void drawFlags(Graphics g) {
 		for(Flag flag : entityManager.getFlags()) {
 			g.setColor(new Color(Teams.getColor(flag.getTeam()).getRed(), Teams.getColor(flag.getTeam()).getGreen(), Teams.getColor(flag.getTeam()).getBlue(), 200));
-			System.out.println(getMinimapX(flag.getX()));
 			drawFlag(g, getMinimapX(flag.getX()), getMinimapY(flag.getY()));
 		}
 	}
