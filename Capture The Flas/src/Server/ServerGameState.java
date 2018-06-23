@@ -98,10 +98,19 @@ public class ServerGameState{
 				for(Hero hero : entityManager.getHeros()) {
 					if(hero.getTeam() != entityManager.getProjectiles().get(i).getOwner().getTeam() && Utils.Collisions.HeroProjectileCollision(hero, entityManager.getProjectiles().get(i))) {
 						// Player got hit 
-						Packet packet = new Packet(Packet.HIT, entityManager.getProjectiles().get(i).getOwner().getUsername() + "," + hero.getUsername() + "," + entityManager.getProjectiles().get(i).getOwner().getWeapon().getDamage() + "," + i);
+						Packet packet = new Packet(Packet.HIT, hero.getUsername() + "," + entityManager.getProjectiles().get(i).getOwner().getWeapon().getDamage() + "," + i);
 						server.sendDataToAllClients(packet.getMessage());
-						entityManager.hitHero(entityManager.getProjectiles().get(i).getOwner().getUsername(), hero.getUsername(), hero.getWeapon().getDamage(), entityManager.getProjectiles().indexOf(entityManager.getProjectiles().get(i)));
-						i--;		// projectile was deleted --> index should stay the same
+						
+						//test if player is dead now
+						if(hero.getHealth() <= 0) {
+							packet = new Packet(Packet.KILL, hero.getUsername() + "," + entityManager.getProjectiles().get(i).getOwner().getUsername());
+							server.sendDataToAllClients(packet.getMessage());
+							entityManager.killHero(hero.getUsername(), entityManager.getProjectiles().get(i).getOwner().getUsername());
+						}
+						
+						entityManager.hitHero(hero.getUsername(), hero.getWeapon().getDamage(), entityManager.getProjectiles().indexOf(entityManager.getProjectiles().get(i)));			// has to been done afterwards because projectile is deleted here
+						
+						i--;				// projectile was deleted --> index should stay the same
 						break;
 					}
 				}

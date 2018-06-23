@@ -87,6 +87,5 @@ public abstract class Weapon extends Entity{
 	
 	public void setScalar(int radius) {
 		scalar = (float)radius / (float)Medium.RADIUS;
-		System.out.println(scalar);
 	}
 }

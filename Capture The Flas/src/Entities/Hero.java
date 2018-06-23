@@ -128,12 +128,9 @@ public class Hero extends Entity{
 		}
 	}
 	
-	public void gotHit(int damage, Hero hitter) {
+	public void gotHit(int damage) {
 		if(!dead) {
 			health -= damage;
-			if(health <= 0) {
-				kill();
-			}
 		}
 	}
 	
@@ -237,6 +234,10 @@ public class Hero extends Entity{
 	
 	public long getDeathTime() {
 		return deathTime;
+	}
+	
+	public int getHealth() {
+		return health;
 	}
 
 }

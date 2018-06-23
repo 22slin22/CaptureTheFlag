@@ -16,11 +16,12 @@ public class Packet {
 	
 	public static final String UPDATE_PLAYER = "20";			// username, x, y, gunAngle
 	public static final String SHOOT = "21";					// username
-	public static final String HIT = "22";						// attacker, username, damage, projectileID
-	public static final String REMOVE_PROJECTILE = "23";		// projectileId
-	public static final String FLAG_PICKUP = "24";				// username, flagIndex
-	public static final String FLAG_RETURN = "25";				// flagIndex
-	public static final String SCORED = "26";					// flagIndex
+	public static final String HIT = "22";						// username, damage, projectileID
+	public static final String KILL = "23";						// username, killer
+	public static final String REMOVE_PROJECTILE = "24";		// projectileId
+	public static final String FLAG_PICKUP = "25";				// username, flagIndex
+	public static final String FLAG_RETURN = "26";				// flagIndex
+	public static final String SCORED = "27";					// flagIndex
 	
 	private String id;
 	private String data;

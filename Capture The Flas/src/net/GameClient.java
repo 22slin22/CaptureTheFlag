@@ -73,7 +73,11 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.HIT:
-				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username attack, username got hit, damage, projectile id
+				StateManager.getGameState().getEntityManager().hitHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username got hit, damage, projectile id
+				break;
+				
+			case Packet.KILL:
+				StateManager.getGameState().getEntityManager().killHero(data[0], data[1]);
 				break;
 				
 			case Packet.FLAG_PICKUP:

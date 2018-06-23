@@ -169,15 +169,11 @@ public class EntityManager {
 		}
 	}
 	
-	public void hitHero(String usernameAttack, String username, int damage, int projectileId) {
+	public void hitHero(String username, int damage, int projectileId) {
 		synchronized (heros) {
 			for(Hero hero : heros) {
 				if(hero.getUsername().equals(username)) {
-					for(Hero attacker : heros) {
-						if(attacker.getUsername().equals(usernameAttack)) {
-							hero.gotHit(damage, attacker);
-						}
-					}
+					hero.gotHit(damage);
 				}
 			}
 		}
@@ -191,7 +187,8 @@ public class EntityManager {
 					for(Hero killer : heros) {
 						if(killer.getUsername().equals(usernameKiller)) {
 							hero.kill();
-							killfeed.addKill(killer, hero);
+							if(killfeed != null)
+								killfeed.addKill(killer, hero);
 						}
 					}
 				}
