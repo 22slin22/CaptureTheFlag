@@ -53,12 +53,12 @@ public class ServerGameState{
 	public void flagLogic() {
 		for(Flag flag : entityManager.getFlags()) {
 			for(Hero hero : entityManager.getHeros()) {
-				if(flag.checkPickup(hero)) {
+				if(!hero.isDead() && flag.checkPickup(hero)) {
 					entityManager.flagPickup(hero.getUsername(), entityManager.getFlags().indexOf(flag));
 					Packet packet = new Packet(Packet.FLAG_PICKUP, hero.getUsername() + "," + entityManager.getFlags().indexOf(flag));
 					server.sendDataToAllClients(packet.getMessage());
 				}
-				if(flag.checkReturn(hero)) {
+				if(!hero.isDead() && flag.checkReturn(hero)) {
 					entityManager.flagReturn(entityManager.getFlags().indexOf(flag));
 					Packet packet = new Packet(Packet.FLAG_RETURN, "" + entityManager.getFlags().indexOf(flag));
 					server.sendDataToAllClients(packet.getMessage());
@@ -96,13 +96,13 @@ public class ServerGameState{
 			int i = 0;
 			while(i < entityManager.getProjectiles().size()) {
 				for(Hero hero : entityManager.getHeros()) {
-					if(hero.getTeam() != entityManager.getProjectiles().get(i).getOwner().getTeam() && Utils.Collisions.HeroProjectileCollision(hero, entityManager.getProjectiles().get(i))) {
+					if(!hero.isDead() && hero.getTeam() != entityManager.getProjectiles().get(i).getOwner().getTeam() && Utils.Collisions.HeroProjectileCollision(hero, entityManager.getProjectiles().get(i))) {
 						// Player got hit 
 						Packet packet = new Packet(Packet.HIT, hero.getUsername() + "," + entityManager.getProjectiles().get(i).getOwner().getWeapon().getDamage() + "," + i);
 						server.sendDataToAllClients(packet.getMessage());
 						
 						//test if player is dead now
-						if(hero.getHealth() <= 0) {
+						if(hero.getHealth() - entityManager.getProjectiles().get(i).getOwner().getWeapon().getDamage() <= 0) {
 							packet = new Packet(Packet.KILL, hero.getUsername() + "," + entityManager.getProjectiles().get(i).getOwner().getUsername());
 							server.sendDataToAllClients(packet.getMessage());
 							entityManager.killHero(hero.getUsername(), entityManager.getProjectiles().get(i).getOwner().getUsername());
