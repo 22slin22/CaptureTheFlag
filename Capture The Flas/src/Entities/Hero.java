@@ -33,7 +33,7 @@ public class Hero extends Entity{
 	private Flag flag;
 	
 	
-	private static final int RESPAWN_TIME = 3000;		// in milliseconds
+	public static final int RESPAWN_TIME = 5000;		// in milliseconds
 	
 	public static final int LIGHT = 0;
 	public static final int MEDIUM = 1;
@@ -233,6 +233,10 @@ public class Hero extends Entity{
 	
 	public boolean isDead() {
 		return dead;
+	}
+	
+	public long getDeathTime() {
+		return deathTime;
 	}
 
 }
