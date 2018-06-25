@@ -108,8 +108,8 @@ public class ServerGameState{
 							entityManager.killHero(hero.getUsername(), entityManager.getProjectiles().get(i).getOwner().getUsername());
 						}
 						
-						entityManager.hitHero(hero.getUsername(), hero.getWeapon().getDamage(), entityManager.getProjectiles().indexOf(entityManager.getProjectiles().get(i)));			// has to been done afterwards because projectile is deleted here
-						
+						entityManager.hitHero(hero.getUsername(), entityManager.getProjectiles().get(i).getOwner().getWeapon().getDamage(), entityManager.getProjectiles().indexOf(entityManager.getProjectiles().get(i)));			// has to been done afterwards because projectile is deleted here
+						System.out.println(hero.getHealth());
 						i--;				// projectile was deleted --> index should stay the same
 						break;
 					}
