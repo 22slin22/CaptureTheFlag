@@ -63,6 +63,7 @@ public class Server extends Thread{
 			case Packet.START_GAME:
 				started = true;
 				serverMain.setPlaying(true);
+				serverMain.getServerGameState().reset();
 				for(MultiPlayer player : connections) {
 					if(player.isReady()) {
 						entityManager.getHero(player.getUsername()).setPlaying(true);
