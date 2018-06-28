@@ -19,7 +19,7 @@ public class StateManager {
 	
 	public static void init(KeyManager keyManager, Main main, Game game) {
 		states.add(new GameState(keyManager, game));
-		states.add(new StartMenu(keyManager, game, getGameState().getEntityManager()));
+		states.add(new StartMenu(keyManager, game));
 		states.add(new Lobby(getGameState().getEntityManager().getHeros(), game, getGameState().getPlayer()));
 		states.add(new WinScreen(game));
 		states.add(new CustomizeMenu(game));

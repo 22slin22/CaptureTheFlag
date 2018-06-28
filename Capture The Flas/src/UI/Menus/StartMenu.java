@@ -17,7 +17,6 @@ import Utils.InputField;
 public class StartMenu extends State{
 	
 	private Game game;
-	private EntityManager entityManager;
 	
 	
 	private int currentButton = -1;
@@ -39,7 +38,7 @@ public class StartMenu extends State{
 	private static final int buttonYDistance = 15;
 	private static final int buttonYOffset = Main.getHeight() /3 ;
 	
-	private static final int nMiddle = 12;
+	private static final int nMiddle = 13;
 	private static final int nRightSide = 9;
 	private static final int nLeftSide = 8;
 	
@@ -56,9 +55,8 @@ public class StartMenu extends State{
 	private InputField inputField;
 	
 	
-	public StartMenu(KeyManager keyManager, Game game, EntityManager entityManager) {
+	public StartMenu(KeyManager keyManager, Game game) {
 		this.game = game;
-		this.entityManager = entityManager;
 		
 		joinServerButton = new Button(Main.getWidth()/2 - joinButtonWidth - joinButtonXDistance/2, joinButtonYOffset - joinButtonHeight/2, joinButtonWidth, joinButtonHeight, 15, 15);
 		joinServerButton.setColor(Color.GREEN);
@@ -169,7 +167,7 @@ public class StartMenu extends State{
 			Button button = new Button(buttonsXStart + i*(buttonWidth + buttonXDistance), buttonYOffset, buttonWidth, buttonHeight);
 			button.setColor(Color.GRAY);
 			button.setFont(Fonts.buttonFont);
-			button.setText("" + (nRightSide + (nMiddle-i) * 1));
+			button.setText("" + (nRightSide + (nMiddle-i)));
 			button.setTextColor(Color.BLACK);
 			buttons.add(button);
 		}
@@ -178,7 +176,7 @@ public class StartMenu extends State{
 			Button buttonLeft = new Button(buttonsXStart - buttonWidth - buttonXDistance, buttonYOffset + (i+1) * (buttonHeight+buttonYDistance), buttonWidth, buttonHeight);
 			buttonLeft.setColor(Color.GRAY);
 			buttonLeft.setFont(Fonts.buttonFont);
-			buttonLeft.setText("" + (nLeftSide + nMiddle + i + 1));
+			buttonLeft.setText("" + (nRightSide + nMiddle + i + 1));
 			buttonLeft.setTextColor(Color.BLACK);
 			buttons.add(buttonLeft);
 		}
