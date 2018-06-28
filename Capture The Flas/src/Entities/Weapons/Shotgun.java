@@ -13,7 +13,7 @@ public class Shotgun extends Weapon{
 	private static final float COOLDOWN = 0.5f;
 	
 	private static final float PROJECTILE_SPEED = 1f;
-	private static final int LIFE_TIME = 500;		// in milliseconds
+	private static final int LIFE_TIME = 400;		// in milliseconds
 	private static final double DELTA_ANGLE = 0.13;		// = 4 degree
 	
 	

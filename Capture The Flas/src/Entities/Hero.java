@@ -137,6 +137,8 @@ public class Hero extends Entity{
 	public void kill() {
 		dead = true;
 		deathTime = System.currentTimeMillis();
+		vx = 0;
+		vy = 0;
 		if(flag != null) {
 			flag.drop();
 			flag = null;
