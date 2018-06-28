@@ -62,11 +62,12 @@ public class Minimap {
 	private void drawPlayers(Graphics g) {
 		synchronized (entityManager.getHeros()) {
 			for(Hero hero : entityManager.getHeros()) {
-				g.setColor(new Color(Teams.getColor(hero.getTeam()).getRed(), Teams.getColor(hero.getTeam()).getGreen(), Teams.getColor(hero.getTeam()).getBlue(), 200)); 		// transparent team colors
-				//g.setColor(Teams.getColor(hero.getTeam()));
-				g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
-						yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 					// y position	= 	y - radius*minimapScalar
-						(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));	// width and height
+				if(!hero.isDead()) {
+					g.setColor(new Color(Teams.getColor(hero.getTeam()).getRed(), Teams.getColor(hero.getTeam()).getGreen(), Teams.getColor(hero.getTeam()).getBlue(), 200)); 		// transparent team colors
+					g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
+							yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 					// y position	= 	y - radius*minimapScalar
+							(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));	// width and height
+				}
 			}
 		}
 	}
