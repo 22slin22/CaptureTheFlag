@@ -9,6 +9,10 @@ import java.awt.geom.Line2D;
 import Entities.Hero;
 import Map.Map;
 
+/*
+ * not used yet
+ */
+
 public class LaserBeam extends Projectile{
 	
 	private Hero hero;

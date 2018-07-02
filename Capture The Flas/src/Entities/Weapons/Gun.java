@@ -9,7 +9,7 @@ public class Gun extends Weapon{
 	private static final int WEAPON_WIDTH = 20;
 	private static final int WEAPON_LENGTH = 25;
 	
-	public static final int DAMAGE = 20;
+	public static final int DAMAGE = 25;
 	private static final float COOLDOWN = 0.2f;
 	
 	private static final float PROJECTILE_SPEED = 1f;

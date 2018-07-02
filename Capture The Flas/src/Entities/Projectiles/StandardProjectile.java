@@ -1,11 +1,11 @@
 package Entities.Projectiles;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import Entities.Hero;
 import Map.Map;
 import Map.Obstacle;
+import Utils.Teams;
 
 public class StandardProjectile extends Projectile{
 	
@@ -67,7 +67,7 @@ public class StandardProjectile extends Projectile{
 	}
 	
 	public void render(Graphics g, int cameraX, int cameraY) {
-		g.setColor(Color.RED);
+		g.setColor(Teams.getColor(owner.getTeam()));
 		g.drawOval((int)x - cameraX - RADIUS, (int)y - cameraY - RADIUS, RADIUS*2, RADIUS*2);
 	}
 	

@@ -8,7 +8,7 @@ import Utils.Teams;
 
 public class Heavy extends Tank{
 	
-	private static final float SPEED = 0.2f;
+	private static final float SPEED = 0.17f;
 	private static final int RADIUS = 23;
 	private static final int DEFAULT_HEALTH = 200;
 	

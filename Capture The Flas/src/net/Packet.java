@@ -26,7 +26,6 @@ public class Packet {
 	private String id;
 	private String data;
 	
-	
 	public Packet(String id, String data) {
 		this.id = id;
 		this.data = data;
@@ -46,7 +45,6 @@ public class Packet {
 		data = message.substring(2);
 	}
 	
-	
 	public byte[] getMessage() {
 		return (id + data).getBytes();
 	}
@@ -58,5 +56,4 @@ public class Packet {
 	public String getId() {
 		return id;
 	}
-
 }
