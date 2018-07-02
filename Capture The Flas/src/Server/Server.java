@@ -74,6 +74,7 @@ public class Server extends Thread{
 				break;
 				
 			case Packet.RESTART:
+				System.out.println("Server has been stopped");
 				started = false;
 				serverMain.setPlaying(false);
 				for(Hero hero : entityManager.getHeros()) {
