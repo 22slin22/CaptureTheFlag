@@ -89,8 +89,8 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.SCORED:
+				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[0])).getCarrier().getTeam());
 				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[0]));		// 0 = flagIndex
-				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[0])).getTeam());
 				break;
 				
 			case Packet.START_GAME:
