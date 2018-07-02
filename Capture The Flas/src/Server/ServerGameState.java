@@ -70,9 +70,9 @@ public class ServerGameState{
 				else if(flag.getCarrier().getTeam() == Teams.RED)
 					scoreRed += 1;
 				
-				entityManager.flagReturn(entityManager.getFlags().indexOf(flag));
-				Packet packet = new Packet(Packet.SCORED, "" + entityManager.getFlags().indexOf(flag));
+				Packet packet = new Packet(Packet.SCORED, flag.getCarrier().getUsername() + "," + entityManager.getFlags().indexOf(flag));
 				server.sendDataToAllClients(packet.getMessage());
+				entityManager.flagReturn(entityManager.getFlags().indexOf(flag));
 			}
 		}
 	}

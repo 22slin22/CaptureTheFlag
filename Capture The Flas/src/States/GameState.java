@@ -31,10 +31,9 @@ public class GameState extends State{
 		
 		player = new Player(keyManager, camera, game, map);
 		
-		overlay = new Overlay(player.getHero());
-		overlay.setMap(map);
-		
 		entityManager = new EntityManager(map);
+		overlay = new Overlay(player.getHero(), entityManager);
+		overlay.setMap(map);
 		entityManager.setKillfeed(overlay.getKillfeed());
 		entityManager.addHero(player.getHero());
 		overlay.setEntityManager(entityManager);
@@ -76,6 +75,10 @@ public class GameState extends State{
 	
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public Overlay getOverlay() {
+		return overlay;
 	}
 
 }

@@ -1,5 +1,6 @@
 package Entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -15,6 +16,8 @@ import Entities.Weapons.Weapon;
 import Map.Flag;
 import Map.Map;
 import UI.Overlay.Killfeed;
+import UI.Overlay.Notification;
+import UI.Overlay.NotificationManager;
 import Utils.Teams;
 
 public class EntityManager {
@@ -24,7 +27,8 @@ public class EntityManager {
 	private ArrayList<StandardProjectile> projectiles = new ArrayList<>();
 	
 	private Map map;
-	Killfeed killfeed;
+	private Killfeed killfeed;
+	
 
 	public EntityManager(Map map) {
 		this.map = map;

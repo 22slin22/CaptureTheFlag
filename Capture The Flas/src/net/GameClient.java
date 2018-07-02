@@ -13,6 +13,7 @@ import Entities.Hero;
 import Main.Game;
 import States.StateManager;
 import States.States;
+import UI.Overlay.NotificationManager;
 import Utils.Teams;
 
 public class GameClient extends Thread{
@@ -20,9 +21,12 @@ public class GameClient extends Thread{
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 	private Game game;
+	private NotificationManager notificationManager;
 	
-	public GameClient(Game game, String ipAddress) {
+	public GameClient(Game game, String ipAddress, NotificationManager notificationManager) {
 		this.game = game;
+		this.notificationManager = notificationManager;
+		
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(ipAddress);
@@ -82,6 +86,7 @@ public class GameClient extends Thread{
 				
 			case Packet.FLAG_PICKUP:
 				StateManager.getGameState().getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));		// username  ,  flag index
+				notificationManager.addNotification(data[0], "picked up the flag");
 				break;
 				
 			case Packet.FLAG_RETURN:
@@ -89,8 +94,9 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.SCORED:
-				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[0])).getCarrier().getTeam());
-				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[0]));		// 0 = flagIndex
+				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[1])).getCarrier().getTeam());
+				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[1]));		// 1 = flagIndex
+				notificationManager.addNotification(data[0], "has scored");
 				break;
 				
 			case Packet.START_GAME:

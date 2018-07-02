@@ -19,17 +19,20 @@ public class Overlay {
 	private Minimap minimap;
 	private Killfeed killfeed;
 	private DeathOverlay deathOverlay;
+	private NotificationManager notificationManager;
 	
 	
-	public Overlay(Hero hero) {
+	public Overlay(Hero hero, EntityManager entityManager) {
 		minimap = new Minimap();
 		killfeed = new Killfeed();
 		deathOverlay = new DeathOverlay(hero);
+		notificationManager = new NotificationManager(entityManager);
 	}
 	
 	
 	public void tick() {
 		killfeed.tick();
+		notificationManager.tick();
 	}
 	
 	public void render(Graphics g) {
@@ -37,6 +40,7 @@ public class Overlay {
 		minimap.render(g);
 		killfeed.render(g);
 		deathOverlay.render(g);
+		notificationManager.render(g);
 	}
 	
 	
@@ -61,6 +65,11 @@ public class Overlay {
 	
 	public void setEntityManager(EntityManager entityManager) {
 		minimap.setEntityManager(entityManager);
+	}
+	
+	
+	public NotificationManager getNotificationManager() {
+		return notificationManager;
 	}
 
 }

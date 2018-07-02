@@ -21,7 +21,7 @@ public class Packet {
 	public static final String REMOVE_PROJECTILE = "24";		// projectileId
 	public static final String FLAG_PICKUP = "25";				// username, flagIndex
 	public static final String FLAG_RETURN = "26";				// flagIndex
-	public static final String SCORED = "27";					// flagIndex
+	public static final String SCORED = "27";					// username, flagIndex
 	
 	private String id;
 	private String data;

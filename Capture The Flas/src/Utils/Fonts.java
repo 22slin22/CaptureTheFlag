@@ -22,6 +22,7 @@ public class Fonts {
 	public static Font winScreenWinner = new Font("", Font.BOLD, 60);
 	public static Font errorFont = new Font("Arial", Font.ITALIC, 20);
 	public static Font respawnTimerFont = new Font("Arial", Font.BOLD, 70);
+	public static Font notificationFont = new Font("Arial", Font.BOLD, 40);
 	
 	public static void drawCenteredText(Graphics g, String text, int x, int y, Font font) {
 		FontMetrics metrics = g.getFontMetrics(font);

@@ -46,7 +46,7 @@ public class Game {
 	public void joinServer(String ipAddress, String username) {
 		// ip till "192.168.2.126"
 		
-		client = new GameClient(this, ipAddress);
+		client = new GameClient(this, ipAddress, StateManager.getGameState().getOverlay().getNotificationManager());
 		client.start();
 		
 		Packet packet = new Packet(Packet.LOGIN, username);
@@ -57,7 +57,7 @@ public class Game {
 		server = new Server();
 		server.start();
 		
-		client = new GameClient(this, "localhost");
+		client = new GameClient(this, "localhost", StateManager.getGameState().getOverlay().getNotificationManager());
 		client.start();
 		
 		StateManager.getLobby().setHost(true);
