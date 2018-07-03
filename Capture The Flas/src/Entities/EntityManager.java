@@ -173,31 +173,26 @@ public class EntityManager {
 		}
 	}
 	
-	public void hitHero(String username, int damage, int projectileId) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					hero.gotHit(damage);
-				}
-			}
-		}
+	public void hitHero(String usernameTarget, String usernameAttacker, int damage, int projectileId) {
+		Hero target = getHero(usernameTarget);
+		Hero attacker = getHero(usernameAttacker);
+		
+		target.gotHit(damage);
 		removeProjectile(projectileId);
+	
+		attacker.getStats().increaseDamage(damage);
 	}
 	
-	public void killHero(String username, String usernameKiller) {
-		synchronized(heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					for(Hero killer : heros) {
-						if(killer.getUsername().equals(usernameKiller)) {
-							hero.kill();
-							if(killfeed != null)
-								killfeed.addKill(killer, hero);
-						}
-					}
-				}
-			}
-		}
+	public void killHero(String usernameTarget, String usernameKiller) {
+		Hero target = getHero(usernameTarget);
+		Hero killer = getHero(usernameKiller);
+		
+		target.kill();
+		
+		killer.getStats().increaseKills();
+		target.getStats().increaseDeaths();
+		if(killfeed != null)
+			killfeed.addKill(killer, target);
 	}
 	
 	public void flagPickup(String username, int flagIndex) {
@@ -211,14 +206,20 @@ public class EntityManager {
 		}
 	}
 	
+	public void scored(String username, int flagIndex) {
+		flagReturn(flagIndex);
+		getHero(username).getStats().increaseScored();
+	}
+	
 	public void reset() {
 		for(Hero hero : heros) {
-			projectiles.clear();
 			hero.move(Teams.getRandomSpawn(hero.getTeam()));
+			hero.getStats().reset();
 		}
 		for(Flag flag : flags) {
 			flag.returnFlag();
 		}
+		projectiles.clear();
 	}
 	
 	public void flagReturn(int flagIndex) {

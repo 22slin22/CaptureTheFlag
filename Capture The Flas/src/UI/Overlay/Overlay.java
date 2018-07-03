@@ -45,7 +45,7 @@ public class Overlay {
 	
 	
 	private void drawScoreboard(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor(Color.GRAY);
 		Fonts.drawCenteredText(g, ":", Main.getWidth()/2, scoreboardYOffset - 3, Fonts.scoreFont);
 		
 		g.setColor(Teams.getColor(Teams.BLUE));

@@ -77,7 +77,7 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.HIT:
-				StateManager.getGameState().getEntityManager().hitHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username got hit, damage, projectile id
+				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username got hit, damage, projectile id
 				break;
 				
 			case Packet.KILL:
@@ -95,7 +95,7 @@ public class GameClient extends Thread{
 				
 			case Packet.SCORED:
 				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[1])).getCarrier().getTeam());
-				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[1]));		// 1 = flagIndex
+				StateManager.getGameState().getEntityManager().scored(data[0], Integer.parseInt(data[1]));		// username, flagIndex
 				notificationManager.addNotification(data[0], "has scored");
 				break;
 				
@@ -135,6 +135,7 @@ public class GameClient extends Thread{
 				
 			case Packet.WIN:
 				StateManager.changeState(States.WIN_SCREEN);
+				StateManager.getWinScreen().setBestPlayers();
 				StateManager.getWinScreen().setWinner(Integer.parseInt(data[0]));
 				break;
 			}

@@ -8,6 +8,7 @@ import Entities.Weapons.Weapon;
 import Map.Flag;
 import Map.Map;
 import Map.Obstacle;
+import Player.Stats;
 import Utils.Fonts;
 import Utils.Teams;
 
@@ -26,6 +27,7 @@ public class Hero extends Entity{
 	
 	private String username;
 	private int team;
+	private Stats stats;
 	
 	private Tank tank;
 	private Weapon weapon;
@@ -46,17 +48,21 @@ public class Hero extends Entity{
 	
 	public Hero(Map map) {
 		super(map.getObstacles());
+		this.map = map;
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
-		this.map = map;
+		
+		stats = new Stats();
 	}
 	
 	public Hero(int team, Map map) {
 		super(map.getObstacles());
 		this.team = team;
+		this.map = map;
 		this.max_x = map.getWidth();
 		this.max_y = map.getHeight();
-		this.map = map;
+		
+		stats = new Stats();
 	}
 	
 	
@@ -240,6 +246,14 @@ public class Hero extends Entity{
 	
 	public int getHealth() {
 		return health;
+	}
+	
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	public Stats getStats() {
+		return stats;
 	}
 
 }
