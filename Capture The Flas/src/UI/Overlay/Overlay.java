@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import Entities.EntityManager;
 import Entities.Hero;
+import Input.KeyManager;
 import Main.Main;
 import Map.Map;
 import Utils.Fonts;
@@ -20,13 +21,15 @@ public class Overlay {
 	private Killfeed killfeed;
 	private DeathOverlay deathOverlay;
 	private NotificationManager notificationManager;
+	private Tab tab;
 	
 	
-	public Overlay(Hero hero, EntityManager entityManager) {
+	public Overlay(Hero player, EntityManager entityManager, KeyManager keyManager) {
 		minimap = new Minimap();
 		killfeed = new Killfeed();
-		deathOverlay = new DeathOverlay(hero);
+		deathOverlay = new DeathOverlay(player);
 		notificationManager = new NotificationManager(entityManager);
+		tab = new Tab(keyManager, player);
 	}
 	
 	
@@ -41,6 +44,7 @@ public class Overlay {
 		killfeed.render(g);
 		deathOverlay.render(g);
 		notificationManager.render(g);
+		tab.render(g);	
 	}
 	
 	

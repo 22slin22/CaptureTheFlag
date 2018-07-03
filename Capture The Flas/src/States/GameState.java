@@ -32,7 +32,7 @@ public class GameState extends State{
 		player = new Player(keyManager, camera, game, map);
 		
 		entityManager = new EntityManager(map);
-		overlay = new Overlay(player.getHero(), entityManager);
+		overlay = new Overlay(player.getHero(), entityManager, keyManager);
 		overlay.setMap(map);
 		entityManager.setKillfeed(overlay.getKillfeed());
 		entityManager.addHero(player.getHero());
@@ -66,6 +66,7 @@ public class GameState extends State{
 		camera.setHero(player.getHero());
 		Teams.setScore(Teams.BLUE, 0);
 		Teams.setScore(Teams.RED, 0);
+		overlay.getNotificationManager().getQueue().clear();
 	}
 	
 	

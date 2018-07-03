@@ -65,5 +65,10 @@ public class NotificationManager {
 		addNotification(new Notification(new String[] {username, " " + text},
 				new Color[] {Teams.getColor(entityManager.getHero(username).getTeam()), Color.GRAY}));
 	}
+	
+	
+	public ArrayList<Notification> getQueue(){
+		return queue;
+	}
 
 }

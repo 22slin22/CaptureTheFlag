@@ -2,6 +2,8 @@ package Display;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.util.Collections;
 
 import javax.swing.JFrame;
 
@@ -24,6 +26,7 @@ public class Display {
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setPreferredSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
+		canvas.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
 		
 		frame.add(canvas);
 		canvas.requestFocus();
