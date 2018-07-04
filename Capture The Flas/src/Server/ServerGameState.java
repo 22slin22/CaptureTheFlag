@@ -16,7 +16,7 @@ public class ServerGameState{
 	private int scoreRed;
 	
 	
-	private static final int SCORE_TO_WIN = 3;
+	private static final int SCORE_TO_WIN = 2;
 	
 	
 	private EntityManager entityManager;

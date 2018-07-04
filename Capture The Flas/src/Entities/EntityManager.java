@@ -92,79 +92,63 @@ public class EntityManager {
 	}
 	
 	public void removeHero(String username) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					heros.remove(hero);
-					break;
-				}
-			}
-		}
+		Hero hero = getHero(username);
+		heros.remove(hero);
 	}
 	
 	public void updateHero(String username, float x, float y, double gunAngle) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					hero.setX(x);
-					hero.setY(y);
-					hero.setGunAngle(gunAngle);
-				}
-			}
-		}
+		Hero hero = getHero(username);
+		hero.setX(x);
+		hero.setY(y);
+		hero.setGunAngle(gunAngle);
+	}
+	
+	public void updateGunAngle(String username, double gunAngle) {
+		Hero hero = getHero(username);
+		hero.setGunAngle(gunAngle);
+	}
+	
+	public void updateVelocity(String username, float vx, float vy) {
+		Hero hero = getHero(username);
+		hero.setVx(vx);
+		hero.setVy(vy);
 	}
 	
 	public void changeTeam(String username, int team) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					hero.setTeam(team);
-					//player.getHero().move(Teams.getRandomSpawn(player.getTeam()));
-				}
-			}
-		}
+		Hero hero = getHero(username);
+		hero.setTeam(team);
 	}
 	
 	public void changeHero(String username, int tank, int weapon) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					switch (tank) {
-					case Hero.LIGHT:
-						hero.setTank(new Light(hero));
-						break;
-					case Hero.MEDIUM:
-						hero.setTank(new Medium(hero));
-						break;
-					case Hero.HEAVY:
-						hero.setTank(new Heavy(hero));
-						break;
-					}
-					
-					switch (weapon) {
-					case Weapon.GUN:
-						hero.setWeapon(new Gun(hero, this));
-						break;
-					case Weapon.SHOTGUN:
-						hero.setWeapon(new Shotgun(hero, this));
-						break;
-					case Weapon.LASER:
-						hero.setWeapon(new Laser(hero, this));
-						break;
-					}
-				}
-			}
+		Hero hero = getHero(username);
+		switch (tank) {
+		case Hero.LIGHT:
+			hero.setTank(new Light(hero));
+			break;
+		case Hero.MEDIUM:
+			hero.setTank(new Medium(hero));
+			break;
+		case Hero.HEAVY:
+			hero.setTank(new Heavy(hero));
+			break;
+		}
+		
+		switch (weapon) {
+		case Weapon.GUN:
+			hero.setWeapon(new Gun(hero, this));
+			break;
+		case Weapon.SHOTGUN:
+			hero.setWeapon(new Shotgun(hero, this));
+			break;
+		case Weapon.LASER:
+			hero.setWeapon(new Laser(hero, this));
+			break;
 		}
 	}
 	
 	public void heroShoot(String username) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					hero.shoot();
-				}
-			}
-		}
+		Hero hero = getHero(username);
+		hero.shoot();
 	}
 	
 	public void removeProjectile(int projectileId) {
@@ -196,14 +180,9 @@ public class EntityManager {
 	}
 	
 	public void flagPickup(String username, int flagIndex) {
-		synchronized (heros) {
-			for(Hero hero : heros) {
-				if(hero.getUsername().equals(username)) {
-					flags.get(flagIndex).setCarrier(hero);
-					hero.setFlag(flags.get(flagIndex));
-				}
-			}
-		}
+		Hero hero = getHero(username);
+		flags.get(flagIndex).setCarrier(hero);
+		hero.setFlag(flags.get(flagIndex));
 	}
 	
 	public void scored(String username, int flagIndex) {

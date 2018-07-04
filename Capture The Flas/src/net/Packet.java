@@ -15,13 +15,15 @@ public class Packet {
 	public static final String EQUIP_HERO = "11";				// username, tank, weapon
 	
 	public static final String UPDATE_PLAYER = "20";			// username, x, y, gunAngle
-	public static final String SHOOT = "21";					// username
-	public static final String HIT = "22";						// target, attacker, damage, projectileID
-	public static final String KILL = "23";						// username, killer
-	public static final String REMOVE_PROJECTILE = "24";		// projectileId
-	public static final String FLAG_PICKUP = "25";				// username, flagIndex
-	public static final String FLAG_RETURN = "26";				// flagIndex
-	public static final String SCORED = "27";					// username, flagIndex
+	public static final String PLAYER_MOVING = "21";			// username, vx, vy
+	public static final String GUN_ANGLE = "22";				// username, angle
+	public static final String SHOOT = "23";					// username
+	public static final String HIT = "24";						// target, attacker, damage, projectileID
+	public static final String KILL = "25";						// username, killer
+	public static final String REMOVE_PROJECTILE = "26";		// projectileId
+	public static final String FLAG_PICKUP = "27";				// username, flagIndex
+	public static final String FLAG_RETURN = "28";				// flagIndex
+	public static final String SCORED = "29";					// username, flagIndex
 	
 	private String id;
 	private String data;

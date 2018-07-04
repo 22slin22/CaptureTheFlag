@@ -61,6 +61,8 @@ public class Server extends Thread{
 				break;
 				
 			case Packet.START_GAME:
+				sendDataToAllClientsIfReady(packet.getMessage());
+				
 				started = true;
 				serverMain.setPlaying(true);
 				serverMain.getServerGameState().reset();
@@ -69,39 +71,47 @@ public class Server extends Thread{
 						entityManager.getHero(player.getUsername()).setPlaying(true);
 					}
 				}
-				
-				sendDataToAllClientsIfReady(packet.getMessage());
 				break;
 				
 			case Packet.RESTART:
+				sendDataToAllClients(packet.getMessage());
+				
 				System.out.println("Server has been stopped");
 				started = false;
 				serverMain.setPlaying(false);
 				for(Hero hero : entityManager.getHeros()) {
 					hero.setPlaying(false);
 				}
-				
-				sendDataToAllClients(packet.getMessage());
 				break;
 				
 			case Packet.EQUIP_HERO:
-				handleEquip(datagramPacket, data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));			// user name + tank + weapon
 				sendDataToAllClients(packet.getMessage());
+				handleEquip(datagramPacket, data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));			// user name + tank + weapon
 				break;
 				
 			case Packet.SHOOT:
-				entityManager.heroShoot(data[0]);
 				sendDataToAllClients(packet.getMessage());
+				entityManager.heroShoot(data[0]);
 				break;
 				
 			case Packet.CHANGE_TEAM:
-				handleChangeTeam(datagramPacket, data[0], Integer.parseInt(data[1]));
 				sendDataToAllClients(packet.getMessage());
+				handleChangeTeam(datagramPacket, data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.UPDATE_PLAYER:
-				entityManager.updateHero(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]), Double.parseDouble(data[3]));
 				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
+				entityManager.updateHero(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]), Double.parseDouble(data[3]));
+				break;
+				
+			case Packet.GUN_ANGLE:
+				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
+				entityManager.updateGunAngle(data[0], Double.parseDouble(data[1]));
+				break;
+				
+			case Packet.PLAYER_MOVING:
+				sendDataToAllClientsExceptSender(datagramPacket, packet.getMessage());
+				entityManager.updateVelocity(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]));
 				break;
 			}
 			

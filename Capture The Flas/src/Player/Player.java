@@ -13,12 +13,11 @@ import net.Packet;
 public class Player{
 	
 	private KeyManager keyManager;
-	
 	private Camera camera;
-	
 	private Game game;
-	
 	private Hero hero;
+	
+	private int tickCounter = 0;
 	
 
 	public Player(KeyManager keyManager, Camera camera, Game game, Map map) {
@@ -38,26 +37,41 @@ public class Player{
 
 	
 	private void updateHero() {
-		hero.setVx(0);
+		float vx = 0;
 		if(keyManager.isKeyPressed(KeyEvent.VK_A) || keyManager.isKeyPressed(KeyEvent.VK_LEFT)) {
-			hero.setVx(-hero.getTank().getSpeed());
+			vx = -hero.getTank().getSpeed();
 		}
 		if(keyManager.isKeyPressed(KeyEvent.VK_D) || keyManager.isKeyPressed(KeyEvent.VK_RIGHT)) {	
-			hero.setVx(hero.getVx() + hero.getTank().getSpeed());
+			vx += hero.getTank().getSpeed();
 		}
 		
-		hero.setVy(0);
+		float vy = 0;
 		if(keyManager.isKeyPressed(KeyEvent.VK_W) || keyManager.isKeyPressed(KeyEvent.VK_UP)) {
-			hero.setVy(-hero.getTank().getSpeed());
+			vy = -hero.getTank().getSpeed();
 		}
 		if(keyManager.isKeyPressed(KeyEvent.VK_S) || keyManager.isKeyPressed(KeyEvent.VK_DOWN)) {
-			hero.setVy(hero.getVy() + hero.getTank().getSpeed());
+			vy += hero.getTank().getSpeed();
 		}
 		
+		if(vx != hero.getVx() || vy != hero.getVy()) {
+			Packet packet = new Packet(Packet.PLAYER_MOVING, hero.getUsername() + "," + hero.getVx() + "," + hero.getVy());
+			game.getClient().sendData(packet.getMessage());
+		}
+		
+		hero.setVx(vx);
+		hero.setVy(vy);
+		
+		double angle = getMouseAngle();
+		if(hero.getGunAngle() != angle) {
+			Packet packet = new Packet(Packet.GUN_ANGLE, hero.getUsername() + "," + Math.round(hero.getGunAngle() * 100)/100f);
+			game.getClient().sendData(packet.getMessage());
+		}
 		hero.setGunAngle(getMouseAngle());
 		
-		Packet packet = new Packet(Packet.UPDATE_PLAYER, hero.getUsername() + "," + hero.getX() + "," + hero.getY() + "," + hero.getGunAngle());
-		game.getClient().sendData(packet.getMessage());
+		if(tickCounter % 15 == 0) {		// every half a second
+			Packet packet = new Packet(Packet.UPDATE_PLAYER, hero.getUsername() + "," + hero.getX() + "," + hero.getY() + "," + Math.round(hero.getGunAngle() * 100)/100f);		// *100)/100 to round to 2 decimal places
+			game.getClient().sendData(packet.getMessage());
+		}
 	}
 	
 	private void testShoot() {
