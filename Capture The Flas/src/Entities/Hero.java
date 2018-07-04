@@ -212,7 +212,7 @@ public class Hero extends Entity{
 	
 	public void setTank(Tank tank) {
 		this.tank = tank;
-		healthBarYOffset = tank.getRadius() + healthBarHeight + 30;
+		healthBarYOffset = tank.getRadius() + healthBarHeight + 10;
 		health = tank.getDefaultHealth();
 		
 		if(weapon != null) {
