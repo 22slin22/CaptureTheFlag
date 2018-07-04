@@ -54,7 +54,7 @@ public class Player{
 		}
 		
 		if(vx != hero.getVx() || vy != hero.getVy()) {
-			Packet packet = new Packet(Packet.PLAYER_MOVING, hero.getUsername() + "," + hero.getVx() + "," + hero.getVy());
+			Packet packet = new Packet(Packet.PLAYER_MOVING, hero.getUsername() + "," + vx + "," + vy);
 			game.getClient().sendData(packet.getMessage());
 		}
 		
@@ -68,10 +68,11 @@ public class Player{
 		}
 		hero.setGunAngle(getMouseAngle());
 		
-		if(tickCounter % 15 == 0) {		// every half a second
+		if(tickCounter % 15 == 0) {		// every quarter a second
 			Packet packet = new Packet(Packet.UPDATE_PLAYER, hero.getUsername() + "," + hero.getX() + "," + hero.getY() + "," + Math.round(hero.getGunAngle() * 100)/100f);		// *100)/100 to round to 2 decimal places
 			game.getClient().sendData(packet.getMessage());
 		}
+		tickCounter++;
 	}
 	
 	private void testShoot() {

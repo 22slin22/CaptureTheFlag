@@ -102,7 +102,12 @@ public class StartMenu extends State{
 				}
 			}
 			else {
-				game.joinServer(ipAddress, username);
+				if(ipAddress == "nils") {
+					game.joinServer("87.147.204.208", username);
+				}
+				else {
+					game.joinServer(ipAddress, username);
+				}
 			}
 		}
 

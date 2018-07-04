@@ -72,6 +72,14 @@ public class GameClient extends Thread{
 				StateManager.getGameState().getEntityManager().updateHero(data[0], x, y, gunAngle);
 				break;
 				
+			case Packet.GUN_ANGLE:
+				StateManager.getGameState().getEntityManager().updateGunAngle(data[0], Double.parseDouble(data[1]));
+				break;
+				
+			case Packet.PLAYER_MOVING:
+				StateManager.getGameState().getEntityManager().updateVelocity(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]));
+				break;
+				
 			case Packet.SHOOT:
 				StateManager.getGameState().getEntityManager().heroShoot(data[0]);
 				break;
