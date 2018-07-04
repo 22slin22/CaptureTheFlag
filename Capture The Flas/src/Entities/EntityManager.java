@@ -1,6 +1,5 @@
 package Entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -16,8 +15,6 @@ import Entities.Weapons.Weapon;
 import Map.Flag;
 import Map.Map;
 import UI.Overlay.Killfeed;
-import UI.Overlay.Notification;
-import UI.Overlay.NotificationManager;
 import Utils.Teams;
 
 public class EntityManager {

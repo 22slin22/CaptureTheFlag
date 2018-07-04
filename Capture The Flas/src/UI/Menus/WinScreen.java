@@ -5,13 +5,6 @@ import java.awt.Graphics;
 
 import Entities.EntityManager;
 import Entities.Hero;
-import Entities.Tanks.Heavy;
-import Entities.Tanks.Light;
-import Entities.Tanks.Medium;
-import Entities.Weapons.Gun;
-import Entities.Weapons.Laser;
-import Entities.Weapons.Shotgun;
-import Entities.Weapons.Weapon;
 import Main.Game;
 import Main.Main;
 import States.State;

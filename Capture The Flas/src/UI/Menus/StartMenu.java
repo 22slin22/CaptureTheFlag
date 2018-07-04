@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Entities.EntityManager;
 import Input.KeyManager;
 import Main.Game;
 import Main.Main;
@@ -102,7 +101,7 @@ public class StartMenu extends State{
 				}
 			}
 			else {
-				if(ipAddress == "nils") {
+				if(ipAddress.equals("nils")) {
 					game.joinServer("87.147.204.208", username);
 				}
 				else {

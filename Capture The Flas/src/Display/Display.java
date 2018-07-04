@@ -26,7 +26,7 @@ public class Display {
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setPreferredSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
-		canvas.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.EMPTY_SET);
+		canvas.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, Collections.emptySet());
 		
 		frame.add(canvas);
 		canvas.requestFocus();

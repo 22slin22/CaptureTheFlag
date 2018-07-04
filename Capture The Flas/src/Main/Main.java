@@ -1,6 +1,5 @@
 package Main;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 
 import Display.Display;
@@ -39,7 +38,7 @@ public class Main implements Runnable{
 		display.getCanvas().addMouseMotionListener(mouseManager);
 		
 		try {
-			thread.sleep(500);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -82,9 +81,6 @@ public class Main implements Runnable{
 		long timeNow;
 		double deltaTime = 0;
 		
-		long timeTicks = System.currentTimeMillis();
-		int ticks = 0;
-		
 		running = true;
 		while(running) {
 			timeNow = System.nanoTime();
@@ -96,13 +92,6 @@ public class Main implements Runnable{
 				render();
 				
 				deltaTime--;
-				ticks++;
-			}
-			
-			if(System.currentTimeMillis() - timeTicks >= 1000) {
-				//System.out.println("FPS: " + ticks);
-				ticks = 0;
-				timeTicks = System.currentTimeMillis();
 			}
 		}
 	}

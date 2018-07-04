@@ -1,20 +1,11 @@
 package Entities.Projectiles;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
-
-import Entities.Hero;
-import Map.Map;
-
 /*
  * not used yet
  */
-
+/*
 public class LaserBeam extends Projectile{
-	
+
 	private Hero hero;
 	private Map map;
 	
@@ -49,3 +40,4 @@ public class LaserBeam extends Projectile{
 	}
 
 }
+*/

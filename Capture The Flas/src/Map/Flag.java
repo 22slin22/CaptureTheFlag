@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
-import Entities.EntityManager;
 import Entities.Hero;
 import Utils.Collisions;
 import Utils.Teams;

@@ -4,10 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Entities.Hero;
-import Main.Main;
-import Utils.Teams;
-
 public class Map {
 	
 	private final static int WIDTH = 3000;
