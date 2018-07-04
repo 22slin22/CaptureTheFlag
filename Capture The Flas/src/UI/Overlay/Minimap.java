@@ -1,7 +1,9 @@
 package UI.Overlay;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import Entities.EntityManager;
@@ -62,14 +64,30 @@ public class Minimap {
 	private void drawPlayers(Graphics g) {
 		synchronized (entityManager.getHeros()) {
 			for(Hero hero : entityManager.getHeros()) {
+				g.setColor(new Color(Teams.getColor(hero.getTeam()).getRed(), Teams.getColor(hero.getTeam()).getGreen(), Teams.getColor(hero.getTeam()).getBlue(), 200)); 		// transparent team colors
 				if(!hero.isDead()) {
-					g.setColor(new Color(Teams.getColor(hero.getTeam()).getRed(), Teams.getColor(hero.getTeam()).getGreen(), Teams.getColor(hero.getTeam()).getBlue(), 200)); 		// transparent team colors
 					g.fillOval(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
 							yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 					// y position	= 	y - radius*minimapScalar
 							(int)(hero.getRadius()*2*minimapScalar), (int)(hero.getRadius()*2*minimapScalar));	// width and height
 				}
+				else {
+					drawX(g, hero);
+				}
 			}
 		}
+	}
+	
+	private void drawX(Graphics g, Hero hero) {
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setStroke(new BasicStroke(1));
+		g2d.drawLine(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
+				yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar), 						// y position	= 	y - radius*minimapScalar
+				xStart + (int)((hero.getX() + (float)hero.getRadius())*minimapScalar), 
+				yStart + (int)((hero.getY() + hero.getRadius())*minimapScalar));
+		g2d.drawLine(xStart + (int)((hero.getX() - (float)hero.getRadius())*minimapScalar), 			// x position	=	x - radius*minimapScalar
+				yStart + (int)((hero.getY() + hero.getRadius())*minimapScalar), 						// y position	= 	y - radius*minimapScalar
+				xStart + (int)((hero.getX() + (float)hero.getRadius())*minimapScalar), 
+				yStart + (int)((hero.getY() - hero.getRadius())*minimapScalar));
 	}
 	
 	private void drawFlags(Graphics g) {
