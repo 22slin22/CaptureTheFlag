@@ -42,17 +42,19 @@ public class StartMenu extends State{
 	private static final int nRightSide = 9;
 	private static final int nLeftSide = 8;
 	
-	private static final int inputFieldYOffset = Main.getHeight() * 3/5;
+	private static final int usernameInputFieldYOffset = Main.getHeight() * 3/5 - 80;
+	private static final int ipAddressInputFieldYOffset = Main.getHeight() * 3/5;
 	private static final int inputFieldWidth = 400;
 	private static final int inputFieldHeight = 50;
 	
-	private static final int errorYOffset = inputFieldYOffset - 30;
+	private static final int errorYOffset = usernameInputFieldYOffset - 30;
 	
 	
 	private ArrayList<Button> buttons = new ArrayList<>();
 	private Button joinServerButton;
 	private Button createServerButton;
-	private InputField inputField;
+	private InputField usernameInputField;
+	private InputField ipAddressInputField;
 	
 	
 	public StartMenu(KeyManager keyManager, Game game) {
@@ -72,7 +74,8 @@ public class StartMenu extends State{
 		
 		createButtons();
 		
-		inputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, inputFieldYOffset, inputFieldWidth, inputFieldHeight, "username", 10, 10);
+		usernameInputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, usernameInputFieldYOffset, inputFieldWidth, inputFieldHeight, "username", 10, 10);
+		ipAddressInputField = new InputField(keyManager, Main.getWidth()/2 - inputFieldWidth/2, ipAddressInputFieldYOffset, inputFieldWidth, inputFieldHeight, "ip address (optional)", 10, 10);
 	}
 	
 	
@@ -82,28 +85,29 @@ public class StartMenu extends State{
 		for(Button button : buttons) {
 			button.tick();
 		}
-		inputField.tick();
+		usernameInputField.tick();
+		ipAddressInputField.tick();
 		
 		if(joinServerButton.isClicked()) {
-			String username = inputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
+			String username = usernameInputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
+			String ipAddress = ipAddressInputField.getText();
 			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
-			if(currentButton == -1)
-				game.joinServer("localhost", username);
-			else if(currentButton == 0)
-				game.joinServer("192.168.2.128", username);		// ip nils
-			else if(currentButton == 1)
-				game.joinServer("192.168.2.116", username);		// ip till
-			else if(currentButton == 2)
-				game.joinServer("87.147.204.208", username);
-			else if(currentButton == 3)
-				game.joinServer("10.9.0.103", username);
-			else
-				game.joinServer("10.9.116." + (currentButton+1), username);
+			if(ipAddress == ipAddressInputField.getHint() || ipAddress == "") {
+				if(currentButton == -1) {
+					game.joinServer("localhost", username);
+				}
+				else {
+					game.joinServer("10.9.116." + (currentButton+1), username);
+				}
+			}
+			else {
+				game.joinServer(ipAddress, username);
+			}
 		}
 
 		if(createServerButton.isClicked()) {
-			String username = inputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
+			String username = usernameInputField.getText();		// (JOptionPane.showInputDialog("Please enter a username"));
 			StateManager.getGameState().getPlayer().getHero().setUsername(username);
 			
 			game.createServer(username);
@@ -131,7 +135,8 @@ public class StartMenu extends State{
 		for(Button button : buttons) {
 			button.render(g);
 		}
-		inputField.render(g);
+		usernameInputField.render(g);
+		ipAddressInputField.render(g);
 		
 		if(showError) {
 			renderError(g);

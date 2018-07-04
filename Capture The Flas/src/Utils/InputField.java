@@ -18,6 +18,7 @@ public class InputField {
 	private boolean rounded = false;
 	
 	private String text = "";
+	private String hint = "";
 	private boolean active = false;
 	private boolean showHint;
 	
@@ -53,6 +54,7 @@ public class InputField {
 		this.width = width;
 		this.height = height;
 		this.text = hint;
+		this.hint = hint;
 		
 		clickBox = new Rectangle(x, y, width, height);
 		showHint = true;
@@ -82,6 +84,7 @@ public class InputField {
 		this.width = width;
 		this.height = height;
 		this.text = hint;
+		this.hint = hint;
 		this.arcWidth = arcWidth;
 		this.arcHeight = arcHeight;
 		
@@ -123,6 +126,9 @@ public class InputField {
 			g.drawRect(x, y, width, height);
 		}
 		
+		if(showHint) {
+			g.setColor(Color.GRAY);
+		}
 		g.setFont(Fonts.inputFieldFont);
 		g.drawString(text, x + TEXT_X_OFFSET, y + height - TEXT_Y_OFFSET);
 	}
@@ -131,10 +137,10 @@ public class InputField {
 	public void onKeyTyped(KeyEvent e) {
 		if(active) {
 			Character c = e.getKeyChar();
-			if((Character.isLetter(c) || Character.isDigit(c)) && text.length() < USERNAME_MAX_LENGHT) {
+			if((Character.isLetter(c) || Character.isDigit(c) || c.toString().equals(".")) && text.length() < USERNAME_MAX_LENGHT) {
 				text += e.getKeyChar();
 			}
-			if(c.equals('\b') && text.length() > 0) {
+			if(c.equals('\b') && text.length() > 0) {			// '\b' = backspace
 				text = text.substring(0, text.length()-1);
 			}
 		}
@@ -143,6 +149,10 @@ public class InputField {
 	
 	public String getText() {
 		return text;
+	}
+	
+	public String getHint() {
+		return hint;
 	}
 
 }
