@@ -95,9 +95,11 @@ public class EntityManager {
 	
 	public void updateHero(String username, float x, float y, double gunAngle) {
 		Hero hero = getHero(username);
-		hero.setX(x);
-		hero.setY(y);
-		hero.setGunAngle(gunAngle);
+		if(hero != null) {
+			hero.setX(x);
+			hero.setY(y);
+			hero.setGunAngle(gunAngle);
+		}
 	}
 	
 	public void updateGunAngle(String username, double gunAngle) {
