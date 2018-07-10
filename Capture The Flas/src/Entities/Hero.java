@@ -12,7 +12,7 @@ import Player.Stats;
 import Utils.Fonts;
 import Utils.Teams;
 
-public class Hero extends Entity{
+public class Hero extends Entity implements Comparable{
 	private Map map;
 	
 	
@@ -161,6 +161,14 @@ public class Hero extends Entity{
 		if(weapon != null) {
 			weapon.shoot();
 		}
+	}
+	
+	@Override
+	public int compareTo(Object o) {
+		Hero compHero = (Hero) o;
+		int score = (int)(3*stats.getScored() + stats.getKills() - 0.5*stats.getDeaths() + 0.005*stats.getDamage());
+		int compScore = (int)(3*compHero.getStats().getScored() + compHero.getStats().getKills() - 0.5*compHero.getStats().getDeaths() + 0.005*compHero.getStats().getDamage());
+		return compScore-score;
 	}
 	
 	

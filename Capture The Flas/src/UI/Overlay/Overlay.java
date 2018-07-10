@@ -29,7 +29,7 @@ public class Overlay {
 		killfeed = new Killfeed();
 		deathOverlay = new DeathOverlay(player);
 		notificationManager = new NotificationManager(entityManager);
-		tab = new Tab(keyManager, player);
+		tab = new Tab(keyManager, player, entityManager);
 	}
 	
 	
