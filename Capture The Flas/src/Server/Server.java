@@ -78,8 +78,10 @@ public class Server extends Thread{
 				System.out.println("Server has been stopped");
 				started = false;
 				serverMain.setPlaying(false);
-				for(Hero hero : entityManager.getHeros()) {
-					hero.setPlaying(false);
+				synchronized(entityManager.getHeros()) {
+					for(Hero hero : entityManager.getHeros()) {
+						hero.setPlaying(false);
+					}
 				}
 				break;
 				

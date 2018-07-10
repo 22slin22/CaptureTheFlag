@@ -79,7 +79,9 @@ public class Tab {
 		Fonts.drawCenteredText(g, "Damage", (int) (Main.getWidth()/2 + ((STATS_WIDTH/2) * (PROPORTION_NAME + PROPROTION_STAT * 7/2))), yStatsName, Fonts.lobbyNameFont);
 		
 		// render player on leaderboard
-		Collections.sort(entityManager.getHeros());
+		synchronized(entityManager.getHeros()) {
+			Collections.sort(entityManager.getHeros());
+		}
 		
 		int blues = 0;
 		int reds = 0;

@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+import Entities.EntityManager;
 import Entities.Hero;
 import Main.Game;
 import States.StateManager;
@@ -21,10 +22,12 @@ public class GameClient extends Thread{
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 	private Game game;
+	private EntityManager entityManager;
 	private NotificationManager notificationManager;
 	
 	public GameClient(Game game, String ipAddress, NotificationManager notificationManager) {
 		this.game = game;
+		entityManager = StateManager.getGameState().getEntityManager();
 		this.notificationManager = notificationManager;
 		
 		try {
@@ -58,52 +61,52 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.LOGIN:
-				StateManager.getGameState().getEntityManager().addHero(data[0], Integer.parseInt(data[1]));
+				entityManager.addHero(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.DISCONNECT:
-				StateManager.getGameState().getEntityManager().removeHero(data[0]);
+				entityManager.removeHero(data[0]);
 				break;
 				
 			case Packet.UPDATE_PLAYER:
 				float x = Float.parseFloat(data[1]);
 				float y = Float.parseFloat(data[2]);
 				double gunAngle = Double.parseDouble(data[3]);
-				StateManager.getGameState().getEntityManager().updateHero(data[0], x, y, gunAngle);
+				entityManager.updateHero(data[0], x, y, gunAngle);
 				break;
 				
 			case Packet.GUN_ANGLE:
-				StateManager.getGameState().getEntityManager().updateGunAngle(data[0], Double.parseDouble(data[1]));
+				entityManager.updateGunAngle(data[0], Double.parseDouble(data[1]));
 				break;
 				
 			case Packet.PLAYER_MOVING:
-				StateManager.getGameState().getEntityManager().updateVelocity(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]));
+				entityManager.updateVelocity(data[0], Float.parseFloat(data[1]), Float.parseFloat(data[2]));
 				break;
 				
 			case Packet.SHOOT:
-				StateManager.getGameState().getEntityManager().heroShoot(data[0]);
+				entityManager.heroShoot(data[0]);
 				break;
 				
 			case Packet.HIT:
-				StateManager.getGameState().getEntityManager().hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username got hit, damage, projectile id
+				entityManager.hitHero(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]));		// username got hit, damage, projectile id
 				break;
 				
 			case Packet.KILL:
-				StateManager.getGameState().getEntityManager().killHero(data[0], data[1]);
+				entityManager.killHero(data[0], data[1]);
 				break;
 				
 			case Packet.FLAG_PICKUP:
-				StateManager.getGameState().getEntityManager().flagPickup(data[0], Integer.parseInt(data[1]));		// username  ,  flag index
+				entityManager.flagPickup(data[0], Integer.parseInt(data[1]));		// username  ,  flag index
 				notificationManager.addNotification(data[0], "picked up the flag");
 				break;
 				
 			case Packet.FLAG_RETURN:
-				StateManager.getGameState().getEntityManager().flagReturn(Integer.parseInt(data[0]));
+				entityManager.flagReturn(Integer.parseInt(data[0]));
 				break;
 				
 			case Packet.SCORED:
 				Teams.increaseScore(StateManager.getGameState().getEntityManager().getFlags().get(Integer.parseInt(data[1])).getCarrier().getTeam());
-				StateManager.getGameState().getEntityManager().scored(data[0], Integer.parseInt(data[1]));		// username, flagIndex
+				entityManager.scored(data[0], Integer.parseInt(data[1]));		// username, flagIndex
 				notificationManager.addNotification(data[0], "has scored");
 				break;
 				
@@ -113,18 +116,20 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.CHANGE_TEAM:
-				StateManager.getGameState().getEntityManager().changeTeam(data[0], Integer.parseInt(data[1]));
+				entityManager.changeTeam(data[0], Integer.parseInt(data[1]));
 				break;
 				
 			case Packet.EQUIP_HERO:
-				StateManager.getGameState().getEntityManager().changeHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username  ,  tank  ,  weapon
-				StateManager.getGameState().getEntityManager().getHero(data[0]).setPlaying(true);
+				entityManager.changeHero(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2]));		// username  ,  tank  ,  weapon
+				entityManager.getHero(data[0]).setPlaying(true);
 				break;
 				
 			case Packet.RESTART:
 				game.restart();
-				for(Hero hero : StateManager.getGameState().getEntityManager().getHeros()) {
-					hero.setPlaying(false);
+				synchronized(entityManager.getHeros()) {
+					for(Hero hero : entityManager.getHeros()) {
+						hero.setPlaying(false);
+					}
 				}
 				break;
 				
@@ -138,7 +143,7 @@ public class GameClient extends Thread{
 				break;
 				
 			case Packet.REMOVE_PROJECTILE:
-				StateManager.getGameState().getEntityManager().removeProjectile(Integer.parseInt(data[0]));
+				entityManager.removeProjectile(Integer.parseInt(data[0]));
 				break;
 				
 			case Packet.WIN:

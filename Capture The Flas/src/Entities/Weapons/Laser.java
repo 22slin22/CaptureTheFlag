@@ -12,7 +12,7 @@ public class Laser extends Weapon{
 	public static final int DAMAGE = 5;
 	private static final float COOLDOWN = 0.05f;
 	
-	private static final float PROJECTILE_SPEED = 1f;
+	private static final float PROJECTILE_SPEED = 1.3f;
 	
 	
 	public Laser(Hero hero, EntityManager entityManager) {

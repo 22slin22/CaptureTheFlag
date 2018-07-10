@@ -190,14 +190,16 @@ public class EntityManager {
 	}
 	
 	public void reset() {
-		for(Hero hero : heros) {
-			hero.move(Teams.getRandomSpawn(hero.getTeam()));
-			hero.getStats().reset();
+		synchronized(heros) {
+			for(Hero hero : heros) {
+				hero.move(Teams.getRandomSpawn(hero.getTeam()));
+				hero.getStats().reset();
+			}
+			for(Flag flag : flags) {
+				flag.returnFlag();
+			}
+			projectiles.clear();
 		}
-		for(Flag flag : flags) {
-			flag.returnFlag();
-		}
-		projectiles.clear();
 	}
 	
 	public void flagReturn(int flagIndex) {
@@ -209,9 +211,11 @@ public class EntityManager {
 	}
 	
 	public Hero getHero(String username) {
-		for(Hero hero : heros) {
-			if(hero.getUsername().equals(username)) {
-				return hero;
+		synchronized(heros) {
+			for(Hero hero : heros) {
+				if(hero.getUsername().equals(username)) {
+					return hero;
+				}
 			}
 		}
 		return null;

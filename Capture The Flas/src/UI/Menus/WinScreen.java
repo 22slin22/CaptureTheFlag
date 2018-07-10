@@ -91,19 +91,6 @@ public class WinScreen extends State{
 		Fonts.drawCenteredText(g, playerMostDamage.getUsername(), Main.getWidth() * 3/4, Main.getHeight() / 2, Fonts.winScreenNameFont);
 		g.setColor(Color.BLACK);
 		Fonts.drawCenteredText(g, "" + playerMostDamage.getStats().getDamage(), Main.getWidth() * 3/4, Main.getHeight()/2 + yOffset, Fonts.lobbyNameFont);
-		
-		
-		/*playerMostKills.setY(Main.getHeight()/2);
-		playerMostScored.setY(Main.getHeight()/2);
-		playerMostDamage.setY(Main.getHeight()/2);
-		playerMostKills.setX(Main.getWidth() * 1/3);
-		playerMostScored.setX(Main.getWidth() * 1/2);
-		playerMostDamage.setX(Main.getWidth() * 2/3);
-		
-		playerMostKills.render(g, 0, 0);
-		playerMostScored.render(g, 0, 0);
-		playerMostDamage.render(g, 0, 0);
-		*/
 	}
 	
 	
@@ -111,11 +98,12 @@ public class WinScreen extends State{
 		int mostKills = -1;
 		Hero best = null;
 		
-		System.out.println(entityManager.getHeros().size());
-		for(Hero hero : entityManager.getHeros()) {
-			if(hero.getStats().getKills() > mostKills) {
-				best = hero;
-				mostKills = hero.getStats().getKills();
+		synchronized(entityManager.getHeros()) {
+			for(Hero hero : entityManager.getHeros()) {
+				if(hero.getStats().getKills() > mostKills) {
+					best = hero;
+					mostKills = hero.getStats().getKills();
+				}
 			}
 		}
 		return best;
@@ -125,10 +113,12 @@ public class WinScreen extends State{
 		int mostScored = -1;
 		Hero best = null;
 		
-		for(Hero hero : entityManager.getHeros()) {
-			if(hero.getStats().getScored() > mostScored) {
-				best = hero;
-				mostScored = hero.getStats().getScored();
+		synchronized(entityManager.getHeros()) {
+			for(Hero hero : entityManager.getHeros()) {
+				if(hero.getStats().getScored() > mostScored) {
+					best = hero;
+					mostScored = hero.getStats().getScored();
+				}
 			}
 		}
 		return best;
@@ -138,10 +128,12 @@ public class WinScreen extends State{
 		int mostDamage = -1;
 		Hero best = null;
 		
-		for(Hero hero : entityManager.getHeros()) {
-			if(hero.getStats().getDamage() > mostDamage) {
-				best = hero;
-				mostDamage = hero.getStats().getDamage();
+		synchronized(entityManager.getHeros()) {
+			for(Hero hero : entityManager.getHeros()) {
+				if(hero.getStats().getDamage() > mostDamage) {
+					best = hero;
+					mostDamage = hero.getStats().getDamage();
+				}
 			}
 		}
 		return best;
@@ -151,27 +143,6 @@ public class WinScreen extends State{
 		playerMostKills = getPlayerMostKills();
 		playerMostScored = getPlayerMostScored();
 		playerMostDamage = getPlayerMostDamage();
-		
-		
-		/*
-		playerMostKills.setGunAngle(0);
-		playerMostScored.setGunAngle(0);
-		playerMostDamage.setGunAngle(0);
-		
-		playerMostKills.setHealth(playerMostKills.getTank().getDefaultHealth());
-		playerMostScored.setHealth(playerMostScored.getTank().getDefaultHealth());
-		playerMostDamage.setHealth(playerMostDamage.getTank().getDefaultHealth());
-		
-		playerMostKills.setY(Main.getHeight()/2);
-		playerMostScored.setY(Main.getHeight()/2);
-		playerMostDamage.setY(Main.getHeight()/2);
-		playerMostKills.setX(Main.getWidth() * 1/3);
-		playerMostScored.setX(Main.getWidth() * 1/2);
-		playerMostDamage.setX(Main.getWidth() * 2/3);
-		*/
-		System.out.println(playerMostKills.getUsername() + " has " + playerMostKills.getStats().getKills() + " kills");
-		System.out.println(playerMostScored.getUsername() + " has scored " + playerMostScored.getStats().getScored() + " times");
-		System.out.println(playerMostDamage.getUsername() + " has done " + playerMostDamage.getStats().getDamage() + " damage");
 	}
 	
 	
