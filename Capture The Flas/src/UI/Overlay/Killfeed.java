@@ -20,22 +20,28 @@ public class Killfeed {
 	
 	
 	public void tick() {
-		for(Kill kill : kills) {
-			if(System.currentTimeMillis() - kill.getAddTime() > KILL_SHOW_TIME * 1000) {
-				kills.remove(kill);
-				break;
+		synchronized(kills) {
+			for(Kill kill : kills) {
+				if(System.currentTimeMillis() - kill.getAddTime() > KILL_SHOW_TIME * 1000) {
+					kills.remove(kill);
+					break;
+				}
 			}
 		}
 	}
 	
 	public void render(Graphics g) {
-		for(Kill kill : kills) {
-			renderKill(g, kill);
+		synchronized(kills) {
+			for(Kill kill : kills) {
+				renderKill(g, kill);
+			}
 		}
 	}
 	
 	public void addKill(Hero killer, Hero target) {
-		kills.add(new Kill(killer, target, System.currentTimeMillis()));
+		synchronized(kills) {
+			kills.add(new Kill(killer, target, System.currentTimeMillis()));
+		}
 	}
 	
 	private void renderKill(Graphics g, Kill kill) {
