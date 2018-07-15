@@ -116,6 +116,7 @@ public class Tab {
 		/*
 		 * always set the color to a transparent color, except for the best players on the team
 		 */
+		
 		Fonts.drawLeftAllinedText(g, hero.getUsername(), x + NAME_X_OFFSET, y, Fonts.lobbyNameFont);
 		
 		if(hero.getTeam() == Teams.BLUE)
