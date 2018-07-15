@@ -113,34 +113,46 @@ public class Tab {
 	}
 	
 	private void renderPlayerStats(Graphics g, Hero hero, int x, int y) {
+		/*
+		 * always set the color to a transparent color, except for the best players on the team
+		 */
 		Fonts.drawLeftAllinedText(g, hero.getUsername(), x + NAME_X_OFFSET, y, Fonts.lobbyNameFont);
+		
+		if(hero.getTeam() == Teams.BLUE)
+			g.setColor(new Color(0.5f, 0.5f, 1f));
+		if(hero.getTeam() == Teams.RED)
+			g.setColor(new Color(1f, 0.5f, 0.5f));
+		if(hero.equals(Teams.getPlayerWithMostScored(entityManager.getHeros(), hero.getTeam()))) {
+			g.setColor(Teams.getColor(hero.getTeam()));
+		}
 		Fonts.drawCenteredText(g, "" + hero.getStats().getScored(), (int) (x + (PROPORTION_NAME + PROPROTION_STAT/2f) * STATS_WIDTH / 2), y, Fonts.lobbyNameFont);
+		
+		if(hero.getTeam() == Teams.BLUE)
+			g.setColor(new Color(0.5f, 0.5f, 1f));
+		if(hero.getTeam() == Teams.RED)
+			g.setColor(new Color(1f, 0.5f, 0.5f));
+		if(hero.equals(Teams.getPlayerWithMostKills(entityManager.getHeros(), hero.getTeam()))) {
+			g.setColor(Teams.getColor(hero.getTeam()));
+		}
 		Fonts.drawCenteredText(g, "" + hero.getStats().getKills(), (int) (x + (PROPORTION_NAME + PROPROTION_STAT * 3/2) * STATS_WIDTH / 2), y, Fonts.lobbyNameFont);
+		
+		if(hero.getTeam() == Teams.BLUE)
+			g.setColor(new Color(0.5f, 0.5f, 1f));
+		if(hero.getTeam() == Teams.RED)
+			g.setColor(new Color(1f, 0.5f, 0.5f));
+		if(hero.equals(Teams.getPlayerWithLeastDeaths(entityManager.getHeros(), hero.getTeam()))) {
+			g.setColor(Teams.getColor(hero.getTeam()));
+		}
 		Fonts.drawCenteredText(g, "" + hero.getStats().getDeaths(), (int) (x + (PROPORTION_NAME + PROPROTION_STAT * 5/2) * STATS_WIDTH / 2), y, Fonts.lobbyNameFont);
+		
+		if(hero.getTeam() == Teams.BLUE)
+			g.setColor(new Color(0.5f, 0.5f, 1f));
+		if(hero.getTeam() == Teams.RED)
+			g.setColor(new Color(1f, 0.5f, 0.5f));
+		if(hero.equals(Teams.getPlayerWithMostDamage(entityManager.getHeros(), hero.getTeam()))) {
+			g.setColor(Teams.getColor(hero.getTeam()));
+		}
 		Fonts.drawCenteredText(g, "" + hero.getStats().getDamage(), (int) (x + (PROPORTION_NAME + PROPROTION_STAT * 7/2) * STATS_WIDTH / 2), y, Fonts.lobbyNameFont);
 	}
-	
-	/*
-	private void renderStats(Graphics g) {
-		g.setColor(new Color(0.8f, 0.8f, 0.8f, 0.8f));
-		g.fillRect(0, Main.getHeight() - STATS_HEIGHT, STATS_WIDTH, STATS_HEIGHT);
-		
-		g.setColor(Color.BLACK);
-		Fonts.drawCenteredText(g, "Scored", STATS_WIDTH/8, Main.getHeight() - STATS_HEIGHT * 2/3, Fonts.tabStatsFont);
-		Fonts.drawCenteredText(g, "" + player.getStats().getScored(), STATS_WIDTH/8, Main.getHeight() - STATS_HEIGHT/3, Fonts.tabStatsFont);
-		
-		g.setColor(Color.BLACK);
-		Fonts.drawCenteredText(g, "Kills", STATS_WIDTH * 3/8, Main.getHeight() - STATS_HEIGHT * 2/3, Fonts.tabStatsFont);
-		Fonts.drawCenteredText(g, "" + player.getStats().getKills(), STATS_WIDTH * 3/8, Main.getHeight() - STATS_HEIGHT/3, Fonts.tabStatsFont);
-		
-		g.setColor(Color.BLACK);
-		Fonts.drawCenteredText(g, "Deaths", STATS_WIDTH * 5/8, Main.getHeight() - STATS_HEIGHT * 2/3, Fonts.tabStatsFont);
-		Fonts.drawCenteredText(g, "" + player.getStats().getDeaths(), STATS_WIDTH * 5/8, Main.getHeight() - STATS_HEIGHT/3, Fonts.tabStatsFont);
-		
-		g.setColor(Color.BLACK);
-		Fonts.drawCenteredText(g, "Damage", STATS_WIDTH * 7/8, Main.getHeight() - STATS_HEIGHT * 2/3, Fonts.tabStatsFont);
-		Fonts.drawCenteredText(g, "" + player.getStats().getDamage(), STATS_WIDTH * 7/8, Main.getHeight() - STATS_HEIGHT/3, Fonts.tabStatsFont);
-	}
-	*/
 	
 }

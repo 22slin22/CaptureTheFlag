@@ -93,7 +93,6 @@ public class WinScreen extends State{
 		Fonts.drawCenteredText(g, "" + playerMostDamage.getStats().getDamage(), Main.getWidth() * 3/4, Main.getHeight()/2 + yOffset, Fonts.lobbyNameFont);
 	}
 	
-	
 	private Hero getPlayerMostKills() {
 		int mostKills = -1;
 		Hero best = null;
