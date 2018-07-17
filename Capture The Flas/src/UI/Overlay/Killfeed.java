@@ -18,7 +18,6 @@ public class Killfeed {
 	private static final int Y_OFFSET_KILLS = 0;
 	
 	
-	
 	public void tick() {
 		synchronized(kills) {
 			for(Kill kill : kills) {
