@@ -47,16 +47,16 @@ public class Overlay {
 		tab.render(g);	
 	}
 	
-	
+	private static final int boxHeight = 80;
+	private static final int boxWidth = 130;
 	private void drawScoreboard(Graphics g) {
-		g.setColor(Color.GRAY);
-		Fonts.drawCenteredText(g, ":", Main.getWidth()/2, scoreboardYOffset - 3, Fonts.scoreFont);
+		g.setColor(new Color(0.5f, 0.5f, 0.5f, 0.5f));
+		// Points from left to right
+		g.fillPolygon(new int[] {Main.getWidth()/2 - boxWidth/2 - boxHeight, Main.getWidth()/2 - boxWidth/2, Main.getWidth()/2 + boxWidth/2, Main.getWidth()/2 + boxWidth/2 + boxHeight},  
+				new int[] {0, boxHeight, boxHeight, 0}, 4);
 		
-		g.setColor(Teams.getColor(Teams.BLUE));
-		Fonts.drawRightAllinedText(g, "" + Teams.getScore(Teams.BLUE), Main.getWidth()/2 - scoreboardXOffset, scoreboardYOffset, Fonts.scoreFont);
-		
-		g.setColor(Teams.getColor(Teams.RED));
-		Fonts.drawLeftAllinedText(g, "" + Teams.getScore(Teams.RED), Main.getWidth()/2 + scoreboardXOffset, scoreboardYOffset, Fonts.scoreFont);
+		Fonts.drawCenteredText(g, new String[] {""+Teams.getScore(Teams.BLUE), " : ", ""+Teams.getScore(Teams.RED)}, Main.getWidth()/2, scoreboardYOffset, Fonts.scoreFont, 
+				new Color[] {Teams.getColor(Teams.BLUE), Color.GRAY, Teams.getColor(Teams.RED)});
 	}
 	
 	public Killfeed getKillfeed() {

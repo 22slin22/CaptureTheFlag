@@ -2,29 +2,77 @@ package Utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import Main.Main;
 
 public class Fonts {
 	
-	public static Font playerNameFont = new Font("Arial", Font.PLAIN, 25);
-	public static Font scoreFont = new Font("Arial", Font.BOLD, 45);
-	public static Font killFeedFont = new Font("Arial", Font.PLAIN, 30);
+	public static Font playerNameFont;
+	public static Font scoreFont;
+	public static Font killFeedFont;
 	
-	public static Font lobbyTeamNameFont = new Font("Arial", Font.BOLD, 45);
-	public static Font lobbyNameFont = new Font("Arial", Font.PLAIN, 30);
-	public static Font buttonFont = new Font("Arial", Font.PLAIN, 30);
-	public static Font playButtonFont = new Font("Arial", Font.BOLD, 50);
-	public static Font inputFieldFont = new Font("", Font.ITALIC, 40);
-	public static Font titleFont = new Font("", Font.BOLD, 75);
-	public static Font winScreenWinner = new Font("", Font.BOLD, 60);
-	public static Font errorFont = new Font("Arial", Font.ITALIC, 20);
-	public static Font respawnTimerFont = new Font("Arial", Font.BOLD, 70);
-	public static Font notificationFont = new Font("Arial", Font.BOLD, 40);
-	public static Font winScreenNameFont = new Font("", Font.BOLD, 55);
-	public static Font tabStatsFont = new Font("", Font.ITALIC, 35);
+	public static Font lobbyTeamNameFont;
+	public static Font lobbyNameFont;
+	public static Font buttonFont;
+	public static Font playButtonFont;
+	public static Font inputFieldFont;
+	public static Font titleFont;
+	public static Font winScreenWinner;
+	public static Font errorFont;
+	public static Font respawnTimerFont;
+	public static Font notificationFont;
+	public static Font winScreenNameFont;
+	public static Font tabStatsFont;
+	
+	public static void init() {
+		
+		Font baseFont = null;
+		try {
+			baseFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/gomarice_no_continue.ttf")));
+			//baseFont = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getResourceAsStream("gomarice_no_continue.ttf"));
+		} catch (Exception e) {
+			System.out.println("Font not found");
+			e.printStackTrace();
+		}
+		if(baseFont == null) {
+			System.out.println("Font is null");
+		}
+		
+		//playerNameFont = new Font("Arial", Font.PLAIN, 25);
+		playerNameFont = baseFont.deriveFont(Font.PLAIN, 25);
+		//scoreFont = new Font("Arial", Font.BOLD, 45);
+		scoreFont = baseFont.deriveFont(Font.BOLD, 45);
+		//killFeedFont = new Font("Arial", Font.PLAIN, 30);
+		killFeedFont = baseFont.deriveFont(Font.PLAIN, 30);
+		
+		//lobbyTeamNameFont = new Font("Arial", Font.BOLD, 45);
+		lobbyTeamNameFont = baseFont.deriveFont(Font.BOLD, 45);
+		//lobbyNameFont = new Font("Arial", Font.PLAIN, 30);
+		lobbyNameFont = baseFont.deriveFont(Font.PLAIN, 30);
+		buttonFont = new Font("Arial", Font.PLAIN, 30);
+		playButtonFont = new Font("Arial", Font.BOLD, 50);
+		inputFieldFont = new Font("", Font.ITALIC, 40);
+		//titleFont = new Font("", Font.BOLD, 75);
+		titleFont = baseFont.deriveFont(Font.BOLD, 75);
+		//winScreenWinner = new Font("", Font.BOLD, 60);
+		winScreenWinner = baseFont.deriveFont(Font.BOLD, 60);
+		errorFont = new Font("Arial", Font.ITALIC, 20);
+		//respawnTimerFont = new Font("Arial", Font.BOLD, 70);
+		respawnTimerFont = baseFont.deriveFont(Font.BOLD, 70);
+		//notificationFont = new Font("Arial", Font.BOLD, 40);
+		notificationFont = baseFont.deriveFont(Font.PLAIN, 40);
+		//winScreenNameFont = new Font("", Font.BOLD, 55);
+		winScreenNameFont = baseFont.deriveFont(Font.BOLD, 55);
+		//tabStatsFont = new Font("", Font.ITALIC, 35);
+		tabStatsFont = baseFont.deriveFont(Font.ITALIC, 35);
+	}
 	
 	public static void drawCenteredText(Graphics g, String text, int x, int y, Font font) {
 		FontMetrics metrics = g.getFontMetrics(font);

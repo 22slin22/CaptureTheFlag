@@ -6,6 +6,7 @@ import Display.Display;
 import Input.KeyManager;
 import Input.MouseManager;
 import Input.WindowManager;
+import Utils.Fonts;
 
 public class Main implements Runnable{
 	
@@ -28,6 +29,7 @@ public class Main implements Runnable{
 	
 	
 	public Main() {
+		Fonts.init();
 		display = new Display(WINDOW_WIDTH, WINDOW_HEIGHT);
 		display.getCanvas().createBufferStrategy(3);
 		
