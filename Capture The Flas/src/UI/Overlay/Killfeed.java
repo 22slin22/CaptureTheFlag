@@ -50,10 +50,15 @@ public class Killfeed {
 		int fontHeight = metrics.getHeight(); // + metrics.getAscent();
 		int y = kills.indexOf(kill) * (fontHeight + Y_OFFSET_KILLS) + Y_OFFSET;
 		
+		g.setFont(Fonts.killFeedFontArial);
 		g.setColor(Teams.getColor(kill.getKiller().getTeam()));
-		g.drawString(kill.getKillerName() + " -> ", X_OFFSET, y);
+		g.drawString(kill.getKillerName(), X_OFFSET, y);
 		
-		int x = X_OFFSET + metrics.stringWidth(kill.getKillerName() + " -> ");
+		int x = X_OFFSET + metrics.stringWidth(kill.getKillerName());
+		g.drawString(" " + Character.toString((char)8594) + " ", x, y);
+		
+		x = X_OFFSET + metrics.stringWidth(kill.getKillerName() + " " + Character.toString((char)8594) + " ");
+		g.setFont(Fonts.killFeedFont);
 		g.setColor(Teams.getColor(kill.getTarget().getTeam()));
 		g.drawString(kill.getTargetName(), x, y);
 	}

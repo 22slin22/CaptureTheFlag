@@ -16,6 +16,7 @@ public class Fonts {
 	
 	public static Font playerNameFont;
 	public static Font scoreFont;
+	public static Font killFeedFontArial;
 	public static Font killFeedFont;
 	
 	public static Font lobbyTeamNameFont;
@@ -49,7 +50,7 @@ public class Fonts {
 		playerNameFont = baseFont.deriveFont(Font.PLAIN, 25);
 		//scoreFont = new Font("Arial", Font.BOLD, 45);
 		scoreFont = baseFont.deriveFont(Font.BOLD, 45);
-		//killFeedFont = new Font("Arial", Font.PLAIN, 30);
+		killFeedFontArial = new Font("Arial", Font.PLAIN, 30);
 		killFeedFont = baseFont.deriveFont(Font.PLAIN, 30);
 		
 		//lobbyTeamNameFont = new Font("Arial", Font.BOLD, 45);
