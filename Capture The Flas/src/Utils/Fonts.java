@@ -36,8 +36,8 @@ public class Fonts {
 		
 		Font baseFont = null;
 		try {
-			baseFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("res/gomarice_no_continue.ttf")));
-			//baseFont = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getResourceAsStream("gomarice_no_continue.ttf"));
+			//baseFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("gomarice_no_continue.ttf")));
+			baseFont = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getResourceAsStream("/gomarice_no_continue.ttf"));
 		} catch (Exception e) {
 			System.out.println("Font not found");
 			e.printStackTrace();
