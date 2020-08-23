@@ -1,0 +1,6 @@
+bin/
+.settings/
+_layouts/
+.classpath
+.project
+_config.yml
